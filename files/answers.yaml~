@@ -1,0 +1,21 @@
+---
+foreman:
+  custom_repo: true
+foreman_proxy:
+  custom_repo: true
+  dhcp: true
+  dhcp_managed: true
+  dhcp_interface: eth2
+  dhcp_gateway: 172.16.0.2
+  dhcp_range: 172.16.0.16 172.16.0.255
+  dhcp_nameservers: 172.16.0.2
+  dns: true
+  dns_interface: eth2
+  dns_zone: local.cloud
+  dns_reverse: 0.16.172.in-addr.arpa
+  dns_forwarders: 8.8.8.8
+  foreman_base_url: http://server.local.cloud
+  oauth_consumer_key: bTLPnbGR8fWovvPqGYmJRFtZDXxaUv8W
+  oauth_consumer_secret: oqWav9Sv44wxeY9Z3dpHWznHArAWKzjt
+puppet:
+  server: true
