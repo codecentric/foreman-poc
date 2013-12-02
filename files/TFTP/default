@@ -1,0 +1,10 @@
+DISPLAY boot.txt
+
+DEFAULT ubuntu-12.04
+
+LABEL ubuntu-12.04
+        kernel ubuntu-12.04/ubuntu-installer/amd64/linux
+        append vga=normal initrd=ubuntu-12.04/ubuntu-installer/amd64/initrd.gz  --
+
+PROMPT 1
+TIMEOUT 0

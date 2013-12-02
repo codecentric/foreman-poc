@@ -49,10 +49,10 @@ package { "foreman-installer":
 	require	=> Exec['apt-update'],
 }
 
-
+# DHCP configuration
 file { "/etc/dhcp/dhcpd.conf":
 	ensure	=> present,
-	source	=> "/vagrant/files/dhcpd.conf",
+	source	=> "/vagrant/files/DHCP/dhcpd.conf",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
@@ -60,7 +60,7 @@ file { "/etc/dhcp/dhcpd.conf":
 
 file { "/etc/dhcp/dhcpd.pools":
 	ensure	=> present,
-	source	=> "/vagrant/files/dhcpd.pools",
+	source	=> "/vagrant/files/DHCP/dhcpd.pools",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
@@ -68,12 +68,76 @@ file { "/etc/dhcp/dhcpd.pools":
 
 file { "/etc/dhcp/dhcpd.hosts":
 	ensure	=> present,
-	source	=> "/vagrant/files/dhcpd.hosts",
+	source	=> "/vagrant/files/DHCP/dhcpd.hosts",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
 }
 
+# create the TFTP-root directory and set the permissions
+#file { '/etc/bind':
+#	ensure	=> directory,
+#	owner	=> root,
+#	group	=> bind,
+#	mode	=> 744,	# korrekter mode?
+#}
+
+# placing the keyfile
+#file { "/etc/bind/DHCP_UPDATER":
+#	ensure	=> present,
+#	source	=> "/vagrant/files/DHCP/DHCP_UPDATER",
+#	owner	=> root,
+#	group	=> bind,
+#	mode	=> 640,
+#}
+
+# TFTP
+
+# create the TFTP-root directory and set the permissions
+file { '/var/lib/tftpboot':
+	ensure	=> directory,
+	owner	=> nobody,
+	group	=> nogroup,
+	mode	=> 777,
+}
+
+# create pxelinux.cfg directory and set the permissions
+file { '/var/lib/tftpboot/pxelinux.cfg':
+	ensure	=> directory,
+	owner	=> nobody,
+	group	=> nogroup,
+	mode	=> 777,
+}
+
+# netboot image for Ubunu 12.04
+file { '/var/lib/tftpboot/ubuntu-12.04':
+	ensure	=> directory,
+	recurse	=> true,
+	purge	=> true,
+	force	=> true,
+	owner	=> nobody,
+	group	=> nogroup,
+	mode	=> 777,
+	source	=> "/vagrant/files/TFTP/ubuntu-12.04",
+}
+
+# config: list of available boot image
+file { '/var/lib/tftpboot/pxelinux.cfg/default':
+	ensure	=> present,
+	owner	=> nobody,
+	group	=> nogroup,
+	mode	=> 777,
+	source	=> "/vagrant/files/TFTP/default",
+}
+
+# boot menu text
+file { '/var/lib/tftpboot/boot.txt':
+	ensure	=> present,
+	owner	=> nobody,
+	group	=> nogroup,
+	mode	=> 777,
+	source	=> "/vagrant/files/TFTP/boot.txt",
+}
 
 
 # options for foreman-installer
@@ -81,11 +145,19 @@ file { "/etc/dhcp/dhcpd.hosts":
 file { "/usr/share/foreman-installer/config/answers.yaml":
 	ensure	=> present,
 	source	=> "/vagrant/files/answers.yaml",
+	owner	=> root,
+	group	=> root,
 }
 
-## installation foreman
+# installation foreman
 #exec { 'foreman-installer':
 #	command	=> "/usr/bin/foreman-installer",
 #	require	=> Package["foreman-installer"]
 #}
 
+
+# adding user 'foreman-proxy' to group 'bind', as this users needs to read the keyfile
+#user { "foreman-proxy":
+#	ensure	=> present,
+#	groups	=> ['bind'],
+#}

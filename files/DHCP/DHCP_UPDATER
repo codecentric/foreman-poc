@@ -1,0 +1,4 @@
+key DHCP_UPDATER {
+         algorithm HMAC-MD5;
+         secret "bQR3x3fquV+YjZ+aChpfJQ==";
+};
