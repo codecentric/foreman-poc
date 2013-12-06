@@ -6,8 +6,6 @@ max-lease-time 7200;
 
 ddns-updates on;
 ddns-update-style interim;
-update-static-leases on;
-use-host-decl-names on;
 
 option domain-name "local.cloud";
 option domain-name-servers 172.16.0.2;
