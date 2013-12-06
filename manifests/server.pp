@@ -49,6 +49,12 @@ package { "foreman-installer":
 	require	=> Exec['apt-update'],
 }
 
+# seperate bind installation necessary for configuration
+package { "bind9":
+	ensure	=> "installed",
+	require	=> Exec['apt-update'],
+}
+
 # DHCP configuration
 file { "/etc/dhcp/dhcpd.conf":
 	ensure	=> present,
@@ -58,13 +64,13 @@ file { "/etc/dhcp/dhcpd.conf":
 	mode	=> 644,
 }
 
-file { "/etc/dhcp/dhcpd.pools":
-	ensure	=> present,
-	source	=> "/vagrant/files/DHCP/dhcpd.pools",
-	owner	=> root,
-	group	=> root,
-	mode	=> 644,
-}
+#file { "/etc/dhcp/dhcpd.pools":
+#	ensure	=> present,
+#	source	=> "/vagrant/files/DHCP/dhcpd.pools",
+#	owner	=> root,
+#	group	=> root,
+#	mode	=> 644,
+#}
 
 file { "/etc/dhcp/dhcpd.hosts":
 	ensure	=> present,
@@ -74,22 +80,15 @@ file { "/etc/dhcp/dhcpd.hosts":
 	mode	=> 644,
 }
 
-# create the TFTP-root directory and set the permissions
-#file { '/etc/bind':
-#	ensure	=> directory,
-#	owner	=> root,
-#	group	=> bind,
-#	mode	=> 744,	# korrekter mode?
-#}
-
 # placing the keyfile
-#file { "/etc/bind/DHCP_UPDATER":
-#	ensure	=> present,
-#	source	=> "/vagrant/files/DHCP/DHCP_UPDATER",
-#	owner	=> root,
-#	group	=> bind,
-#	mode	=> 640,
-#}
+file { "/etc/bind/DHCP_UPDATER":
+	ensure	=> present,
+	source	=> "/vagrant/files/DHCP/DHCP_UPDATER",
+	owner	=> root,
+	group	=> bind,
+	mode	=> 640,
+	require	=> Package["bind9"],
+}
 
 # TFTP
 
@@ -147,17 +146,19 @@ file { "/usr/share/foreman-installer/config/answers.yaml":
 	source	=> "/vagrant/files/answers.yaml",
 	owner	=> root,
 	group	=> root,
+	require	=> [ Package["foreman-installer"], File['/etc/dhcp/dhcpd.conf']]
 }
 
 # installation foreman
-#exec { 'foreman-installer':
-#	command	=> "/usr/bin/foreman-installer",
-#	require	=> Package["foreman-installer"]
-#}
+exec { 'foreman-installer':
+	command	=> "/usr/bin/foreman-installer",
+	require => [ Package["bind9"], Package["foreman-installer"]],
+}
 
 
 # adding user 'foreman-proxy' to group 'bind', as this users needs to read the keyfile
-#user { "foreman-proxy":
-#	ensure	=> present,
-#	groups	=> ['bind'],
-#}
+user { "foreman-proxy":
+	ensure	=> present,
+	groups	=> ['bind'], 
+	require => Exec["foreman-installer"],
+}
