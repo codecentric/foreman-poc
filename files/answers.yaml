@@ -17,7 +17,6 @@ foreman_proxy:
   dns_reverse: 0.16.172.in-addr.arpa
   dns_server: 172.16.0.2
   dns_forwarders: 8.8.8.8
-  keyfile: /etc/bind/rndc.key
   foreman_base_url: http://server.local.cloud
   oauth_consumer_key: Ls6P7vd3sfv8QZviRTNnPUX2k5RPhTnn
   oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
