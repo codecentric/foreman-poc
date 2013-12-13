@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "client" do |client|
 
 	# hostname
-	client.vm.hostname = "client.local.cloud"
+	client.vm.hostname = "client"
 
 	# private network
 	client.vm.network "private_network", type: :dhcp

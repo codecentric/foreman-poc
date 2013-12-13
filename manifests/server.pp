@@ -59,31 +59,6 @@ package { "isc-dhcp-server":
 	require	=> Exec['apt-update'],
 }
 
-## DHCP configuration
-#file { "/etc/dhcp/dhcpd.conf":
-#	ensure	=> present,
-#	source	=> "/vagrant/files/DHCP/dhcpd.conf",
-#	owner	=> root,
-#	group	=> root,
-#	mode	=> 644,
-#}
-
-#file { "/etc/dhcp/dhcpd.pools":
-#	ensure	=> present,
-#	source	=> "/vagrant/files/DHCP/dhcpd.pools",
-#	owner	=> root,
-#	group	=> root,
-#	mode	=> 644,
-#}
-
-#file { "/etc/dhcp/dhcpd.hosts":
-#	ensure	=> present,
-#	source	=> "/vagrant/files/DHCP/dhcpd.hosts",
-#	owner	=> root,
-#	group	=> root,
-#	mode	=> 644,
-#}
-
 # placing the keyfile
 file { "/etc/bind/rndc.key":
 	ensure	=> present,
