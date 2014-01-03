@@ -1,0 +1,10 @@
+:modules:
+    - hammer_cli_foreman
+
+:foreman:
+    :host: 'https://localhost/'
+    :username: 'admin'
+    :password: 'changeme'
+
+:log_dir: '/var/log/foreman/'
+:log_level: 'debug'

@@ -1,0 +1,22 @@
+---
+### File managed with puppet ###
+## Module:           'foreman'
+## Template source:  'MODULES/foreman/templates/settings.yaml.erb'
+:foreman_url: server.local.cloud
+
+#your default puppet server - can be overridden in the host level
+#if none specified, plain "puppet" will be used.
+#:puppet_server: puppet
+:unattended: true
+:puppetconfdir: /etc/puppet/puppet.conf
+:login: true
+:require_ssl: true
+:locations_enabled: false
+:organizations_enabled: false
+
+# The following values are used for providing default settings during db migrate
+:oauth_active: true
+:oauth_map_users: true
+:oauth_consumer_key: Ls6P7vd3sfv8QZviRTNnPUX2k5RPhTnn
+:oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
+
