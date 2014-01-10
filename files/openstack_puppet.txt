@@ -1,0 +1,83 @@
+/*
+# openstack
+exec { "install git rake":
+	command	=> "apt-get -y install git rake",
+	path	=> "/usr/local/bin/",
+	require	=> Exec["hammer execution"],
+}
+
+file { "/tmp/openstack":
+	ensure	=> directory,
+	require	=> Exec["install git rake"],
+}
+
+exec { "git clone openstack":
+	command	=> "git clone https://github.com/puppetlabs/puppetlabs-openstack",
+	cwd	=> "/tmp/openstack",
+	require	=> File["/tmp/openstack"],
+	
+}
+
+exec { "git checkout stable/havana":
+	command	=> "git checkout stable/havana",
+	cwd	=> "/tmp/openstack/puppetlabs-openstack",
+	require	=> Exec["git clone openstack"],
+}
+
+exec { "copy openstack":
+	command	=> "cp -R . /etc/puppet/modules/openstack",
+	cwd	=> "/tmp/openstack/puppetlabs-openstack",
+	require	=> Exec["git checkout stable/havana"],
+}
+
+package { 'libactiverecord-ruby':
+	ensure	=> "installed",
+}
+
+package { 'libsqlite3-ruby':
+	ensure	=> "installed",
+}
+
+package { 'sqlite3':
+	ensure	=> "installed",
+}
+
+file { '/etc/puppet/puppet.conf':
+	ensure	=> present,
+	owner	=> root,
+	group	=> root,
+	mode	=> 644,
+	source	=> "/vagrant/hammer/puppet.conf",
+}
+
+
+# puppet module: cloud_box
+
+file { '/etc/puppet/module/cloud_box':
+	ensure	=> directory,
+}
+
+file { "/etc/puppet/module/cloud_box/params.pp":
+	ensure	=> present,
+	source	=> "/vagrant/cloud_box/params.pp",
+	require	=> File["/etc/puppet/module/cloud_box"],
+}
+
+file { "/etc/puppet/module/cloud_box/all_in_one.pp":
+	ensure	=> present,
+	source	=> "/vagrant/cloud_box/all_in_one.pp",
+	require	=> File["/etc/puppet/module/cloud_box"],
+}
+
+file { "/etc/puppet/module/cloud_box/controller.pp":
+	ensure	=> present,
+	source	=> "/vagrant/cloud_box/controller.pp",
+	require	=> File["/etc/puppet/module/cloud_box"],
+}
+
+file { "/etc/puppet/module/cloud_box/compute.pp":
+	ensure	=> present,
+	source	=> "/vagrant/cloud_box/compute.pp",
+	require	=> File["/etc/puppet/module/cloud_box"],
+}
+*/

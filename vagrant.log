@@ -1,0 +1,310 @@
+Bringing machine 'server' up with 'virtualbox' provider...
+[server] Importing base box 'precise32'...
+Progress: 10%Progress: 30%Progress: 40%Progress: 50%Progress: 80%Progress: 90%[server] Matching MAC address for NAT networking...
+[server] Setting the name of the VM...
+[server] Clearing any previously set forwarded ports...
+[server] Clearing any previously set network interfaces...
+[server] Preparing network interfaces based on configuration...
+[server] Forwarding ports...
+[server] -- 22 => 2222 (adapter 1)
+[server] Running 'pre-boot' VM customizations...
+[server] Booting VM...
+[server] Waiting for machine to boot. This may take a few minutes...
+[server] Machine booted and ready!
+[server] Setting hostname...
+[server] Configuring and enabling network interfaces...
+[server] Mounting shared folders...
+[server] -- /vagrant
+[server] -- /tmp/vagrant-puppet-1/manifests
+[server] -- /tmp/vagrant-puppet-1/modules-0
+[server] Running provisioner: shell...
+[server] Running: /tmp/vagrant-shell20140110-23297-187jhf9
+stdin: is not a tty
+--2014-01-10 09:43:19--  https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+Resolving apt.puppetlabs.com (apt.puppetlabs.com)... 198.58.114.168
+Connecting to apt.puppetlabs.com (apt.puppetlabs.com)|198.58.114.168|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3430 (3.3K) [application/x-debian-package]
+Saving to: `puppetlabs-release-precise.deb'
+
+     0K ...                                                   100% 12.6M=0s
+
+2014-01-10 09:43:19 (12.6 MB/s) - `puppetlabs-release-precise.deb' saved [3430/3430]
+
+Selecting previously unselected package puppetlabs-release.
+(Reading database ... 29361 files and directories currently installed.)
+Unpacking puppetlabs-release (from puppetlabs-release-precise.deb) ...
+Setting up puppetlabs-release (1.0-7) ...
+Ign http://security.ubuntu.com precise-security InRelease
+Ign http://us.archive.ubuntu.com precise InRelease
+Ign http://us.archive.ubuntu.com precise-updates InRelease
+Ign http://us.archive.ubuntu.com precise-backports InRelease
+Ign http://apt.puppetlabs.com precise InRelease
+Get:1 http://security.ubuntu.com precise-security Release.gpg [198 B]
+Hit http://us.archive.ubuntu.com precise Release.gpg
+Get:2 http://apt.puppetlabs.com precise Release.gpg [836 B]
+Get:3 http://security.ubuntu.com precise-security Release [49.6 kB]
+Get:4 http://us.archive.ubuntu.com precise-updates Release.gpg [198 B]
+Get:5 http://us.archive.ubuntu.com precise-backports Release.gpg [198 B]
+Get:6 http://apt.puppetlabs.com precise Release [22.4 kB]
+Hit http://us.archive.ubuntu.com precise Release
+Get:7 http://us.archive.ubuntu.com precise-updates Release [49.6 kB]
+Get:8 http://security.ubuntu.com precise-security/main Sources [95.1 kB]
+Get:9 http://apt.puppetlabs.com precise/main Sources [60.0 kB]
+Get:10 http://us.archive.ubuntu.com precise-backports Release [49.6 kB]
+Hit http://us.archive.ubuntu.com precise/main Sources
+Hit http://us.archive.ubuntu.com precise/restricted Sources
+Hit http://us.archive.ubuntu.com precise/universe Sources
+Hit http://us.archive.ubuntu.com precise/multiverse Sources
+Hit http://us.archive.ubuntu.com precise/main i386 Packages
+Get:11 http://security.ubuntu.com precise-security/restricted Sources [2,494 B]
+Get:12 http://security.ubuntu.com precise-security/universe Sources [29.9 kB]
+Get:13 http://security.ubuntu.com precise-security/multiverse Sources [1,792 B]
+Get:14 http://security.ubuntu.com precise-security/main i386 Packages [375 kB]
+Hit http://us.archive.ubuntu.com precise/restricted i386 Packages
+Hit http://us.archive.ubuntu.com precise/universe i386 Packages
+Hit http://us.archive.ubuntu.com precise/multiverse i386 Packages
+Hit http://us.archive.ubuntu.com precise/main TranslationIndex
+Hit http://us.archive.ubuntu.com precise/multiverse TranslationIndex
+Hit http://us.archive.ubuntu.com precise/restricted TranslationIndex
+Hit http://us.archive.ubuntu.com precise/universe TranslationIndex
+Get:15 http://us.archive.ubuntu.com precise-updates/main Sources [432 kB]
+Get:16 http://apt.puppetlabs.com precise/dependencies Sources [8,552 B]
+Get:17 http://apt.puppetlabs.com precise/main i386 Packages [59.5 kB]
+Get:18 http://apt.puppetlabs.com precise/dependencies i386 Packages [6,183 B]
+Ign http://apt.puppetlabs.com precise/dependencies TranslationIndex
+Ign http://apt.puppetlabs.com precise/main TranslationIndex
+Get:19 http://us.archive.ubuntu.com precise-updates/restricted Sources [7,039 B]
+Get:20 http://us.archive.ubuntu.com precise-updates/universe Sources [101 kB]
+Get:21 http://us.archive.ubuntu.com precise-updates/multiverse Sources [8,468 B]
+Get:22 http://us.archive.ubuntu.com precise-updates/main i386 Packages [749 kB]
+Get:23 http://security.ubuntu.com precise-security/restricted i386 Packages [4,620 B]
+Get:24 http://security.ubuntu.com precise-security/universe i386 Packages [91.1 kB]
+Get:25 http://us.archive.ubuntu.com precise-updates/restricted i386 Packages [11.5 kB]
+Get:26 http://us.archive.ubuntu.com precise-updates/universe i386 Packages [232 kB]
+Get:27 http://us.archive.ubuntu.com precise-updates/multiverse i386 Packages [14.4 kB]
+Get:28 http://us.archive.ubuntu.com precise-updates/main TranslationIndex [3,564 B]
+Get:29 http://us.archive.ubuntu.com precise-updates/multiverse TranslationIndex [2,605 B]
+Get:30 http://us.archive.ubuntu.com precise-updates/restricted TranslationIndex [2,461 B]
+Get:31 http://us.archive.ubuntu.com precise-updates/universe TranslationIndex [2,850 B]
+Get:32 http://us.archive.ubuntu.com precise-backports/main Sources [4,225 B]
+Get:33 http://us.archive.ubuntu.com precise-backports/restricted Sources [14 B]
+Get:34 http://security.ubuntu.com precise-security/multiverse i386 Packages [2,642 B]
+Get:35 http://security.ubuntu.com precise-security/main TranslationIndex [74 B]
+Get:36 http://security.ubuntu.com precise-security/multiverse TranslationIndex [72 B]
+Get:37 http://security.ubuntu.com precise-security/restricted TranslationIndex [72 B]
+Get:38 http://security.ubuntu.com precise-security/universe TranslationIndex [73 B]
+Get:39 http://us.archive.ubuntu.com precise-backports/universe Sources [36.4 kB]
+Get:40 http://us.archive.ubuntu.com precise-backports/multiverse Sources [5,311 B]
+Get:41 http://us.archive.ubuntu.com precise-backports/main i386 Packages [4,809 B]
+Get:42 http://us.archive.ubuntu.com precise-backports/restricted i386 Packages [14 B]
+Get:43 http://us.archive.ubuntu.com precise-backports/universe i386 Packages [37.7 kB]
+Get:44 http://us.archive.ubuntu.com precise-backports/multiverse i386 Packages [5,178 B]
+Get:45 http://us.archive.ubuntu.com precise-backports/main TranslationIndex [72 B]
+Get:46 http://us.archive.ubuntu.com precise-backports/multiverse TranslationIndex [72 B]
+Get:47 http://us.archive.ubuntu.com precise-backports/restricted TranslationIndex [70 B]
+Get:48 http://us.archive.ubuntu.com precise-backports/universe TranslationIndex [73 B]
+Hit http://us.archive.ubuntu.com precise/main Translation-en
+Hit http://us.archive.ubuntu.com precise/multiverse Translation-en
+Hit http://us.archive.ubuntu.com precise/restricted Translation-en
+Hit http://us.archive.ubuntu.com precise/universe Translation-en
+Get:49 http://us.archive.ubuntu.com precise-updates/main Translation-en [328 kB]
+Get:50 http://security.ubuntu.com precise-security/main Translation-en [166 kB]
+Get:51 http://us.archive.ubuntu.com precise-updates/multiverse Translation-en [8,293 B]
+Get:52 http://us.archive.ubuntu.com precise-updates/restricted Translation-en [2,663 B]
+Get:53 http://us.archive.ubuntu.com precise-updates/universe Translation-en [133 kB]
+Get:54 http://us.archive.ubuntu.com precise-backports/main Translation-en [4,235 B]
+Get:55 http://us.archive.ubuntu.com precise-backports/multiverse Translation-en [4,610 B]
+Hit http://us.archive.ubuntu.com precise-backports/restricted Translation-en
+Get:56 http://us.archive.ubuntu.com precise-backports/universe Translation-en [27.6 kB]
+Get:57 http://security.ubuntu.com precise-security/multiverse Translation-en [1,299 B]
+Get:58 http://security.ubuntu.com precise-security/restricted Translation-en [1,253 B]
+Get:59 http://security.ubuntu.com precise-security/universe Translation-en [54.8 kB]
+Ign http://apt.puppetlabs.com precise/dependencies Translation-en_US
+Ign http://apt.puppetlabs.com precise/dependencies Translation-en
+Ign http://apt.puppetlabs.com precise/main Translation-en_US
+Ign http://apt.puppetlabs.com precise/main Translation-en
+Fetched 3,301 kB in 4s (819 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following extra packages will be installed:
+  augeas-lenses debconf-utils facter hiera libaugeas-ruby libaugeas-ruby1.8
+  libaugeas0 libjson-ruby libreadline5 libruby libruby1.8 libshadow-ruby1.8
+  puppet-common ruby ruby-json ruby-rgen ruby1.8 virt-what
+Suggested packages:
+  augeas-doc augeas-tools puppet-el vim-puppet ruby-selinux libselinux-ruby1.8
+  librrd-ruby1.9.1 librrd-ruby1.8 ri ruby-dev ruby1.8-examples ri1.8
+Recommended packages:
+  rdoc
+The following NEW packages will be installed:
+  augeas-lenses debconf-utils facter hiera libaugeas-ruby libaugeas-ruby1.8
+  libaugeas0 libjson-ruby libreadline5 libruby libruby1.8 libshadow-ruby1.8
+  puppet puppet-common ruby ruby-json ruby-rgen ruby1.8 virt-what
+0 upgraded, 19 newly installed, 0 to remove and 156 not upgraded.
+Need to get 3,802 kB of archives.
+After this operation, 14.5 MB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu/ precise/main libreadline5 i386 5.2-11 [123 kB]
+Get:2 http://apt.puppetlabs.com/ precise/main facter i386 1.7.4-1puppetlabs1 [76.6 kB]
+Get:3 http://us.archive.ubuntu.com/ubuntu/ precise/main augeas-lenses all 0.10.0-0ubuntu4 [175 kB]
+Get:4 http://apt.puppetlabs.com/ precise/main hiera all 1.3.0-1puppetlabs1 [12.5 kB]
+Get:5 http://apt.puppetlabs.com/ precise/dependencies ruby-rgen all 0.6.5-1puppetlabs1 [82.2 kB]
+Get:6 http://us.archive.ubuntu.com/ubuntu/ precise/main debconf-utils all 1.5.42ubuntu1 [54.9 kB]
+Get:7 http://apt.puppetlabs.com/ precise/main puppet-common all 3.4.2-1puppetlabs1 [1,160 kB]
+Get:8 http://us.archive.ubuntu.com/ubuntu/ precise-updates/main libruby1.8 i386 1.8.7.352-2ubuntu1.4 [1,787 kB]
+Get:9 http://us.archive.ubuntu.com/ubuntu/ precise-updates/main ruby1.8 i386 1.8.7.352-2ubuntu1.4 [34.2 kB]
+Get:10 http://us.archive.ubuntu.com/ubuntu/ precise/main ruby all 4.8 [5,054 B]
+Get:11 http://us.archive.ubuntu.com/ubuntu/ precise/universe virt-what i386 1.11-1 [12.8 kB]
+Get:12 http://us.archive.ubuntu.com/ubuntu/ precise/main libaugeas0 i386 0.10.0-0ubuntu4 [169 kB]
+Get:13 http://us.archive.ubuntu.com/ubuntu/ precise/main libaugeas-ruby1.8 i386 0.3.0-1.1ubuntu4 [9,490 B]
+Get:14 http://us.archive.ubuntu.com/ubuntu/ precise/universe libaugeas-ruby all 0.3.0-1.1ubuntu4 [3,354 B]
+Get:15 http://us.archive.ubuntu.com/ubuntu/ precise/universe ruby-json i386 1.6.3-1 [72.4 kB]
+Get:16 http://us.archive.ubuntu.com/ubuntu/ precise/universe libjson-ruby all 1.6.3-1 [1,588 B]
+Get:17 http://us.archive.ubuntu.com/ubuntu/ precise/main libruby all 4.8 [4,766 B]
+Get:18 http://us.archive.ubuntu.com/ubuntu/ precise/main libshadow-ruby1.8 i386 1.4.1-8build1 [8,828 B]
+Get:19 http://apt.puppetlabs.com/ precise/main puppet all 3.4.2-1puppetlabs1 [9,624 B]
+dpkg-preconfigure: unable to re-open stdin: No such file or directory
+Fetched 3,802 kB in 2s (1,543 kB/s)
+Selecting previously unselected package libreadline5.
+(Reading database ... 29367 files and directories currently installed.)
+Unpacking libreadline5 (from .../libreadline5_5.2-11_i386.deb) ...
+Selecting previously unselected package augeas-lenses.
+Unpacking augeas-lenses (from .../augeas-lenses_0.10.0-0ubuntu4_all.deb) ...
+Selecting previously unselected package debconf-utils.
+Unpacking debconf-utils (from .../debconf-utils_1.5.42ubuntu1_all.deb) ...
+Selecting previously unselected package libruby1.8.
+Unpacking libruby1.8 (from .../libruby1.8_1.8.7.352-2ubuntu1.4_i386.deb) ...
+Selecting previously unselected package ruby1.8.
+Unpacking ruby1.8 (from .../ruby1.8_1.8.7.352-2ubuntu1.4_i386.deb) ...
+Selecting previously unselected package ruby.
+Unpacking ruby (from .../apt/archives/ruby_4.8_all.deb) ...
+Selecting previously unselected package virt-what.
+Unpacking virt-what (from .../virt-what_1.11-1_i386.deb) ...
+Selecting previously unselected package facter.
+Unpacking facter (from .../facter_1.7.4-1puppetlabs1_i386.deb) ...
+Selecting previously unselected package libaugeas0.
+Unpacking libaugeas0 (from .../libaugeas0_0.10.0-0ubuntu4_i386.deb) ...
+Selecting previously unselected package libaugeas-ruby1.8.
+Unpacking libaugeas-ruby1.8 (from .../libaugeas-ruby1.8_0.3.0-1.1ubuntu4_i386.deb) ...
+Selecting previously unselected package libaugeas-ruby.
+Unpacking libaugeas-ruby (from .../libaugeas-ruby_0.3.0-1.1ubuntu4_all.deb) ...
+Selecting previously unselected package ruby-json.
+Unpacking ruby-json (from .../ruby-json_1.6.3-1_i386.deb) ...
+Selecting previously unselected package libjson-ruby.
+Unpacking libjson-ruby (from .../libjson-ruby_1.6.3-1_all.deb) ...
+Selecting previously unselected package libruby.
+Unpacking libruby (from .../archives/libruby_4.8_all.deb) ...
+Selecting previously unselected package libshadow-ruby1.8.
+Unpacking libshadow-ruby1.8 (from .../libshadow-ruby1.8_1.4.1-8build1_i386.deb) ...
+Selecting previously unselected package hiera.
+Unpacking hiera (from .../hiera_1.3.0-1puppetlabs1_all.deb) ...
+Selecting previously unselected package ruby-rgen.
+Unpacking ruby-rgen (from .../ruby-rgen_0.6.5-1puppetlabs1_all.deb) ...
+Selecting previously unselected package puppet-common.
+Unpacking puppet-common (from .../puppet-common_3.4.2-1puppetlabs1_all.deb) ...
+Selecting previously unselected package puppet.
+Unpacking puppet (from .../puppet_3.4.2-1puppetlabs1_all.deb) ...
+Processing triggers for man-db ...
+Processing triggers for ureadahead ...
+ureadahead will be reprofiled on next reboot
+Setting up libreadline5 (5.2-11) ...
+Setting up augeas-lenses (0.10.0-0ubuntu4) ...
+Setting up debconf-utils (1.5.42ubuntu1) ...
+Setting up libruby1.8 (1.8.7.352-2ubuntu1.4) ...
+Setting up ruby1.8 (1.8.7.352-2ubuntu1.4) ...
+update-alternatives: using /usr/bin/ruby1.8 to provide /usr/bin/ruby (ruby) in auto mode.
+Setting up ruby (4.8) ...
+Setting up virt-what (1.11-1) ...
+Setting up facter (1.7.4-1puppetlabs1) ...
+Setting up libaugeas0 (0.10.0-0ubuntu4) ...
+Setting up libaugeas-ruby1.8 (0.3.0-1.1ubuntu4) ...
+Setting up libaugeas-ruby (0.3.0-1.1ubuntu4) ...
+Setting up ruby-json (1.6.3-1) ...
+Setting up libjson-ruby (1.6.3-1) ...
+Setting up libruby (4.8) ...
+Setting up libshadow-ruby1.8 (1.4.1-8build1) ...
+Setting up hiera (1.3.0-1puppetlabs1) ...
+Setting up ruby-rgen (0.6.5-1puppetlabs1) ...
+Setting up puppet-common (3.4.2-1puppetlabs1) ...
+Setting up puppet (3.4.2-1puppetlabs1) ...
+ * Starting puppet agent
+
+puppet not configured to start, please edit /etc/default/puppet to enable
+   ...done.
+Processing triggers for libc-bin ...
+ldconfig deferred processing now taking place
+[server] Running provisioner: puppet...
+Running Puppet with server.pp...
+stdin: is not a tty
+Notice: Compiled catalog for server.local.cloud in environment production in 0.28 seconds
+Notice: /Stage[main]/Main/File[smartproxylist]/ensure: created
+Notice: /Stage[main]/Main/Exec[net.ipv4.ip_forward]/returns: executed successfully
+Notice: /Stage[main]/Main/Exec[sysctl]/returns: executed successfully
+Notice: /Stage[main]/Main/File[/home/vagrant/iptables-persistent.seed]/ensure: defined content as '{md5}f4e6ecd128030ce4a43a3e3a019f3060'
+Notice: /Stage[main]/Main/File[foremanlist]/ensure: created
+Notice: /Stage[main]/Main/Exec[iptables forward]/returns: executed successfully
+Notice: /Stage[main]/Main/Aptkey[foreman.asc]/Exec[apt-key present foreman.asc]/returns: executed successfully
+Notice: /Stage[main]/Main/Exec[apt-update]/returns: executed successfully
+Notice: /Stage[main]/Main/Package[isc-dhcp-server]/ensure: ensure changed 'purged' to 'present'
+Notice: /Stage[main]/Main/Exec[iptables masquerade]/returns: executed successfully
+Notice: /Stage[main]/Main/Package[iptables-persistent]/ensure: ensure changed 'purged' to 'present'
+Notice: /Stage[main]/Main/Service[iptables-persistent]/ensure: ensure changed 'stopped' to 'running'
+Notice: /Stage[main]/Main/Package[bind9]/ensure: ensure changed 'purged' to 'present'
+Notice: /Stage[main]/Main/User[dhcpd]/groups: groups changed '' to 'bind'
+Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/content: content changed '{md5}cdbfbb1a693dd23567ff3cc4c862bcb9' to '{md5}5e8ce92ef62e12451c1a4512ac2214e8'
+Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/owner: owner changed 'bind' to 'root'
+Notice: /Stage[main]/Main/Exec[preseed]/returns: executed successfully
+Notice: /Stage[main]/Main/Package[gem]/ensure: ensure changed 'purged' to 'present'
+Notice: /Stage[main]/Main/Package[hammer_cli]/ensure: created
+Notice: /Stage[main]/Main/Package[hammer_cli_foreman]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/pxelinux.cfg]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/pxelinux.cfg/default]/ensure: defined content as '{md5}2af90812a2fc117ef3191019746749d8'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/boot.txt]/ensure: defined content as '{md5}487b373ea16036d7f391a0e10ae56cda'
+Notice: /Stage[main]/Main/File[/etc/apparmor.d/usr.sbin.dhcpd]/content: content changed '{md5}de9a7784c64131b2d08392e163ecf0f5' to '{md5}187112871cf1ff932f077e56e2b909c9'
+Notice: /Stage[main]/Main/Service[apparmor]: Triggered 'refresh' from 1 events
+Notice: /Stage[main]/Main/Package[foreman-installer]/ensure: ensure changed 'purged' to 'present'
+Notice: /Stage[main]/Main/File[/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp]/content: content changed '{md5}783c448905bd0eeac15a144a53e7533b' to '{md5}0245f7f8a920c5d88361615a0771012e'
+Notice: /Stage[main]/Main/File[/usr/share/foreman-installer/config/answers.yaml]/content: content changed '{md5}5a9626c9789952f6dc8ef8d5d1e636b3' to '{md5}a0d7908427b0a04a933bdaced7de33ba'
+Notice: /Stage[main]/Main/File[/usr/share/foreman-installer/config/answers.yaml]/mode: mode changed '0644' to '0600'
+Notice: /Stage[main]/Main/Exec[foreman-installer]/returns: executed successfully
+Notice: /Stage[main]/Main/Exec[autocompletion]/returns: executed successfully
+Notice: /Stage[main]/Main/File[/var/log/foreman/hammer.log]/ensure: created
+Notice: /Stage[main]/Main/File[/etc/foreman/settings.yaml]/content: content changed '{md5}d36c09e8c6efc11202dfa384b27b5251' to '{md5}11ccb506ef5e4aec1fc3760495e5cae3'
+Notice: /Stage[main]/Main/File[/etc/foreman/cli_config.yml]/ensure: defined content as '{md5}cc5a46b466d237dbdc23d3dfcd8b17fc'
+Notice: /Stage[main]/Main/Exec[foremam-restart]: Triggered 'refresh' from 1 events
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/pxelinux.0]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/version.info]/ensure: defined content as '{md5}ef95c99367c17f996b14f45d357d4e5a'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/linux]/ensure: defined content as '{md5}874b4eaf7d1141518e2b34d8314819bc'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/pxelinux.cfg]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/initrd.gz]/ensure: defined content as '{md5}6471ce48b0b87693ce41e4600f3945b6'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/syslinux.cfg]/ensure: defined content as '{md5}573bf62a1f14cdcef0e8299863547a5a'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/stdmenu.cfg]/ensure: defined content as '{md5}e83da036753e30ddfd3765383026ab05'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f2.txt]/ensure: defined content as '{md5}c0492b92100594d15ffe0330cb89022b'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/vesamenu.c32]/ensure: defined content as '{md5}65d5085b8bb30b0cf2e53fc89f64d46c'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/adtxt.cfg]/ensure: defined content as '{md5}5cb3933be629afe4de506bfe738e4dd6'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f9.txt]/ensure: defined content as '{md5}7e429a12698af309d070dc4b73a8f37f'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f4.txt]/ensure: defined content as '{md5}4200ac0d70782c4c4c52f8d9fa42f645'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/pxelinux.0]/ensure: defined content as '{md5}94fa5add303db869b79cba07449127c2'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f7.txt]/ensure: defined content as '{md5}4afba850eb9c5d28aae4f5b581421e72'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f10.txt]/ensure: defined content as '{md5}bdf4619572db379c9ce2dd923ec7b949'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/splash.png]/ensure: defined content as '{md5}f24719e0ff7101f11f77a8c30bf9e195'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/rqtxt.cfg]/ensure: defined content as '{md5}c6b31b647766043cea098351b015a256'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f1.txt]/ensure: defined content as '{md5}87767c6d1290af3216799b98a957c443'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/pxelinux.cfg/default]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/txt.cfg]/ensure: defined content as '{md5}72909da2096d6bf5675b6ccb19ae63f0'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f6.txt]/ensure: defined content as '{md5}7b4bf143bfd2de9d96a93596e8f832c6'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f8.txt]/ensure: defined content as '{md5}81f3aa6a52491856805a73e18f3eece5'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f5.txt]/ensure: defined content as '{md5}f0c0082b6334ccfcdd22280873ae8d9a'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/f3.txt]/ensure: defined content as '{md5}40f7f6fe67f21f800869166546ecd874'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/prompt.cfg]/ensure: defined content as '{md5}fc6570239d176410a8ad99e297505a10'
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/pxelinux.cfg]/ensure: created
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/exithelp.cfg]/ensure: defined content as '{md5}29c5d14ef88d01dc686ee0f5f1a7fb5b'
+Notice: /Stage[main]/Main/Exec[hammer execution]/returns: executed successfully
+Notice: /Stage[main]/Main/File[/var/lib/tftpboot/ubuntu-12.04/ubuntu-installer/amd64/boot-screens/menu.cfg]/ensure: defined content as '{md5}dc026eae4d173f38462eb138dcb3c12b'
+Notice: Finished catalog run in 248.71 seconds
