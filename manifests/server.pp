@@ -116,38 +116,53 @@ file { '/var/lib/tftpboot/pxelinux.cfg':
 	require	=> File["/var/lib/tftpboot"],
 }
 
-# netboot image for Ubunu 12.04
-file { '/var/lib/tftpboot/ubuntu-12.04':
+# config: list of available boot image
+#file { '/var/lib/tftpboot/pxelinux.cfg/default':
+#	ensure	=> present,
+#	owner	=> nobody,
+#	group	=> nogroup,
+#	mode	=> 777,
+#	source	=> "/vagrant/files/TFTP/default",
+#	require	=> File["/var/lib/tftpboot/pxelinux.cfg"],
+#}
+
+# netboot image directory
+file { '/var/lib/tftpboot/boot':
 	ensure	=> directory,
-	recurse	=> true,
-	purge	=> true,
-	force	=> true,
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/vagrant/files/TFTP/ubuntu-12.04",
 	require	=> File["/var/lib/tftpboot"],
 }
 
-# config: list of available boot image
-file { '/var/lib/tftpboot/pxelinux.cfg/default':
+# image for Ubuntu 12.10
+file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz':
 	ensure	=> present,
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/vagrant/files/TFTP/default",
-	require	=> File["/var/lib/tftpboot/pxelinux.cfg"],
+	source	=> "/vagrant/files/TFTP/ubuntu12.10/initrd.gz",
+	require	=> File["/var/lib/tftpboot/boot"],
+}
+
+file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
+	ensure	=> present,
+	owner	=> nobody,
+	group	=> nogroup,
+	mode	=> 777,
+	source	=> "/vagrant/files/TFTP/ubuntu12.10/linux",
+	require	=> File["/var/lib/tftpboot/boot"],
 }
 
 # boot menu text
-file { '/var/lib/tftpboot/boot.txt':
-	ensure	=> present,
-	owner	=> nobody,
-	group	=> nogroup,
-	mode	=> 777,
-	source	=> "/vagrant/files/TFTP/boot.txt",
-	require	=> File["/var/lib/tftpboot"],
-}
+#file { '/var/lib/tftpboot/boot.txt':
+#	ensure	=> present,
+#	owner	=> nobody,
+#	group	=> nogroup,
+#	mode	=> 777,
+#	source	=> "/vagrant/files/TFTP/boot.txt",
+#	require	=> File["/var/lib/tftpboot"],
+#}
 
 
 # options for foreman-installer
@@ -343,5 +358,39 @@ service { "iptables-persistent":
 	require	=> Package["iptables-persistent"],
 }
 
+
+
+# local ubuntu repository: apt-cacher
+#service { "apache2":
+#	ensure  => "running",
+#	enable  => "true",
+#	require	=> Exec['foreman-installer'],
+#}
+
+#package { 'apt-cacher':
+#	ensure	=> installed,
+#	require	=> Exec['foreman-installer'],
+#}
+
+# uncomment allowed hosts
+#exec { 'allowed_hosts':
+#	command	=> "/bin/sed -i -e'/#allowed_hosts = */s/^#\\+//' '/etc/apt-cacher/apt-cacher.conf'",
+#	onlyif	=> "/bin/grep '#allowed_hosts = *' '/etc/apt-cacher/apt-cacher.conf' | /bin/grep '^#' | /usr/bin/wc -l",
+#	notify  => Service["apache2"],
+#	require => Package["apt-cacher"],
+#}
+
+# preseed provision: add apt proxy
+#exec { "hammer add apt proxy":
+#	command	=> "hammer template update --id 6 --file /vagrant/hammer/provision",
+#	path	=> "/opt/vagrant_ruby/bin/",
+#	require	=> [
+#			File["/var/log/foreman/hammer.log"],
+#			File["/etc/foreman/cli_config.yml"],
+#			Package["hammer_cli_foreman"],
+#		],
+#	user	=> vagrant,
+#	environment	=> ["HOME=/home/vagrant"],
+#}
 
 

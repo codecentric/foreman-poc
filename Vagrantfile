@@ -21,6 +21,9 @@ Vagrant.configure("2") do |config|
 		vb.customize ["modifyvm", :id, "--nic3", "intnet"]
 	end
 
+	# Set the Timezone
+	config.vm.provision :shell, :inline => "echo \"Europe/Berlin\" | sudo tee /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata"
+
 	# upgrade puppet
 	server.vm.provision :shell, :path => "upgrade-puppet.sh"
 
@@ -43,6 +46,9 @@ Vagrant.configure("2") do |config|
 	client.vm.provider "virtualbox" do |vb|
 		vb.customize ["modifyvm", :id, "--nic2", "intnet"]
 	end
+
+	# Set the Timezone
+	config.vm.provision :shell, :inline => "echo \"Europe/Berlin\" | sudo tee /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata"
 
 	# upgrade puppet
 	client.vm.provision :shell, :path => "upgrade-puppet.sh"

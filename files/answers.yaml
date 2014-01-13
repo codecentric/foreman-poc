@@ -5,6 +5,12 @@ foreman:
   oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
 foreman_proxy:
   custom_repo: true
+  tftp: true
+#  tftp_syslinux_root: 
+#  tftp_syslinux_files:
+#  tftp_root:
+#  tftp_dirs:
+  tftp_servername: 172.16.0.2
   dhcp: true
   dhcp_managed: true
   dhcp_interface: eth2
