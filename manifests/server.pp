@@ -277,6 +277,7 @@ exec { "hammer execution":
 	command	=> "hammer architecture create --name x86_64 \
 		&& hammer domain create --name \"local.cloud\" --description \"Base cloud domain\" \
 		&& hammer domain update --id 1 --dns-id 1 \
+		&& hammer medium create --name 'Local Media' --path http://172.16.0.2:3142/apt-cacher/ubuntu \
 		&& hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids 1 --ptable-ids 2 --medium-ids 3 \
 		&& hammer template update --id 6 --operatingsystem-ids 1 \
 		&& hammer template update --id 7 --operatingsystem-ids 1 \
@@ -361,15 +362,21 @@ service { "iptables-persistent":
 
 
 # local ubuntu repository: apt-cacher
-#service { "apache2":
-#	ensure  => "running",
-#	enable  => "true",
-#	require	=> Exec['foreman-installer'],
-#}
+service { "apache2":
+	ensure  => "running",
+	enable  => "true",
+	require	=> Exec['foreman-installer'],
+}
 
 package { 'apt-cacher':
 	ensure	=> installed,
-	require	=> Exec['foreman-installer'],
+	require	=> Service['apache2'],
+}
+
+service { "apt-cacher":
+	ensure  => "running",
+	enable  => "true",
+	require	=> Package['apt-cacher'],
 }
 
 file { '/etc/apt-cacher/apt-cacher.conf':
@@ -378,19 +385,20 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	group	=> root,
 	mode	=> 644,
 	source	=> "/vagrant/files/apt-cacher.conf",
+	notify  => Service["apt-cacher"],
 	require	=> Package["apt-cacher"],
 }
 
 exec { 'apt-cacher restart':
 	command => "apt-cacher restart",
 	path	=> "/etc/init.d/",
-	require => File["/etc/apt-cacher/apt-cacher.conf"],
+	require => Exec["apt-cacher-import"],
 }
 
-exec {'apt-cacher-import.pl -r /var/cache/apt/archives':
+exec {'apt-cacher-import':
 	command => "apt-cacher-import.pl -r /var/cache/apt/archives",
 	path	=> "/usr/share/apt-cacher/",
-	require => Exec["apt-cacher restart"],
+	require => File["/etc/apt-cacher/apt-cacher.conf"],
 }
 
 # uncomment allowed hosts
