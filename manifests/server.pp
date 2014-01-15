@@ -367,10 +367,31 @@ service { "iptables-persistent":
 #	require	=> Exec['foreman-installer'],
 #}
 
-#package { 'apt-cacher':
-#	ensure	=> installed,
-#	require	=> Exec['foreman-installer'],
-#}
+package { 'apt-cacher':
+	ensure	=> installed,
+	require	=> Exec['foreman-installer'],
+}
+
+file { '/etc/apt-cacher/apt-cacher.conf':
+	ensure	=> present,
+	owner	=> root,
+	group	=> root,
+	mode	=> 644,
+	source	=> "/vagrant/files/apt-cacher.conf",
+	require	=> Package["apt-cacher"],
+}
+
+exec { 'apt-cacher restart':
+	command => "apt-cacher restart",
+	path	=> "/etc/init.d/",
+	require => File["/etc/apt-cacher/apt-cacher.conf"],
+}
+
+exec {'apt-cacher-import.pl -r /var/cache/apt/archives':
+	command => "apt-cacher-import.pl -r /var/cache/apt/archives",
+	path	=> "/usr/share/apt-cacher/",
+	require => Exec["apt-cacher restart"],
+}
 
 # uncomment allowed hosts
 #exec { 'allowed_hosts':
