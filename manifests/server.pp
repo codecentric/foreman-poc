@@ -257,7 +257,7 @@ file { "/etc/foreman/cli_config.yml":
 
 # hammer autocompletion
 exec { "autocompletion":
-	command	=> "/bin/cp /opt/vagrant_ruby/lib/ruby/gems/1.8/gems/hammer_cli-0.0.14/hammer_cli_complete /etc/bash_completion.d/",
+	command	=> "/bin/cp /var/lib/gems/1.9.1/gems/hammer_cli-0.0.14/hammer_cli_complete /etc/bash_completion.d/",
 	require	=> [
 			Package["hammer_cli_foreman"],
 			Exec['foreman-installer'],
@@ -285,7 +285,7 @@ exec { "hammer execution":
 		&& hammer partition_table update --id 2 --file /home/ccka/git/foreman-poc/hammer/pTable \
 		&& hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.2 --domain-ids 1 --dhcp-id 1 --tftp-id 1 --dns-id 1 \
 		&& hammer environment create --name cloudbox",
-	path	=> "/opt/vagrant_ruby/bin/",
+	path	=> "/usr/local/bin/",
 	require	=> [
 			File["/var/log/foreman/hammer.log"],
 			File["/etc/foreman/cli_config.yml"],
