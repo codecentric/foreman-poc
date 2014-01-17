@@ -62,7 +62,7 @@ package { "isc-dhcp-server":
 # placing the keyfile
 file { "/etc/bind/rndc.key":
 	ensure	=> present,
-	source	=> "/vagrant/files/BIND/rndc.key",
+	source	=> "/home/ccka/git/foreman-poc/files/BIND/rndc.key",
 	owner	=> root,
 	group	=> bind,
 	mode	=> 640,
@@ -93,7 +93,7 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/vagrant/files/DHCP/apparmor_usr.sbin.dhcpd",
+	source	=> "/home/ccka/git/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
 	require => Package["isc-dhcp-server"],
 }
 
@@ -122,7 +122,7 @@ file { '/var/lib/tftpboot/pxelinux.cfg':
 #	owner	=> nobody,
 #	group	=> nogroup,
 #	mode	=> 777,
-#	source	=> "/vagrant/files/TFTP/default",
+#	source	=> "/home/ccka/git/foreman-poc/files/TFTP/default",
 #	require	=> File["/var/lib/tftpboot/pxelinux.cfg"],
 #}
 
@@ -141,7 +141,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/vagrant/files/TFTP/ubuntu12.10/initrd.gz",
+	source	=> "/home/ccka/git/foreman-poc/files/TFTP/ubuntu12.10/initrd.gz",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
@@ -150,7 +150,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/vagrant/files/TFTP/ubuntu12.10/linux",
+	source	=> "/home/ccka/git/foreman-poc/files/TFTP/ubuntu12.10/linux",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
@@ -160,7 +160,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 #	owner	=> nobody,
 #	group	=> nogroup,
 #	mode	=> 777,
-#	source	=> "/vagrant/files/TFTP/boot.txt",
+#	source	=> "/home/ccka/git/foreman-poc/files/TFTP/boot.txt",
 #	require	=> File["/var/lib/tftpboot"],
 #}
 
@@ -168,7 +168,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 # options for foreman-installer
 file { "/usr/share/foreman-installer/config/answers.yaml":
 	ensure	=> present,
-	source	=> "/vagrant/files/answers.yaml",
+	source	=> "/home/ccka/git/foreman-poc/files/answers.yaml",
 	owner	=> root,
 	group	=> root,
 	mode	=> 600,
@@ -178,7 +178,7 @@ file { "/usr/share/foreman-installer/config/answers.yaml":
 # modifying foreman-installer to support DDNS
 file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp":
 	ensure	=> present,
-	source	=> "/vagrant/files/proxydhcp.pp",
+	source	=> "/home/ccka/git/foreman-poc/files/proxydhcp.pp",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
@@ -208,7 +208,7 @@ user { "foreman-proxy":
 # foreman settings
 file { "/etc/foreman/settings.yaml":
 	ensure	=> present,
-	source	=> "/vagrant/files/settings.yaml",
+	source	=> "/home/ccka/git/foreman-poc/files/settings.yaml",
 	owner	=> root,
 	group	=> foreman,
 	mode	=> 640,
@@ -251,7 +251,7 @@ package { 'hammer_cli_foreman':
 # hammer config file
 file { "/etc/foreman/cli_config.yml":
 	ensure	=> present,
-	source	=> "/vagrant/hammer/cli_config.yml",
+	source	=> "/home/ccka/git/foreman-poc/hammer/cli_config.yml",
 	require	=> Exec['foreman-installer'],
 }
 
@@ -282,7 +282,7 @@ exec { "hammer execution":
 		&& hammer template update --id 6 --operatingsystem-ids 1 \
 		&& hammer template update --id 7 --operatingsystem-ids 1 \
 		&& hammer template update --id 2 --operatingsystem-ids 1 \
-		&& hammer partition_table update --id 2 --file /vagrant/hammer/pTable \
+		&& hammer partition_table update --id 2 --file /home/ccka/git/foreman-poc/hammer/pTable \
 		&& hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.2 --domain-ids 1 --dhcp-id 1 --tftp-id 1 --dns-id 1 \
 		&& hammer environment create --name cloudbox",
 	path	=> "/opt/vagrant_ruby/bin/",
@@ -291,8 +291,8 @@ exec { "hammer execution":
 			File["/etc/foreman/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-	user	=> vagrant,
-	environment	=> ["HOME=/home/vagrant"],
+#	user	=> vagrant,
+#	environment	=> ["HOME=/home/vagrant"],
 }
 
 
@@ -334,16 +334,16 @@ exec { 'iptables masquerade':
 package{ 'debconf-utils':
 	ensure	=> installed,
 }
-file { '/home/vagrant/iptables-persistent.seed':
-	ensure	=> present,
-	source	=> "/vagrant/files/iptables-persistent.seed",
-}
+#file { '/home/ccka/iptables-persistent.seed':
+#	ensure	=> present,
+#	source	=> "/vagrant/files/iptables-persistent.seed",
+#}
 exec { 'preseed':
-	command	=> "debconf-set-selections /home/vagrant/iptables-persistent.seed",
+	command	=> "debconf-set-selections /home/ccka/git/foreman-poc/files/iptables-persistent.seed",
 	path	=> "/usr/bin/",
 	require	=> [
 			Package['debconf-utils'],
-			File['/home/vagrant/iptables-persistent.seed'],
+#			File['/home/vagrant/iptables-persistent.seed'],
 		],
 }
 
@@ -384,16 +384,10 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/vagrant/files/apt-cacher.conf",
+	source	=> "/home/ccka/git/foreman-poc/files/apt-cacher.conf",
 	notify  => Service["apt-cacher"],
 	require	=> Package["apt-cacher"],
 }
-
-#exec { 'apt-cacher restart':
-#	command => "apt-cacher restart",
-#	path	=> "/etc/init.d/",
-#	require => Exec["apt-cacher-import"],
-#}
 
 exec {'apt-cacher-import':
 	command => "apt-cacher-import.pl -r /var/cache/apt/archives",
@@ -401,17 +395,9 @@ exec {'apt-cacher-import':
 	require => File["/etc/apt-cacher/apt-cacher.conf"],
 }
 
-# uncomment allowed hosts
-#exec { 'allowed_hosts':
-#	command	=> "/bin/sed -i -e'/#allowed_hosts = */s/^#\\+//' '/etc/apt-cacher/apt-cacher.conf'",
-#	onlyif	=> "/bin/grep '#allowed_hosts = *' '/etc/apt-cacher/apt-cacher.conf' | /bin/grep '^#' | /usr/bin/wc -l",
-#	notify  => Service["apache2"],
-#	require => Package["apt-cacher"],
-#}
-
 # preseed provision: add apt proxy
 #exec { "hammer add apt proxy":
-#	command	=> "hammer template update --id 6 --file /vagrant/hammer/provision",
+#	command	=> "hammer template update --id 6 --file /home/ccka/git/foreman-poc/hammer/provision",
 #	path	=> "/opt/vagrant_ruby/bin/",
 #	require	=> [
 #			File["/var/log/foreman/hammer.log"],
