@@ -278,13 +278,13 @@ exec { "hammer execution":
 		&& hammer domain create --name \"local.cloud\" --description \"Base cloud domain\" \
 		&& hammer domain update --id 1 --dns-id 1 \
 		&& hammer medium create --name 'Local Media' --path http://172.16.0.2:3142/apt-cacher/ubuntu \
-		&& hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids 1 --ptable-ids 2 --medium-ids 3 \
+		&& hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids 1 --ptable-ids 2 --medium-ids 5 \
 		&& hammer template update --id 6 --operatingsystem-ids 1 \
 		&& hammer template update --id 7 --operatingsystem-ids 1 \
 		&& hammer template update --id 2 --operatingsystem-ids 1 \
 		&& hammer partition_table update --id 2 --file /vagrant/hammer/pTable \
 		&& hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.2 --domain-ids 1 --dhcp-id 1 --tftp-id 1 --dns-id 1 \
-		&& hammer environment create --name cloud",
+		&& hammer environment create --name cloudbox",
 	path	=> "/opt/vagrant_ruby/bin/",
 	require	=> [
 			File["/var/log/foreman/hammer.log"],
@@ -389,11 +389,11 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	require	=> Package["apt-cacher"],
 }
 
-exec { 'apt-cacher restart':
-	command => "apt-cacher restart",
-	path	=> "/etc/init.d/",
-	require => Exec["apt-cacher-import"],
-}
+#exec { 'apt-cacher restart':
+#	command => "apt-cacher restart",
+#	path	=> "/etc/init.d/",
+#	require => Exec["apt-cacher-import"],
+#}
 
 exec {'apt-cacher-import':
 	command => "apt-cacher-import.pl -r /var/cache/apt/archives",

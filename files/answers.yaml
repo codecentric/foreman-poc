@@ -1,5 +1,6 @@
 ---
 foreman:
+  environment: cloudbox
   custom_repo: true
   oauth_consumer_key: Ls6P7vd3sfv8QZviRTNnPUX2k5RPhTnn
   oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
@@ -30,3 +31,8 @@ foreman_proxy:
   oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
 puppet:
   server: true
+  server_environments:
+      - cloudbox
+      - development
+      - production
+
