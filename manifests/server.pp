@@ -274,25 +274,17 @@ file { '/var/log/foreman/hammer.log':
 # foreman configuration via hammer
 
 exec { "hammer execution":
-	command	=> "hammer architecture create --name x86_64 \
-		&& hammer domain create --name \"local.cloud\" --description \"Base cloud domain\" \
-		&& hammer domain update --id 1 --dns-id 1 \
-		&& hammer medium create --name 'Local Media' --path http://172.16.0.2:3142/apt-cacher/ubuntu \
-		&& hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids 1 --ptable-ids 2 --medium-ids 5 \
-		&& hammer template update --id 6 --operatingsystem-ids 1 \
-		&& hammer template update --id 7 --operatingsystem-ids 1 \
-		&& hammer template update --id 2 --operatingsystem-ids 1 \
-		&& hammer partition_table update --id 2 --file /home/ccka/foreman-poc/hammer/pTable \
-		&& hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.2 --domain-ids 1 --dhcp-id 1 --tftp-id 1 --dns-id 1 \
-		&& hammer environment create --name cloudbox",
+	command	=> "/home/ccka/foreman-poc/hammer/hammer.sh",
 	path	=> "/usr/local/bin/",
 	require	=> [
 			File["/var/log/foreman/hammer.log"],
 			File["/etc/foreman/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-#	user	=> vagrant,
-#	environment	=> ["HOME=/home/vagrant"],
+       # onlyif  => "hammer architecture list | /bin/grep 'x86_64' | /usr/bin/wc -l",
+	onlyif => "/bin/echo 1",
+	user	=> ccka,
+	environment	=> ["HOME=/home/ccka"],
 }
 
 
