@@ -1,6 +1,6 @@
 Bringing machine 'server' up with 'virtualbox' provider...
 [server] Importing base box 'precise32'...
-Progress: 30%Progress: 40%Progress: 50%Progress: 70%Progress: 80%Progress: 90%[server] Matching MAC address for NAT networking...
+Progress: 20%Progress: 30%Progress: 40%Progress: 50%Progress: 80%Progress: 90%[server] Matching MAC address for NAT networking...
 [server] Setting the name of the VM...
 [server] Clearing any previously set forwarded ports...
 [server] Clearing any previously set network interfaces...
@@ -23,50 +23,59 @@ stdin: is not a tty
 Europe/Berlin
 
 Current default time zone: 'Europe/Berlin'
-Local time is now:      Mon Jan 13 12:34:05 CET 2014.
-Universal Time is now:  Mon Jan 13 11:34:05 UTC 2014.
+Local time is now:      Thu Jan 16 09:53:38 CET 2014.
+Universal Time is now:  Thu Jan 16 08:53:38 UTC 2014.
 
 [server] Running provisioner: shell...
-[server] Running: /tmp/vagrant-shell20140113-17314-x6wgu0
+[server] Running: /tmp/vagrant-shell20140116-7060-1w7fzii
 stdin: is not a tty
---2014-01-13 12:34:06--  https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+--2014-01-16 09:53:39--  https://apt.puppetlabs.com/puppetlabs-release-precise.deb
 Resolving apt.puppetlabs.com (apt.puppetlabs.com)... 198.58.114.168
 Connecting to apt.puppetlabs.com (apt.puppetlabs.com)|198.58.114.168|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 3430 (3.3K) [application/x-debian-package]
 Saving to: `puppetlabs-release-precise.deb'
 
-     0K ...                                                   100% 46.7M=0s
+     0K ...                                                   100% 15.7M=0s
 
-2014-01-13 12:34:06 (46.7 MB/s) - `puppetlabs-release-precise.deb' saved [3430/3430]
+2014-01-16 09:53:41 (15.7 MB/s) - `puppetlabs-release-precise.deb' saved [3430/3430]
 
 Selecting previously unselected package puppetlabs-release.
 (Reading database ... 29361 files and directories currently installed.)
 Unpacking puppetlabs-release (from puppetlabs-release-precise.deb) ...
 Setting up puppetlabs-release (1.0-7) ...
 Ign http://security.ubuntu.com precise-security InRelease
+Get:1 http://security.ubuntu.com precise-security Release.gpg [198 B]
+Get:2 http://security.ubuntu.com precise-security Release [49.6 kB]
 Ign http://us.archive.ubuntu.com precise InRelease
 Ign http://us.archive.ubuntu.com precise-updates InRelease
 Ign http://us.archive.ubuntu.com precise-backports InRelease
+Get:3 http://security.ubuntu.com precise-security/main Sources [95.7 kB]
 Ign http://apt.puppetlabs.com precise InRelease
+Get:4 http://security.ubuntu.com precise-security/restricted Sources [2,494 B]
 Hit http://us.archive.ubuntu.com precise Release.gpg
-Get:1 http://security.ubuntu.com precise-security Release.gpg [198 B]
-Get:2 http://apt.puppetlabs.com precise Release.gpg [836 B]
-Get:3 http://us.archive.ubuntu.com precise-updates Release.gpg [198 B]
-Get:4 http://security.ubuntu.com precise-security Release [49.6 kB]
-Get:5 http://apt.puppetlabs.com precise Release [22.4 kB]
-Get:6 http://us.archive.ubuntu.com precise-backports Release.gpg [198 B]
+Get:5 http://us.archive.ubuntu.com precise-updates Release.gpg [198 B]
+Get:6 http://security.ubuntu.com precise-security/universe Sources [30.5 kB]
+Get:7 http://security.ubuntu.com precise-security/multiverse Sources [1,797 B]
+Get:8 http://security.ubuntu.com precise-security/main i386 Packages [375 kB]
+Get:9 http://apt.puppetlabs.com precise Release.gpg [876 B]
+Get:10 http://us.archive.ubuntu.com precise-backports Release.gpg [198 B]
 Hit http://us.archive.ubuntu.com precise Release
-Get:7 http://us.archive.ubuntu.com precise-updates Release [49.6 kB]
-Get:8 http://security.ubuntu.com precise-security/main Sources [95.4 kB]
-Get:9 http://apt.puppetlabs.com precise/main Sources [60.0 kB]
-Get:10 http://us.archive.ubuntu.com precise-backports Release [49.6 kB]
-Get:11 http://security.ubuntu.com precise-security/restricted Sources [2,494 B]
-Get:12 http://security.ubuntu.com precise-security/universe Sources [29.9 kB]
-Get:13 http://security.ubuntu.com precise-security/multiverse Sources [1,792 B]
-Get:14 http://security.ubuntu.com precise-security/main i386 Packages [375 kB]
-Get:15 http://apt.puppetlabs.com precise/dependencies Sources [8,552 B]
-Get:16 http://apt.puppetlabs.com precise/main i386 Packages [59.5 kB]
+Get:11 http://security.ubuntu.com precise-security/restricted i386 Packages [4,620 B]
+Get:12 http://security.ubuntu.com precise-security/universe i386 Packages [92.5 kB]
+Get:13 http://security.ubuntu.com precise-security/multiverse i386 Packages [2,650 B]
+Get:14 http://security.ubuntu.com precise-security/main TranslationIndex [74 B]
+Get:15 http://security.ubuntu.com precise-security/multiverse TranslationIndex [72 B]
+Get:16 http://security.ubuntu.com precise-security/restricted TranslationIndex [72 B]
+Get:17 http://security.ubuntu.com precise-security/universe TranslationIndex [73 B]
+Get:18 http://apt.puppetlabs.com precise Release [22.4 kB]
+Get:19 http://us.archive.ubuntu.com precise-updates Release [49.6 kB]
+Get:20 http://security.ubuntu.com precise-security/main Translation-en [167 kB]
+Get:21 http://security.ubuntu.com precise-security/multiverse Translation-en [1,299 B]
+Get:22 http://security.ubuntu.com precise-security/restricted Translation-en [1,253 B]
+Get:23 http://security.ubuntu.com precise-security/universe Translation-en [55.3 kB]
+Get:24 http://apt.puppetlabs.com precise/main Sources [60.0 kB]
+Get:25 http://us.archive.ubuntu.com precise-backports Release [49.6 kB]
 Hit http://us.archive.ubuntu.com precise/main Sources
 Hit http://us.archive.ubuntu.com precise/restricted Sources
 Hit http://us.archive.ubuntu.com precise/universe Sources
@@ -79,50 +88,41 @@ Hit http://us.archive.ubuntu.com precise/main TranslationIndex
 Hit http://us.archive.ubuntu.com precise/multiverse TranslationIndex
 Hit http://us.archive.ubuntu.com precise/restricted TranslationIndex
 Hit http://us.archive.ubuntu.com precise/universe TranslationIndex
-Get:17 http://us.archive.ubuntu.com precise-updates/main Sources [444 kB]
-Get:18 http://apt.puppetlabs.com precise/dependencies i386 Packages [6,183 B]
+Get:26 http://us.archive.ubuntu.com precise-updates/main Sources [447 kB]
+Get:27 http://apt.puppetlabs.com precise/dependencies Sources [8,552 B]
+Get:28 http://apt.puppetlabs.com precise/main i386 Packages [59.8 kB]
+Get:29 http://apt.puppetlabs.com precise/dependencies i386 Packages [6,183 B]
 Ign http://apt.puppetlabs.com precise/dependencies TranslationIndex
 Ign http://apt.puppetlabs.com precise/main TranslationIndex
-Get:19 http://us.archive.ubuntu.com precise-updates/restricted Sources [7,039 B]
-Get:20 http://us.archive.ubuntu.com precise-updates/universe Sources [101 kB]
-Get:21 http://security.ubuntu.com precise-security/restricted i386 Packages [4,620 B]
-Get:22 http://security.ubuntu.com precise-security/universe i386 Packages [91.1 kB]
-Get:23 http://us.archive.ubuntu.com precise-updates/multiverse Sources [8,468 B]
-Get:24 http://us.archive.ubuntu.com precise-updates/main i386 Packages [764 kB]
-Get:25 http://security.ubuntu.com precise-security/multiverse i386 Packages [2,642 B]
-Get:26 http://security.ubuntu.com precise-security/main TranslationIndex [74 B]
-Get:27 http://security.ubuntu.com precise-security/multiverse TranslationIndex [72 B]
-Get:28 http://security.ubuntu.com precise-security/restricted TranslationIndex [72 B]
-Get:29 http://security.ubuntu.com precise-security/universe TranslationIndex [73 B]
-Get:30 http://us.archive.ubuntu.com precise-updates/restricted i386 Packages [11.5 kB]
-Get:31 http://us.archive.ubuntu.com precise-updates/universe i386 Packages [233 kB]
-Get:32 http://us.archive.ubuntu.com precise-updates/multiverse i386 Packages [14.4 kB]
-Get:33 http://us.archive.ubuntu.com precise-updates/main TranslationIndex [3,564 B]
-Get:34 http://us.archive.ubuntu.com precise-updates/multiverse TranslationIndex [2,605 B]
-Get:35 http://us.archive.ubuntu.com precise-updates/restricted TranslationIndex [2,461 B]
-Get:36 http://us.archive.ubuntu.com precise-updates/universe TranslationIndex [2,850 B]
-Get:37 http://us.archive.ubuntu.com precise-backports/main Sources [4,225 B]
-Get:38 http://us.archive.ubuntu.com precise-backports/restricted Sources [14 B]
-Get:39 http://security.ubuntu.com precise-security/main Translation-en [166 kB]
-Get:40 http://us.archive.ubuntu.com precise-backports/universe Sources [36.4 kB]
-Get:41 http://us.archive.ubuntu.com precise-backports/multiverse Sources [5,311 B]
-Get:42 http://us.archive.ubuntu.com precise-backports/main i386 Packages [4,809 B]
-Get:43 http://us.archive.ubuntu.com precise-backports/restricted i386 Packages [14 B]
-Get:44 http://us.archive.ubuntu.com precise-backports/universe i386 Packages [37.7 kB]
-Get:45 http://us.archive.ubuntu.com precise-backports/multiverse i386 Packages [5,178 B]
-Get:46 http://us.archive.ubuntu.com precise-backports/main TranslationIndex [72 B]
-Get:47 http://us.archive.ubuntu.com precise-backports/multiverse TranslationIndex [72 B]
-Get:48 http://us.archive.ubuntu.com precise-backports/restricted TranslationIndex [70 B]
-Get:49 http://us.archive.ubuntu.com precise-backports/universe TranslationIndex [73 B]
-Get:50 http://security.ubuntu.com precise-security/multiverse Translation-en [1,299 B]
-Get:51 http://security.ubuntu.com precise-security/restricted Translation-en [1,253 B]
+Get:30 http://us.archive.ubuntu.com precise-updates/restricted Sources [7,039 B]
+Get:31 http://us.archive.ubuntu.com precise-updates/universe Sources [101 kB]
+Get:32 http://us.archive.ubuntu.com precise-updates/multiverse Sources [8,486 B]
+Get:33 http://us.archive.ubuntu.com precise-updates/main i386 Packages [765 kB]
+Get:34 http://us.archive.ubuntu.com precise-updates/restricted i386 Packages [11.5 kB]
+Get:35 http://us.archive.ubuntu.com precise-updates/universe i386 Packages [234 kB]
+Get:36 http://us.archive.ubuntu.com precise-updates/multiverse i386 Packages [14.4 kB]
+Get:37 http://us.archive.ubuntu.com precise-updates/main TranslationIndex [3,564 B]
+Get:38 http://us.archive.ubuntu.com precise-updates/multiverse TranslationIndex [2,605 B]
+Get:39 http://us.archive.ubuntu.com precise-updates/restricted TranslationIndex [2,461 B]
+Get:40 http://us.archive.ubuntu.com precise-updates/universe TranslationIndex [2,850 B]
 Hit http://us.archive.ubuntu.com precise/main Translation-en
+Get:41 http://us.archive.ubuntu.com precise-backports/main Sources [4,225 B]
+Get:42 http://us.archive.ubuntu.com precise-backports/restricted Sources [14 B]
+Get:43 http://us.archive.ubuntu.com precise-backports/universe Sources [36.4 kB]
+Get:44 http://us.archive.ubuntu.com precise-backports/multiverse Sources [5,311 B]
+Get:45 http://us.archive.ubuntu.com precise-backports/main i386 Packages [4,809 B]
+Get:46 http://us.archive.ubuntu.com precise-backports/restricted i386 Packages [14 B]
+Get:47 http://us.archive.ubuntu.com precise-backports/universe i386 Packages [37.7 kB]
+Get:48 http://us.archive.ubuntu.com precise-backports/multiverse i386 Packages [5,178 B]
+Get:49 http://us.archive.ubuntu.com precise-backports/main TranslationIndex [72 B]
+Get:50 http://us.archive.ubuntu.com precise-backports/multiverse TranslationIndex [72 B]
+Get:51 http://us.archive.ubuntu.com precise-backports/restricted TranslationIndex [70 B]
+Get:52 http://us.archive.ubuntu.com precise-backports/universe TranslationIndex [73 B]
 Hit http://us.archive.ubuntu.com precise/multiverse Translation-en
 Hit http://us.archive.ubuntu.com precise/restricted Translation-en
 Hit http://us.archive.ubuntu.com precise/universe Translation-en
-Get:52 http://us.archive.ubuntu.com precise-updates/main Translation-en [332 kB]
-Get:53 http://us.archive.ubuntu.com precise-updates/multiverse Translation-en [8,293 B]
-Get:54 http://security.ubuntu.com precise-security/universe Translation-en [54.8 kB]
+Get:53 http://us.archive.ubuntu.com precise-updates/main Translation-en [333 kB]
+Get:54 http://us.archive.ubuntu.com precise-updates/multiverse Translation-en [8,293 B]
 Get:55 http://us.archive.ubuntu.com precise-updates/restricted Translation-en [2,663 B]
 Get:56 http://us.archive.ubuntu.com precise-updates/universe Translation-en [134 kB]
 Get:57 http://us.archive.ubuntu.com precise-backports/main Translation-en [4,235 B]
@@ -133,7 +133,7 @@ Ign http://apt.puppetlabs.com precise/dependencies Translation-en_US
 Ign http://apt.puppetlabs.com precise/dependencies Translation-en
 Ign http://apt.puppetlabs.com precise/main Translation-en_US
 Ign http://apt.puppetlabs.com precise/main Translation-en
-Fetched 3,335 kB in 4s (724 kB/s)
+Fetched 3,346 kB in 3s (926 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -154,13 +154,13 @@ The following NEW packages will be installed:
 0 upgraded, 19 newly installed, 0 to remove and 156 not upgraded.
 Need to get 3,802 kB of archives.
 After this operation, 14.5 MB of additional disk space will be used.
-Get:1 http://us.archive.ubuntu.com/ubuntu/ precise/main libreadline5 i386 5.2-11 [123 kB]
-Get:2 http://apt.puppetlabs.com/ precise/main facter i386 1.7.4-1puppetlabs1 [76.6 kB]
+Get:1 http://apt.puppetlabs.com/ precise/main facter i386 1.7.4-1puppetlabs1 [76.6 kB]
+Get:2 http://us.archive.ubuntu.com/ubuntu/ precise/main libreadline5 i386 5.2-11 [123 kB]
 Get:3 http://apt.puppetlabs.com/ precise/main hiera all 1.3.0-1puppetlabs1 [12.5 kB]
 Get:4 http://apt.puppetlabs.com/ precise/dependencies ruby-rgen all 0.6.5-1puppetlabs1 [82.2 kB]
 Get:5 http://us.archive.ubuntu.com/ubuntu/ precise/main augeas-lenses all 0.10.0-0ubuntu4 [175 kB]
-Get:6 http://apt.puppetlabs.com/ precise/main puppet-common all 3.4.2-1puppetlabs1 [1,160 kB]
-Get:7 http://us.archive.ubuntu.com/ubuntu/ precise/main debconf-utils all 1.5.42ubuntu1 [54.9 kB]
+Get:6 http://us.archive.ubuntu.com/ubuntu/ precise/main debconf-utils all 1.5.42ubuntu1 [54.9 kB]
+Get:7 http://apt.puppetlabs.com/ precise/main puppet-common all 3.4.2-1puppetlabs1 [1,160 kB]
 Get:8 http://us.archive.ubuntu.com/ubuntu/ precise-updates/main libruby1.8 i386 1.8.7.352-2ubuntu1.4 [1,787 kB]
 Get:9 http://us.archive.ubuntu.com/ubuntu/ precise-updates/main ruby1.8 i386 1.8.7.352-2ubuntu1.4 [34.2 kB]
 Get:10 http://us.archive.ubuntu.com/ubuntu/ precise/main ruby all 4.8 [5,054 B]
@@ -174,7 +174,7 @@ Get:17 http://us.archive.ubuntu.com/ubuntu/ precise/main libruby all 4.8 [4,766 
 Get:18 http://us.archive.ubuntu.com/ubuntu/ precise/main libshadow-ruby1.8 i386 1.4.1-8build1 [8,828 B]
 Get:19 http://apt.puppetlabs.com/ precise/main puppet all 3.4.2-1puppetlabs1 [9,624 B]
 dpkg-preconfigure: unable to re-open stdin: No such file or directory
-Fetched 3,802 kB in 2s (1,323 kB/s)
+Fetched 3,802 kB in 2s (1,853 kB/s)
 Selecting previously unselected package libreadline5.
 (Reading database ... 29367 files and directories currently installed.)
 Unpacking libreadline5 (from .../libreadline5_5.2-11_i386.deb) ...
@@ -246,7 +246,7 @@ ldconfig deferred processing now taking place
 [server] Running provisioner: puppet...
 Running Puppet with server.pp...
 stdin: is not a tty
-Notice: Compiled catalog for server.local.cloud in environment production in 0.25 seconds
+Notice: Compiled catalog for server.local.cloud in environment production in 0.33 seconds
 Notice: /Stage[main]/Main/File[smartproxylist]/ensure: created
 Notice: /Stage[main]/Main/Exec[net.ipv4.ip_forward]/returns: executed successfully
 Notice: /Stage[main]/Main/Exec[sysctl]/returns: executed successfully
@@ -261,7 +261,7 @@ Notice: /Stage[main]/Main/Package[iptables-persistent]/ensure: ensure changed 'p
 Notice: /Stage[main]/Main/Service[iptables-persistent]/ensure: ensure changed 'stopped' to 'running'
 Notice: /Stage[main]/Main/Package[bind9]/ensure: ensure changed 'purged' to 'present'
 Notice: /Stage[main]/Main/User[dhcpd]/groups: groups changed '' to 'bind'
-Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/content: content changed '{md5}935949e34e71bb2918157e7f0454a546' to '{md5}5e8ce92ef62e12451c1a4512ac2214e8'
+Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/content: content changed '{md5}37562aa70260137cd1f339c55197e241' to '{md5}5e8ce92ef62e12451c1a4512ac2214e8'
 Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/owner: owner changed 'bind' to 'root'
 Notice: /Stage[main]/Main/Exec[preseed]/returns: executed successfully
 Notice: /Stage[main]/Main/Package[gem]/ensure: ensure changed 'purged' to 'present'
@@ -280,9 +280,14 @@ Notice: /Stage[main]/Main/File[/usr/share/foreman-installer/config/answers.yaml]
 Notice: /Stage[main]/Main/File[/usr/share/foreman-installer/config/answers.yaml]/mode: mode changed '0644' to '0600'
 Notice: /Stage[main]/Main/Exec[foreman-installer]/returns: executed successfully
 Notice: /Stage[main]/Main/Exec[autocompletion]/returns: executed successfully
+Notice: /Stage[main]/Main/Package[apt-cacher]/ensure: ensure changed 'purged' to 'present'
 Notice: /Stage[main]/Main/File[/var/log/foreman/hammer.log]/ensure: created
+Notice: /Stage[main]/Main/File[/etc/apt-cacher/apt-cacher.conf]/content: content changed '{md5}ed9e97a75d29c1889b9ab6d4f4298e49' to '{md5}2c80bd6a2d4dc2d93af79da3b9049199'
+Notice: /Stage[main]/Main/Exec[apt-cacher-import]/returns: executed successfully
+Notice: /Stage[main]/Main/Service[apt-cacher]: Triggered 'refresh' from 1 events
 Notice: /Stage[main]/Main/File[/etc/foreman/settings.yaml]/content: content changed '{md5}d36c09e8c6efc11202dfa384b27b5251' to '{md5}11ccb506ef5e4aec1fc3760495e5cae3'
 Notice: /Stage[main]/Main/File[/etc/foreman/cli_config.yml]/ensure: defined content as '{md5}cc5a46b466d237dbdc23d3dfcd8b17fc'
+Notice: /Stage[main]/Main/Exec[apt-cacher restart]/returns: executed successfully
 Notice: /Stage[main]/Main/Exec[foremam-restart]: Triggered 'refresh' from 1 events
 Notice: /Stage[main]/Main/Exec[hammer execution]/returns: executed successfully
-Notice: Finished catalog run in 245.85 seconds
+Notice: Finished catalog run in 264.34 seconds
