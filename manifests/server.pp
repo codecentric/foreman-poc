@@ -58,6 +58,23 @@ package { "isc-dhcp-server":
 	ensure	=> "installed",
 	require	=> Exec['apt-update'],
 }
+package { "git":
+	ensure  => "installed",
+	require => Exec['apt-update'],
+}
+package { "gem":
+	ensure => "installed",
+	require => Exec['apt-update'],
+}
+package { "ruby1.9.1-dev":
+	ensure => "installed",
+	require => Exec['apt-update'],
+}
+exec { "bundle update":
+	command => "bundle update",
+	require => Package["gem"],
+	path => "/usr/bin/",
+}
 
 # placing the keyfile
 file { "/etc/bind/rndc.key":
@@ -223,27 +240,18 @@ exec { "foremam-restart":
 }
 
 # HAMMER
-
-# install gem (ruby package manager)
-package { 'gem':
-	ensure	=> "installed",
-}
-
 # install hammer cli
 package { 'hammer_cli':
 	ensure	=> installed,
 	provider => "gem",
-	require => Package["gem"],
+	require => Exec["bundle update"],
 }
 
 # install foreman plugin for hammer
 package { 'hammer_cli_foreman':
 	ensure	=> installed,
 	provider => "gem",
-	require => [
-			Package["gem"],
-			Package["hammer_cli"],
-		],
+	require => Package["hammer_cli"],
 }
 
 # set up hammer for foreman
