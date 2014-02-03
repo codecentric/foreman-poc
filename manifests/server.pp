@@ -256,13 +256,13 @@ file { "/etc/foreman/cli_config.yml":
 }
 
 # hammer autocompletion
-exec { "autocompletion":
-	command	=> "/bin/cp /opt/vagrant_ruby/lib/ruby/gems/1.8/gems/hammer_cli-0.0.14/hammer_cli_complete /etc/bash_completion.d/",
-	require	=> [
-			Package["hammer_cli_foreman"],
-			Exec['foreman-installer'],
-		],
-}
+#exec { "autocompletion":
+#	command	=> "/bin/cp /opt/vagrant_ruby/lib/ruby/gems/1.8/gems/hammer_cli-0.0.14/hammer_cli_complete /etc/bash_completion.d/",
+#	require	=> [
+#			Package["hammer_cli_foreman"],
+#			Exec['foreman-installer'],
+#		],
+#}
 
 # hammer logging
 file { '/var/log/foreman/hammer.log':
@@ -272,6 +272,19 @@ file { '/var/log/foreman/hammer.log':
 }
 
 # foreman configuration via hammer
+#exec { "hammer execution":
+#       command        => "/vagrant/hammer/hammer.sh",
+#        path        => "/usr/local/bin/",
+#        require        => [
+#                        File["/var/log/foreman/hammer.log"],
+#                        File["/etc/foreman/cli_config.yml"],
+#                        Package["hammer_cli_foreman"],
+#                ],
+#        onlyif  => "hammer architecture list | /bin/grep  -q 'x86_64'",
+#       # onlyif => "/bin/echo 1",
+#        user        => vagrant,
+#        environment        => ["HOME=/home/vagrant"],
+#}
 
 exec { "hammer execution":
 	command	=> "hammer architecture create --name x86_64 \
@@ -361,7 +374,7 @@ service { "iptables-persistent":
 
 
 
-# local ubuntu repository: apt-cacher
+# Install local ubuntu repository: apt-cacher
 service { "apache2":
 	ensure  => "running",
 	enable  => "true",
@@ -421,5 +434,36 @@ exec {'apt-cacher-import':
 #	user	=> vagrant,
 #	environment	=> ["HOME=/home/vagrant"],
 #}
+
+file_line { 'sudo_rule':
+   path => '/etc/sudoers',
+   line => 'Defaults:foreman-proxy !requiretty',
+   require	=> Exec['foreman-installer'],
+}
+
+file_line { 'sudo_rule_v1':
+   path => '/etc/sudoers',
+   line => 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet kick *',
+   require	=> File_Line['sudo_rule'],
+ }
+ 
+file_line { 'sudo_rule_v2':
+   path => '/etc/sudoers',
+   line => 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet cert *',
+   require	=> File_Line['sudo_rule_v1'],
+ }
+ 
+ #service { "networking":
+ #   ensure  => "running",
+ #   enable  => "true",
+ #   require	=> Exec['foreman-installer'],
+#}
+ 
+ #file_line {'dhclient.conf':
+#	notify  => Service["networking"],
+#	path => '/etc/dhcp/dhclient.conf',
+#	line => 'prepend domain-name-servers 172.16.0.2;',
+#	require => File_Line['sudo_rule_v2'],
+ #}
 
 
