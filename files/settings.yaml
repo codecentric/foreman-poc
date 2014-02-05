@@ -20,3 +20,8 @@
 :oauth_consumer_key: Ls6P7vd3sfv8QZviRTNnPUX2k5RPhTnn
 :oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
 
+# Settings for Puppet runs
+:puppet: true
+:puppet_conf: /etc/puppet/puppet.conf
+:puppet_provider: mcollective
+
