@@ -44,6 +44,11 @@ exec { "apt-update":
 	require	=> Aptkey['foreman.asc'],
 }
 
+package { "openssh-server":
+	ensure	=> "installed",
+	require	=> Exec['apt-update'],
+}
+
 package { "foreman-installer":
 	ensure	=> "installed",
 	require	=> Exec['apt-update'],
