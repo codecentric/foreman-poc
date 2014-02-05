@@ -66,15 +66,16 @@ package { "gem":
 	ensure => "installed",
 	require => Exec['apt-update'],
 }
-package { "ruby1.9.1-dev":
-	ensure => "installed",
-	require => Exec['apt-update'],
-}
-exec { "bundle update":
-	command => "bundle update",
-	require => Package["gem"],
-	path => "/usr/bin/",
-}
+#package { "ruby1.9.1-dev":
+#	ensure => "installed",
+#	require => Exec['apt-update'],
+#}
+#exec { "bundle update":
+#	command => "bundle update",
+##	cwd => "/usr/share/foreman",
+#	require => Package["gem"],
+#	path => "/usr/bin/",
+#}
 
 # placing the keyfile
 file { "/etc/bind/rndc.key":
@@ -114,6 +115,13 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 	require => Package["isc-dhcp-server"],
 }
 
+# dhclient fix: prepend DNS-server
+file_line { 'dhclient':
+	path	=> '/etc/dhcp/dhclient.conf',
+	line	=> 'prepend domain-name-servers 172.16.0.2;',
+	match	=> "prepend domain-name-servers",
+}
+
 # TFTP
 
 # create the TFTP-root directory and set the permissions
@@ -132,16 +140,6 @@ file { '/var/lib/tftpboot/pxelinux.cfg':
 	mode	=> 777,
 	require	=> File["/var/lib/tftpboot"],
 }
-
-# config: list of available boot image
-#file { '/var/lib/tftpboot/pxelinux.cfg/default':
-#	ensure	=> present,
-#	owner	=> nobody,
-#	group	=> nogroup,
-#	mode	=> 777,
-#	source	=> "/home/ccka/foreman-poc/files/TFTP/default",
-#	require	=> File["/var/lib/tftpboot/pxelinux.cfg"],
-#}
 
 # netboot image directory
 file { '/var/lib/tftpboot/boot':
@@ -170,17 +168,6 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	source	=> "/home/ccka/foreman-poc/files/TFTP/ubuntu12.10/linux",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
-
-# boot menu text
-#file { '/var/lib/tftpboot/boot.txt':
-#	ensure	=> present,
-#	owner	=> nobody,
-#	group	=> nogroup,
-#	mode	=> 777,
-#	source	=> "/home/ccka/foreman-poc/files/TFTP/boot.txt",
-#	require	=> File["/var/lib/tftpboot"],
-#}
-
 
 # options for foreman-installer
 file { "/usr/share/foreman-installer/config/answers.yaml":
@@ -289,8 +276,7 @@ exec { "hammer execution":
 			File["/etc/foreman/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-       # onlyif  => "hammer architecture list | /bin/grep 'x86_64' | /usr/bin/wc -l",
-	onlyif => "/bin/echo 1",
+	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
 	user	=> ccka,
 	environment	=> ["HOME=/home/ccka"],
 }
@@ -334,16 +320,12 @@ exec { 'iptables masquerade':
 package{ 'debconf-utils':
 	ensure	=> installed,
 }
-#file { '/home/ccka/iptables-persistent.seed':
-#	ensure	=> present,
-#	source	=> "/vagrant/files/iptables-persistent.seed",
-#}
+
 exec { 'preseed':
 	command	=> "debconf-set-selections /home/ccka/foreman-poc/files/iptables-persistent.seed",
 	path	=> "/usr/bin/",
 	require	=> [
 			Package['debconf-utils'],
-#			File['/home/vagrant/iptables-persistent.seed'],
 		],
 }
 
@@ -358,7 +340,6 @@ service { "iptables-persistent":
 	ensure	=> running,
 	require	=> Package["iptables-persistent"],
 }
-
 
 
 # local ubuntu repository: apt-cacher
