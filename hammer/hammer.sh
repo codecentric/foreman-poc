@@ -22,7 +22,7 @@ hammer template update --id $template_id_default --operatingsystem-ids $os_id
 hammer template update --id $template_id_finish --operatingsystem-ids $os_id
 hammer template update --id $template_id_pxelinux --operatingsystem-ids $os_id
 
-hammer partition_table update --id $ptable_id --file /home/ccka/foreman-poc/hammer/pTable
+hammer partition_table update --id $ptable_id --file /home/server/git/foreman-poc/hammer/pTable
 
 domain_id=$(hammer domain list | grep "local.cloud" | cut -c 1)
 hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.2 --domain-ids $domain_id --dhcp-id $proxy_id --tftp-id $proxy_id --dns-id $proxy_id

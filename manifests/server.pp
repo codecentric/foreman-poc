@@ -75,17 +75,21 @@ package { "gem":
 #	ensure => "installed",
 #	require => Exec['apt-update'],
 #}
-#exec { "bundle update":
-#	command => "bundle update",
-##	cwd => "/usr/share/foreman",
-#	require => Package["gem"],
-#	path => "/usr/bin/",
-#}
+
+exec { "bundle update":
+	command => "bundle update",
+	cwd => "/usr/share/foreman",
+	path => "/usr/bin/",
+	require => [
+                 Package["foreman-installer"],
+		 Package["gem"],
+	],
+}
 
 # placing the keyfile
 file { "/etc/bind/rndc.key":
 	ensure	=> present,
-	source	=> "/home/ccka/foreman-poc/files/BIND/rndc.key",
+	source	=> "/home/server/git/foreman-poc/files/BIND/rndc.key",
 	owner	=> root,
 	group	=> bind,
 	mode	=> 640,
@@ -116,16 +120,16 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/home/ccka/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
+	source	=> "/home/server/git/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
 	require => Package["isc-dhcp-server"],
 }
 
 # dhclient fix: prepend DNS-server
-file_line { 'dhclient':
-	path	=> '/etc/dhcp/dhclient.conf',
-	line	=> 'prepend domain-name-servers 172.16.0.2;',
-	match	=> "prepend domain-name-servers",
-}
+#file_line { 'dhclient':
+#	path	=> '/etc/dhcp/dhclient.conf',
+#	line	=> 'prepend domain-name-servers 172.16.0.2;',
+#	match	=> "prepend domain-name-servers",
+#}
 
 # TFTP
 
@@ -161,7 +165,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/home/ccka/foreman-poc/files/TFTP/ubuntu12.10/initrd.gz",
+	source	=> "/home/server/git/foreman-poc/files/TFTP/ubuntu12.10/initrd.gz",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
@@ -170,14 +174,14 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/home/ccka/foreman-poc/files/TFTP/ubuntu12.10/linux",
+	source	=> "/home/server/git/foreman-poc/files/TFTP/ubuntu12.10/linux",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
 # options for foreman-installer
 file { "/usr/share/foreman-installer/config/answers.yaml":
 	ensure	=> present,
-	source	=> "/home/ccka/foreman-poc/files/answers.yaml",
+	source	=> "/home/server/git/foreman-poc/files/answers.yaml",
 	owner	=> root,
 	group	=> root,
 	mode	=> 600,
@@ -187,7 +191,7 @@ file { "/usr/share/foreman-installer/config/answers.yaml":
 # modifying foreman-installer to support DDNS
 file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp":
 	ensure	=> present,
-	source	=> "/home/ccka/foreman-poc/files/proxydhcp.pp",
+	source	=> "/home/server/git/foreman-poc/files/proxydhcp.pp",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
@@ -202,7 +206,8 @@ exec { 'foreman-installer':
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
 		File['/usr/share/foreman-installer/config/answers.yaml'],
-		File["/etc/bind/rndc.key"]
+		File["/etc/bind/rndc.key"],
+		Exec["bundle update"],
 	],
 }
 
@@ -217,7 +222,7 @@ user { "foreman-proxy":
 # foreman settings
 file { "/etc/foreman/settings.yaml":
 	ensure	=> present,
-	source	=> "/home/ccka/foreman-poc/files/settings.yaml",
+	source	=> "/home/server/git/foreman-poc/files/settings.yaml",
 	owner	=> root,
 	group	=> foreman,
 	mode	=> 640,
@@ -236,7 +241,7 @@ exec { "foremam-restart":
 package { 'hammer_cli':
 	ensure	=> installed,
 	provider => "gem",
-	require => Exec["bundle update"],
+#	require => Exec["bundle update"],
 }
 
 # install foreman plugin for hammer
@@ -251,7 +256,7 @@ package { 'hammer_cli_foreman':
 # hammer config file
 file { "/etc/foreman/cli_config.yml":
 	ensure	=> present,
-	source	=> "/home/ccka/foreman-poc/hammer/cli_config.yml",
+	source	=> "/home/server/git/foreman-poc/hammer/cli_config.yml",
 	require	=> Exec['foreman-installer'],
 }
 
@@ -288,7 +293,7 @@ file { '/var/log/foreman/hammer.log':
 #}
 
 exec { "hammer execution":
-	command	=> "/home/ccka/foreman-poc/hammer/hammer.sh",
+	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
 	path	=> "/usr/local/bin/",
 	require	=> [
 			File["/var/log/foreman/hammer.log"],
@@ -296,8 +301,8 @@ exec { "hammer execution":
 			Package["hammer_cli_foreman"],
 		],
 	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
-	user	=> ccka,
-	environment	=> ["HOME=/home/ccka"],
+	user	=> "server",
+	environment	=> ["HOME=/home/server"],
 }
 
 
@@ -341,7 +346,7 @@ package{ 'debconf-utils':
 }
 
 exec { 'preseed':
-	command	=> "debconf-set-selections /home/ccka/foreman-poc/files/iptables-persistent.seed",
+	command	=> "debconf-set-selections /home/server/git/foreman-poc/files/iptables-persistent.seed",
 	path	=> "/usr/bin/",
 	require	=> [
 			Package['debconf-utils'],
@@ -383,7 +388,7 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/home/ccka/foreman-poc/files/apt-cacher.conf",
+	source	=> "/home/server/git/foreman-poc/files/apt-cacher.conf",
 	notify  => Service["apt-cacher"],
 	require	=> Package["apt-cacher"],
 }
@@ -396,15 +401,15 @@ exec {'apt-cacher-import':
 
 # preseed provision: add apt proxy
 #exec { "hammer add apt proxy":
-#	command	=> "hammer template update --id 6 --file /home/ccka/foreman-poc/hammer/provision",
-#	path	=> "/opt/vagrant_ruby/bin/",
+#	command	=> "hammer template update --id 6 --file /home/server/git/foreman-poc/hammer/provision",
+#        path	=> "/opt/vagrant_ruby/bin/",
 #	require	=> [
 #			File["/var/log/foreman/hammer.log"],
 #			File["/etc/foreman/cli_config.yml"],
 #			Package["hammer_cli_foreman"],
 #		],
-#	user	=> vagrant,
-#	environment	=> ["HOME=/home/vagrant"],
+#	user	=> server,
+#	environment	=> ["HOME=/home/server"],
 #}
 
 file_line { 'sudo_rule':
@@ -425,7 +430,7 @@ file_line { 'sudo_rule_v2':
    require	=> File_Line['sudo_rule_v1'],
  }
  
- #service { "networking":
+#service { "networking":
  #   ensure  => "running",
  #   enable  => "true",
  #   require	=> Exec['foreman-installer'],
