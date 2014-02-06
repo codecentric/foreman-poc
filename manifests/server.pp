@@ -292,18 +292,18 @@ file { '/var/log/foreman/hammer.log':
 #        environment        => ["HOME=/home/vagrant"],
 #}
 
-exec { "hammer execution":
-	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
-	path	=> "/usr/local/bin/",
-	require	=> [
-			File["/var/log/foreman/hammer.log"],
-			File["/etc/foreman/cli_config.yml"],
-			Package["hammer_cli_foreman"],
-		],
-	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
-	user	=> "server",
-	environment	=> ["HOME=/home/server"],
-}
+#exec { "hammer execution":
+#	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
+#	path	=> "/usr/local/bin/",
+#	require	=> [
+#			File["/var/log/foreman/hammer.log"],
+#			File["/etc/foreman/cli_config.yml"],
+#			Package["hammer_cli_foreman"],
+#		],
+#	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
+#	user	=> "server",
+#	environment	=> ["HOME=/home/server"],
+#}
 
 
 
