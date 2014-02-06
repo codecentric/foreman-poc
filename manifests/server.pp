@@ -24,7 +24,7 @@ file {'foremanlist':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise 1.3'
+	content	=> 'deb http://deb.theforeman.org/ precise 1.4'
 }
 
 file {'smartproxylist':
@@ -71,10 +71,10 @@ package { "gem":
 	ensure => "installed",
 	require => Exec['apt-update'],
 }
-#package { "ruby1.9.1-dev":
-#	ensure => "installed",
-#	require => Exec['apt-update'],
-#}
+package { "ruby1.9.1-dev":
+	ensure => "installed",
+	require => Exec['apt-update'],
+}
 
 # placing the keyfile
 file { "/etc/bind/rndc.key":
@@ -186,7 +186,7 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 	group	=> root,
 	mode	=> 644,
 	require	=> Package["foreman-installer"],
-}
+}	
 
 
 # installation foreman
