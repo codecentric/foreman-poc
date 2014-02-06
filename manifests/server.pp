@@ -76,16 +76,6 @@ package { "gem":
 #	require => Exec['apt-update'],
 #}
 
-exec { "bundle update":
-	command => "bundle update",
-	cwd => "/usr/share/foreman",
-	path => "/usr/bin/",
-	require => [
-                 Package["foreman-installer"],
-		 Package["gem"],
-	],
-}
-
 # placing the keyfile
 file { "/etc/bind/rndc.key":
 	ensure	=> present,
@@ -207,7 +197,6 @@ exec { 'foreman-installer':
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
 		File['/usr/share/foreman-installer/config/answers.yaml'],
 		File["/etc/bind/rndc.key"],
-		Exec["bundle update"],
 	],
 }
 
@@ -248,7 +237,10 @@ package { 'hammer_cli':
 package { 'hammer_cli_foreman':
 	ensure	=> installed,
 	provider => "gem",
-	require => Package["hammer_cli"],
+	require => [ Package["hammer_cli"],
+			Exec["foreman-installer"],
+			Exec["bundle update"]
+		   ],
 }
 
 # set up hammer for foreman
@@ -297,6 +289,15 @@ file { '/var/log/foreman/hammer.log':
 #	path	=> "/usr/local/bin/",
 #	require	=> [
 #			File["/var/log/foreman/hammer.log"],
+exec { "bundle update":
+	command => "bundle update",
+	cwd => "/usr/share/foreman",
+	path => "/usr/bin/",
+	require => [
+		 Package["gem"],
+	],
+}
+
 #			File["/etc/foreman/cli_config.yml"],
 #			Package["hammer_cli_foreman"],
 #		],
