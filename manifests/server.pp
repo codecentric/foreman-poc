@@ -239,7 +239,6 @@ package { 'hammer_cli_foreman':
 	provider => "gem",
 	require => [ Package["hammer_cli"],
 			Exec["foreman-installer"],
-			Exec["bundle update"]
 		   ],
 }
 
@@ -284,27 +283,27 @@ file { '/var/log/foreman/hammer.log':
 #        environment        => ["HOME=/home/vagrant"],
 #}
 
-#exec { "hammer execution":
-#	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
-#	path	=> "/usr/local/bin/",
-#	require	=> [
-#			File["/var/log/foreman/hammer.log"],
-exec { "bundle update":
-	command => "bundle update",
-	cwd => "/usr/share/foreman",
-	path => "/usr/bin/",
-	require => [
-		 Package["gem"],
-	],
-}
-
-#			File["/etc/foreman/cli_config.yml"],
-#			Package["hammer_cli_foreman"],
-#		],
-#	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
-#	user	=> "server",
-#	environment	=> ["HOME=/home/server"],
+#exec { "bundle update":
+#	command => "bundle update",
+#	cwd => "/usr/share/foreman",
+#	path => "/usr/bin/",
+#	require => [
+#		 Package["gem"],
+#	],
 #}
+
+exec { "hammer execution":
+	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
+	path	=> "/usr/local/bin/",
+	require	=> [
+			File["/var/log/foreman/hammer.log"],
+			File["/etc/foreman/cli_config.yml"],
+			Package["hammer_cli_foreman"],
+		],
+	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
+	user	=> "server",
+	environment	=> ["HOME=/home/server"],
+}
 
 
 

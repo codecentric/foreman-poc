@@ -10,7 +10,7 @@ hammer domain update --name local.cloud --dns-id $proxy_id
 hammer medium create --name 'Local Mirror' --path http://172.16.0.2:3142/apt-cacher/ubuntu
 
 architecture_id=$(hammer architecture list | grep "x86_64" | cut -c 1)
-ptable_id=$(hammer partition_table list | grep "Debian default" | cut -c 1)
+ptable_id=$(hammer partition_table list | grep "Preseed default" | cut -c 1)
 medium_id=$(hammer medium list | grep "Local Mirror" | cut -c 1)
 hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids $architecture_id --ptable-ids $ptable_id --medium-ids $medium_id
 
