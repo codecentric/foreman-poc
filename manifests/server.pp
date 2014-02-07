@@ -115,11 +115,11 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 }
 
 # dhclient fix: prepend DNS-server
-#file_line { 'dhclient':
-#	path	=> '/etc/dhcp/dhclient.conf',
-#	line	=> 'prepend domain-name-servers 172.16.0.2;',
-#	match	=> "prepend domain-name-servers",
-#}
+file_line { 'dhclient':
+	path	=> '/etc/dhcp/dhclient.conf',
+	line	=> 'prepend domain-name-servers 172.16.0.2;',
+	match	=> "prepend domain-name-servers",
+}
 
 # TFTP
 
@@ -268,30 +268,6 @@ file { '/var/log/foreman/hammer.log':
 	require	=> Exec['foreman-installer'],
 }
 
-# foreman configuration via hammer
-#exec { "hammer execution":
-#       command        => "/vagrant/hammer/hammer.sh",
-#        path        => "/usr/local/bin/",
-#        require        => [
-#                        File["/var/log/foreman/hammer.log"],
-#                        File["/etc/foreman/cli_config.yml"],
-#                        Package["hammer_cli_foreman"],
-#                ],
-#        onlyif  => "hammer architecture list | /bin/grep  -q 'x86_64'",
-#       # onlyif => "/bin/echo 1",
-#        user        => vagrant,
-#        environment        => ["HOME=/home/vagrant"],
-#}
-
-#exec { "bundle update":
-#	command => "bundle update",
-#	cwd => "/usr/share/foreman",
-#	path => "/usr/bin/",
-#	require => [
-#		 Package["gem"],
-#	],
-#}
-
 exec { "hammer execution":
 	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
 	path	=> "/usr/local/bin/",
@@ -300,7 +276,7 @@ exec { "hammer execution":
 			File["/etc/foreman/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
+#	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
 	user	=> "server",
 	environment	=> ["HOME=/home/server"],
 }
@@ -399,48 +375,27 @@ exec {'apt-cacher-import':
 	require => File["/etc/apt-cacher/apt-cacher.conf"],
 }
 
-# preseed provision: add apt proxy
-#exec { "hammer add apt proxy":
-#	command	=> "hammer template update --id 6 --file /home/server/git/foreman-poc/hammer/provision",
-#        path	=> "/opt/vagrant_ruby/bin/",
-#	require	=> [
-#			File["/var/log/foreman/hammer.log"],
-#			File["/etc/foreman/cli_config.yml"],
-#			Package["hammer_cli_foreman"],
-#		],
-#	user	=> server,
-#	environment	=> ["HOME=/home/server"],
-#}
 
-file_line { 'sudo_rule':
-   path => '/etc/sudoers',
-   line => 'Defaults:foreman-proxy !requiretty',
-   require	=> Exec['foreman-installer'],
-}
 
 file_line { 'sudo_rule_v1':
-   path => '/etc/sudoers',
-   line => 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet kick *',
-   require	=> File_Line['sudo_rule'],
- }
- 
+	path	=> '/etc/sudoers',
+	line	=> 'Defaults:foreman-proxy !requiretty',
+	require	=> Exec['foreman-installer'],
+}
+
 file_line { 'sudo_rule_v2':
-   path => '/etc/sudoers',
-   line => 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet cert *',
-   require	=> File_Line['sudo_rule_v1'],
- }
+	path	=> '/etc/sudoers',
+	line	=> 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet kick *',
+	require	=> File_Line['sudo_rule_v1'],
+}
  
-#service { "networking":
- #   ensure  => "running",
- #   enable  => "true",
- #   require	=> Exec['foreman-installer'],
+file_line { 'sudo_rule_v3':
+	path	=> '/etc/sudoers',
+	line	=> 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet cert *',
+	require	=> File_Line['sudo_rule_v2'],
+}
+
+#exec { "reboot machine":
+#	command => "/sbin/reboot",
+#	require => 
 #}
- 
- #file_line {'dhclient.conf':
-#	notify  => Service["networking"],
-#	path => '/etc/dhcp/dhclient.conf',
-#	line => 'prepend domain-name-servers 172.16.0.2;',
-#	require => File_Line['sudo_rule_v2'],
- #}
-
-
