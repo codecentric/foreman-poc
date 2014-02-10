@@ -71,10 +71,10 @@ package { "gem":
 	ensure => "installed",
 	require => Exec['apt-update'],
 }
-package { "ruby1.9.1-dev":
-	ensure => "installed",
-	require => Exec['apt-update'],
-}
+#package { "ruby1.9.1-dev":
+#	ensure => "installed",
+#	require => Exec['apt-update'],
+#}
 
 # placing the keyfile
 file { "/etc/bind/rndc.key":

@@ -17,7 +17,7 @@ sudo apt-get update
 #sudo apt-get install --yes puppet=3.3.2-1puppetlabs1
 sudo apt-get install --yes puppet
 
-sudo puppet module install  puppetlabs-stdlib
-
+#sudo puppet module install puppetlabs-stdlib
+#
 rm puppetlabs-release-precise.deb
 sudo reboot
