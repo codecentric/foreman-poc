@@ -20,7 +20,7 @@ hammer domain update --name local.cloud --dns-id $proxy_id
 
 # Create Installation Medium (if not alreay there)
 if [ -z "$(hammer medium list | /bin/grep "Local Mirror")"  ]; then
-	hammer medium create --name 'Local Mirror' --path http://172.16.0.2:3142/apt-cacher/ubuntu
+	hammer medium create --name 'Local Mirror' --path http://172.16.0.2:3142/apt-cacher/ubuntu --os-family Debian
 else
 	echo "Already created: Installation Medium"
 fi

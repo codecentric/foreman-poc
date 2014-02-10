@@ -171,7 +171,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 # options for foreman-installer
 file { "/usr/share/foreman-installer/config/answers.yaml":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/answers.yaml",
+	source	=> "/home/server/git/foreman-poc/files/Foreman/answers.yaml",
 	owner	=> root,
 	group	=> root,
 	mode	=> 600,
@@ -181,7 +181,7 @@ file { "/usr/share/foreman-installer/config/answers.yaml":
 # modifying foreman-installer to support DDNS
 file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/proxydhcp.pp",
+	source	=> "/home/server/git/foreman-poc/files/DHCP/proxydhcp.pp",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
@@ -211,7 +211,7 @@ user { "foreman-proxy":
 # foreman settings
 file { "/etc/foreman/settings.yaml":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/settings.yaml",
+	source	=> "/home/server/git/foreman-poc/files/Foreman/settings.yaml",
 	owner	=> root,
 	group	=> foreman,
 	mode	=> 640,
@@ -322,7 +322,7 @@ package{ 'debconf-utils':
 }
 
 exec { 'preseed':
-	command	=> "debconf-set-selections /home/server/git/foreman-poc/files/iptables-persistent.seed",
+	command	=> "debconf-set-selections /home/server/git/foreman-poc/files/System/iptables-persistent.seed",
 	path	=> "/usr/bin/",
 	require	=> [
 			Package['debconf-utils'],
@@ -364,7 +364,7 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/home/server/git/foreman-poc/files/apt-cacher.conf",
+	source	=> "/home/server/git/foreman-poc/files/System/apt-cacher.conf",
 	notify  => Service["apt-cacher"],
 	require	=> Package["apt-cacher"],
 }
