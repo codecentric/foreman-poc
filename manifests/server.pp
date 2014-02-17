@@ -41,7 +41,10 @@ aptkey { 'foreman.asc':
 # update and source installation
 exec { "apt-update":
 	command	=> "/usr/bin/apt-get update",
-	require	=> Aptkey['foreman.asc'],
+	require	=> [
+		Aptkey['foreman.asc'],
+		File['smartproxylist'],
+		File['foremanlist'],
 }
 
 package { "openssh-server":
@@ -71,10 +74,6 @@ package { "gem":
 	ensure => "installed",
 	require => Exec['apt-update'],
 }
-#package { "ruby1.9.1-dev":
-#	ensure => "installed",
-#	require => Exec['apt-update'],
-#}
 
 # placing the keyfile
 file { "/etc/bind/rndc.key":
@@ -219,7 +218,7 @@ file { "/etc/foreman/settings.yaml":
 	require	=> Exec["foreman-installer"],
 }
 
-exec { "foremam-restart":
+exec { "foreman-restart":
 	command		=> "touch ~foreman/tmp/restart.txt",
 	subscribe	=> File["/etc/foreman/settings.yaml"],
 	refreshonly	=> true,
@@ -229,16 +228,17 @@ exec { "foremam-restart":
 # HAMMER
 # install hammer cli
 package { 'hammer_cli':
-	ensure	=> installed,
-	provider => "gem",
-#	require => Exec["bundle update"],
+	ensure		=> installed,
+	provider	=> "gem",
+	require		=> Package['gem'],
 }
 
 # install foreman plugin for hammer
 package { 'hammer_cli_foreman':
 	ensure	=> installed,
 	provider => "gem",
-	require => [ Package["hammer_cli"],
+	require => [
+			Package["hammer_cli"],
 			Exec["foreman-installer"],
 		   ],
 }
@@ -251,16 +251,6 @@ file { "/etc/foreman/cli_config.yml":
 	source	=> "/home/server/git/foreman-poc/hammer/cli_config.yml",
 	require	=> Exec['foreman-installer'],
 }
-
-# hammer autocompletion
-#exec { "autocompletion":
-#	command	=> "/bin/cp /opt/vagrant_ruby/lib/ruby/gems/1.8/gems/hammer_cli-0.0.14/hammer_cli_complete /etc/bash_completion.d/",
-#	require	=> [
-#			Package["hammer_cli_foreman"],
-#			Exec['foreman-installer'],
-#		],
-#}
-
 
 # hammer logging
 file { '/var/log/foreman/hammer.log':
@@ -312,7 +302,7 @@ exec { 'iptables forward':
 	require	=> Exec["sysctl"],
 }
 exec { 'iptables masquerade':
-	command	=> "iptables --table nat -A POSTROUTING -o eth0 -j MASQUERADE",
+	command	=> "iptables --table nat -A POSTROUTING -o eth1 -j MASQUERADE",
 	path	=> "/sbin",
 	require	=> Exec["iptables forward"],
 }
@@ -396,7 +386,24 @@ file_line { 'sudo_rule_v3':
 	require	=> File_Line['sudo_rule_v2'],
 }
 
-#exec { "reboot machine":
-#	command => "/sbin/reboot",
-#	require => 
-#}
+exec { "reboot machine":
+	command => "/sbin/reboot",
+	require	=> [
+		Package['openssh-server'],
+		Package['git'],
+		User['dhcpd'],
+		Service['apparmor'],
+		File['/etc/apparmor.d/usr.sbin.dhcpd'],
+		File_line['dhclient'],
+		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
+		User['foreman-proxy'],
+		Exec['/etc/foreman/settings.yaml'],
+		Exec['foreman-restart'],
+		Exec['hammer execution'],
+		Exec['iptables masquerade'],
+		Exec['preseed'],
+		Service['iptables-persistent'],
+		Exec['apt-cacher-import'],
+		File_Line['sudo_rule_v3'],
+	],
+}
