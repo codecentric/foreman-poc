@@ -1,0 +1,11 @@
+DEFAULT menu
+PROMPT 0
+MENU TITLE PXE Menu
+TIMEOUT 50
+TOTALTIMEOUT 6000
+ONTIMEOUT discovery
+
+LABEL discovery
+MENU LABEL Foreman Discovery
+KERNEL boot/discovery-vmlinuz
+APPEND rootflags=loop initrd=boot/discovery-initrd.img root=live:/foreman.iso rootfstype=auto ro rd.live.image rd.live.check rd.lvm=0 rootflags=ro crashkernel=128M elevator=deadline max_loop=256 rd.luks=0 rd.md=0 rd.dm=0 foreman.ip=172.16.0.2 nomodeset selinux=0 stateless

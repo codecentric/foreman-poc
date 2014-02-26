@@ -167,6 +167,36 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
+# image for Tiny Core Linux
+
+# global image directory
+#file { '/boot':
+#        ensure  => directory,
+#}
+
+
+#file { '/boot/TinyCore-initrd.gz':
+#      ensure  => present,
+#      owner   => nobody,
+#      group   => nogroup,
+#      mode    => 777,
+#      source  => "/home/server/git/foreman-poc/files/TFTP/tiny_core_linux/TinyCore-initrd.gz",
+#      require => File["/boot"],
+#}
+
+#file { 'boot/TinyCore-vmlinuz':
+#      ensure  => present,
+#      owner   => nobody,
+#      group   => nogroup,
+#      mode    => 777,
+#      source  => "/home/server/git/foreman-poc/files/TFTP/tiny_core_linux/TinyCore-vmlinuz",
+#      require => File["/boot"],
+#}
+
+
+
+
+
 # options for foreman-installer
 file { "/usr/share/foreman-installer/config/answers.yaml":
 	ensure	=> present,
