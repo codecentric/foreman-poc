@@ -34,6 +34,13 @@ file {'smartproxylist':
 	content	=> 'deb http://deb.theforeman.org/ precise stable'
 }
 
+file {'foreman-pluginlist':
+        path    => '/etc/apt/sources.list.d/foreman-plugins.list',
+        ensure  => present,
+        mode    => 0644,
+        content => 'deb http://deb.theforeman.org/ plugins main'
+}
+
 aptkey { 'foreman.asc':
 	ensure	=> present
 }
@@ -45,6 +52,8 @@ exec { "apt-update":
 		Aptkey['foreman.asc'],
 		File['smartproxylist'],
 		File['foremanlist'],
+		File['foreman-pluginlist'],
+	]
 }
 
 package { "openssh-server":
@@ -148,7 +157,7 @@ file { '/var/lib/tftpboot/boot':
 	require	=> File["/var/lib/tftpboot"],
 }
 
-# image for Ubuntu 12.10
+# copy image for Ubuntu 12.10
 file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz':
 	ensure	=> present,
 	owner	=> nobody,
@@ -167,34 +176,40 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
-# image for Tiny Core Linux
+# download discovery images
+exec { "wget initrd.img":
+        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-initrd.img",
+	cwd     => "/var/lib/tftpboot/boot/",
+	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img",
+	path    => "/usr/bin",
+	require => File["/var/lib/tftpboot/boot"],
+}
 
-# global image directory
-#file { '/boot':
-#        ensure  => directory,
-#}
+exec { "wget vmlinuz":
+        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-vmlinuz",
+	cwd     => "/var/lib/tftpboot/boot/",
+	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz",
+	path    => "/usr/bin",
+	require => File["/var/lib/tftpboot/boot"],
+}
+
+# set permissions for discovery images
+file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img':
+      ensure  => present,
+      owner   => foreman-proxy,
+      group   => nogroup,
+      mode    => 644,
+      require => Exec["wget initrd.img"],
+}
 
 
-#file { '/boot/TinyCore-initrd.gz':
-#      ensure  => present,
-#      owner   => nobody,
-#      group   => nogroup,
-#      mode    => 777,
-#      source  => "/home/server/git/foreman-poc/files/TFTP/tiny_core_linux/TinyCore-initrd.gz",
-#      require => File["/boot"],
-#}
-
-#file { 'boot/TinyCore-vmlinuz':
-#      ensure  => present,
-#      owner   => nobody,
-#      group   => nogroup,
-#      mode    => 777,
-#      source  => "/home/server/git/foreman-poc/files/TFTP/tiny_core_linux/TinyCore-vmlinuz",
-#      require => File["/boot"],
-#}
-
-
-
+file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
+      ensure  => present,
+      owner   => foreman-proxy,
+      group   => nogroup,
+      mode    => 644,
+      require => Exec["wget vmlinuz"],
+}
 
 
 # options for foreman-installer
@@ -416,6 +431,13 @@ file_line { 'sudo_rule_v3':
 	require	=> File_Line['sudo_rule_v2'],
 }
 
+package { 'ruby-foreman-discovery':
+        ensure  => installed,
+        require => [
+			Exec['foreman-installer'],
+		]
+}
+
 exec { "reboot machine":
 	command => "/sbin/reboot",
 	require	=> [
@@ -427,7 +449,7 @@ exec { "reboot machine":
 		File_line['dhclient'],
 		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
 		User['foreman-proxy'],
-		Exec['/etc/foreman/settings.yaml'],
+		File['/etc/foreman/settings.yaml'],
 		Exec['foreman-restart'],
 		Exec['hammer execution'],
 		Exec['iptables masquerade'],
@@ -435,5 +457,6 @@ exec { "reboot machine":
 		Service['iptables-persistent'],
 		Exec['apt-cacher-import'],
 		File_Line['sudo_rule_v3'],
+		Package['ruby-foreman-discovery'],
 	],
 }

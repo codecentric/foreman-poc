@@ -45,6 +45,10 @@ hammer template update --id $template_id_default --operatingsystem-ids $os_id
 hammer template update --id $template_id_finish --operatingsystem-ids $os_id
 hammer template update --id $template_id_pxelinux --operatingsystem-ids $os_id
 
+# Update PXELinux global default
+template_id_pxelinux_global_default=$(hammer template list --search "PXELinux global default" | /bin/grep "PXELinux global default" | /usr/bin/cut -d' ' -f1)
+hammer template update --id $template_id_pxelinux_global_default --file /home/server/git/foreman-poc/hammer/PXELinux_global_default
+
 # Update Preseed Finish
 hammer template update --id $template_id_finish --file /home/server/git/foreman-poc/hammer/preseed_default_finish
 
