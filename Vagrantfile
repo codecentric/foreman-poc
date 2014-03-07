@@ -24,8 +24,12 @@ Vagrant.configure("2") do |config|
 	# Set the Timezone
 	config.vm.provision :shell, :inline => "echo \"Europe/Berlin\" | sudo tee /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata"
 
-	# upgrade puppet
-	server.vm.provision :shell, :path => "upgrade-puppet.sh"
+#	# upgrade puppet
+#	server.vm.provision :shell, :path => "upgrade-puppet.sh"
+
+	# post installation
+	server.vm.provision :shell, :path => "files/System/post-install.sh"
+	
 
 	# provisioning with puppet
 	server.vm.provision "puppet" do |puppet|

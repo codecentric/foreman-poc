@@ -6,6 +6,7 @@ foreman:
   oauth_consumer_secret: Uq2Hwyp7kHuSB7YGU3beMXcTKuyA9VaD
 foreman_proxy:
   custom_repo: true
+  puppetrun: true
   tftp: true
 #  tftp_syslinux_root: 
 #  tftp_syslinux_files:
@@ -33,6 +34,4 @@ puppet:
   server: true
   server_environments:
       - cloudbox
-      - development
-      - production
 

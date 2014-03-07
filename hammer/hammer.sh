@@ -47,17 +47,17 @@ hammer template update --id $template_id_pxelinux --operatingsystem-ids $os_id
 
 # Update PXELinux global default
 template_id_pxelinux_global_default=$(hammer template list --search "PXELinux global default" | /bin/grep "PXELinux global default" | /usr/bin/cut -d' ' -f1)
-hammer template update --id $template_id_pxelinux_global_default --file /home/server/git/foreman-poc/hammer/PXELinux_global_default
+hammer template update --id $template_id_pxelinux_global_default --file /vagrant/hammer/PXELinux_global_default
 
 # Update Preseed Finish
-hammer template update --id $template_id_finish --file /home/server/git/foreman-poc/hammer/preseed_default_finish
+hammer template update --id $template_id_finish --file /vagrant/hammer/preseed_default_finish
 
 # Update Puppet.conf
 template_id_puppetConf=$(hammer template list --search puppet.conf | /bin/grep puppet.conf | /usr/bin/cut -d' ' -f1)
-hammer template update --id $template_id_puppetConf --file /home/server/git/foreman-poc/hammer/puppet.conf
+hammer template update --id $template_id_puppetConf --file /vagrant/hammer/puppet.conf
 
 # Update Partition Table
-hammer partition_table update --id $ptable_id --file /home/server/git/foreman-poc/hammer/pTable
+hammer partition_table update --id $ptable_id --file /vagrant/hammer/pTable
 domain_id=$(hammer domain list | /bin/grep "local.cloud" | /usr/bin/cut -d' ' -f1)
 
 # Create Subnet (if not alreay there)
