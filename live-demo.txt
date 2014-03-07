@@ -1,0 +1,31 @@
+Live-Demo
+
+1. vagrant up server
+
+
+
+2. Web UI Config: 
+
+- ifconfig -> IP
+
+- Bereitstellung > Bereitstellungsvorlagen > "Erstelle PXE-Vorgaben"
+- Bereitstellung > Betriebssysteme > Ubuntu 12.10 > Vorlagen > ...
+- Hosts > neues System
+  * Host:		Name=client
+  * Netzwerk:		MAC=VirtualBox > Ändern > Netzwerk > Erweitert > MAC-Adresse
+  * Betriebssystem:	RootPassword: 123123, Provisioning Templates > Auflösen
+   => absenden
+
+3. Virtuellen Client starten
+
+- 
+
+4. Abbrechen und vorbereitete VM verwenden
+
+- Reines OS ohne Module
+- 
+
+5. Apache provisionieren
+
+- sudo puppet module install -i /etc/puppet/environments/cloudbox/modules puppetlabs/apache
+- 
