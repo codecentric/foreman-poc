@@ -1,0 +1,38 @@
+<%#
+kind: finish
+name: Community Preseed Finish
+oses:
+- Debian 6.0
+- Debian 7.0
+- Ubuntu 10.04
+- Ubuntu 12.04
+- Ubuntu 13.04
+%>
+
+
+<%
+  # safemode renderer does not support unary negation
+  pm_set = @host.puppetmaster.empty? ? false : true
+  puppet_enabled = pm_set || @host.params['force-puppet']
+%>
+
+<%@host.params['drives'].split( ',').each do |entry|%>
+<% $device,$mp = entry.split(':')%>
+echo ";" | sfdisk <%=$device%>; 
+mkfs.ext4 <%=$device%>1; 
+mkdir -p <%=$mp%>; 
+echo '<%=$device%>1 <%=$mp%> ext4 defaults 0 2' >> /etc/fstab;
+<%end%>
+
+<% if puppet_enabled %>
+cat > /etc/puppet/puppet.conf << EOF
+<%= snippet 'puppet.conf' %>
+EOF
+/bin/sed -i 's/^START=no/START=yes/' /etc/default/puppet
+/bin/touch /etc/puppet/namespaceauth.conf
+/usr/bin/printf 'path / \n method find, search, save\n auth yes\n allow server.local.cloud\npath /run\nauth any\nallow *\n' > /etc/puppet/auth.conf
+/usr/bin/puppet agent --config /etc/puppet/puppet.conf --onetime --tags no_such_tag <%= @host.puppetmaster.blank? ? '' : "--server #{@host.puppetmaster}" %> --no-daemonize
+<% end -%>
+
+/usr/bin/wget --quiet --output-document=/dev/null --no-check-certificate <%= foreman_url %>
+
