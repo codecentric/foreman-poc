@@ -74,13 +74,18 @@ else
 fi
 
 #Create Hostgroup
-environment_id_cloudbox = $(hammer environment list --search "cloudbox" | /bin/grep "cloudbox" | /usr/bin/cut -d' ' -f1)
-subnet_id_main = $(hammer subnet list --search "main" |  /bin/grep "main" | /usr/bin/cut -d' ' -f1)
+environment_id_cloudbox=$(hammer environment list --search "cloudbox" | /bin/grep "cloudbox" | /usr/bin/cut -d' ' -f1)
+subnet_id_main=$(hammer subnet list --search "main" |  /bin/grep "main" | /usr/bin/cut -d' ' -f1)
 
 hammer hostgroup create --name 'multidisk' --environment-id $environment_id_cloudbox --operatingsystem-id $os_id --architecture-id $architecture_id --medium-id $medium_id --ptable-id $ptable_id --puppet-ca-proxy-id $proxy_id --subnet-id $subnet_id_main --domain-id $domain_id --puppet-proxy-id $proxy_id
 
-hostgroup_id_multidisk = $(hammer hostgroup list --search "multidisk" | /bin/grep "multidisk" | /usr/bin/cut -d' ' -f1)
+hostgroup_id_multidisk=$(hammer hostgroup list --search "multidisk" | /bin/grep "multidisk" | /usr/bin/cut -d' ' -f1)
 hammer hostgroup set_parameter --name 'drives' --value '/dev/sdb:/drv/drive01' --hostgroup-id $hostgroup_id_multidisk
 
 #Provisioning Template
-hammer template create --file 'preseed_multidisk_finish' --type 'finish' --name 'Preseed multidisk finish' --operatingsystem-ids $os_id
+# Provisioning Template
+#if [ -z "$(hammer template list --search 'Preseed multidisk finish' | /bin/grep 'Preseed multidisk finish')"  ]; then
+#        hammer template create --file '/vagrant/hammer/preseed_multidisk_finish' --type 'finish' --name 'Preseed multidisk finish' --operatingsystem-ids $os_id
+#else
+#        echo "Already created: Provisioning Template 'multidisk'"
+#fi

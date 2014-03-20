@@ -1,4 +1,9 @@
 # aptkey
+package {'squid-deb-proxy-client':
+	ensure => installed,
+	require => Exec['apt-update'],
+}
+
 define aptkey($ensure, $apt_key_url = 'http://deb.theforeman.org') {
   case $ensure {
     'present': {
@@ -38,7 +43,7 @@ file {'foreman-pluginlist':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins main'
+        content => 'deb http://deb.theforeman.org/ plugins 1.4'
 }
 
 aptkey { 'foreman.asc':
@@ -53,35 +58,44 @@ exec { "apt-update":
 		File['smartproxylist'],
 		File['foremanlist'],
 		File['foreman-pluginlist'],
+		File['/etc/apt/apt.conf.d/99auth'],
 	]
+}
+# It's OK to install unsigned packages 
+file { "/etc/apt/apt.conf.d/99auth": 
+	owner => root, 
+	group => root, 
+	content => "APT::Get::AllowUnauthenticated yes;", 
+	mode => 644;
 }
 
 package { "openssh-server":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+	require	=> [
+		Exec['apt-update'],],
 }
 
 package { "foreman-installer":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+	require	=> [Exec['apt-update'],],
 }
 
 # seperate installations necessary for proper configuration
 package { "bind9":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+	require	=> [Exec['apt-update'],],
 }
 package { "isc-dhcp-server":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+	require	=> [Exec['apt-update'],],
 }
 package { "git":
 	ensure  => "installed",
-	require => Exec['apt-update'],
+	require => [Exec['apt-update'],],
 }
 package { "gem":
 	ensure => "installed",
-	require => Exec['apt-update'],
+	require => [Exec['apt-update'],],
 }
 
 # placing the keyfile
