@@ -284,6 +284,12 @@ exec { "foreman-restart":
 	path		=> "/usr/bin/",
 }
 
+exec { "foreman-cache":
+	command		=> "/usr/sbin/foreman-rake apipie:cache",
+	require		=> Exec['foreman-restart'],
+}
+
+
 # HAMMER
 # install hammer cli
 package { 'hammer_cli':
@@ -303,9 +309,15 @@ package { 'hammer_cli_foreman':
 }
 
 # set up hammer for foreman
+file { '/etc/hammer':
+        ensure  => directory,
+        owner   => nobody,
+        group   => nogroup,
+        mode    => 777,
+}
 
 # hammer config file
-file { "/etc/foreman/cli_config.yml":
+file { "/etc/hammer/cli_config.yml":
 	ensure	=> present,
 	source	=> "/vagrant/hammer/cli_config.yml",
 	require	=> Exec['foreman-installer'],
@@ -323,7 +335,7 @@ exec { "hammer execution":
 	path	=> "/usr/local/bin/",
 	require	=> [
 			File["/var/log/foreman/hammer.log"],
-			File["/etc/foreman/cli_config.yml"],
+			File["/etc/hammer/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
 #	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
