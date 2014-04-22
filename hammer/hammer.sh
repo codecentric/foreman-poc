@@ -26,7 +26,7 @@ else
 fi
 
 # Create OS (if not alreay there)
-ptable_id=$(hammer partition_table list | /bin/grep "Preseed default" | /usr/bin/cut -d' ' -f1)
+ptable_id=$(hammer partition-table list | /bin/grep "Preseed default" | /usr/bin/cut -d' ' -f1)
 os_id=$(hammer os list | /bin/grep "Ubuntu" | /usr/bin/cut -d' ' -f1)
 architecture_id=$(hammer architecture list | /bin/grep "x86_64" | /usr/bin/cut -d' ' -f1)
 medium_id=$(hammer medium list | /bin/grep "Local Mirror" | /usr/bin/cut -d' ' -f1)
@@ -54,10 +54,10 @@ hammer template update --id $template_id_finish --file /home/server/git/foreman-
 
 # Update Puppet.conf
 template_id_puppetConf=$(hammer template list --search puppet.conf | /bin/grep puppet.conf | /usr/bin/cut -d' ' -f1)
-hammer template update --id $template_id_puppetConf --file /home/server/git/foreman-poc/hammer/puppet.conf
+hammer template update --id $template_id_puppetConf --file /home/server/git/foreman-poc/hammer/puppet.conf --type snippet
 
 # Update Partition Table
-hammer partition_table update --id $ptable_id --file /home/server/git/foreman-poc/hammer/pTable
+hammer partition-table update --id $ptable_id --file /home/server/git/foreman-poc/hammer/pTable
 domain_id=$(hammer domain list | /bin/grep "local.cloud" | /usr/bin/cut -d' ' -f1)
 
 # Create Subnet (if not alreay there)
@@ -74,13 +74,18 @@ else
 fi
 
 #Create Hostgroup
-environment_id_cloudbox = $(hammer environment list --search "cloudbox" | /bin/grep "cloudbox" | /usr/bin/cut -d' ' -f1)
-subnet_id_main = $(hammer subnet list --search "main" |  /bin/grep "main" | /usr/bin/cut -d' ' -f1)
+environment_id_cloudbox=$(hammer environment list --search "cloudbox" | /bin/grep "cloudbox" | /usr/bin/cut -d' ' -f1)
+subnet_id_main=$(hammer subnet list --search "main" |  /bin/grep "main" | /usr/bin/cut -d' ' -f1)
 
 hammer hostgroup create --name 'multidisk' --environment-id $environment_id_cloudbox --operatingsystem-id $os_id --architecture-id $architecture_id --medium-id $medium_id --ptable-id $ptable_id --puppet-ca-proxy-id $proxy_id --subnet-id $subnet_id_main --domain-id $domain_id --puppet-proxy-id $proxy_id
 
-hostgroup_id_multidisk = $(hammer hostgroup list --search "multidisk" | /bin/grep "multidisk" | /usr/bin/cut -d' ' -f1)
-hammer hostgroup set_parameter --name 'drives' --value '/dev/sdb:/drv/drive01' --hostgroup-id $hostgroup_id_multidisk
+hostgroup_id_multidisk=$(hammer hostgroup list --search "multidisk" | /bin/grep "multidisk" | /usr/bin/cut -d' ' -f1)
+hammer hostgroup set-parameter --name 'drives' --value '/dev/sdb:/drv/drive01' --hostgroup-id $hostgroup_id_multidisk
 
 #Provisioning Template
-hammer template create --file 'preseed_multidisk_finish' --type 'finish' --name 'Preseed multidisk finish' --operatingsystem-ids $os_id
+# Provisioning Template
+#if [ -z "$(hammer template list --search 'Preseed multidisk finish' | /bin/grep 'Preseed multidisk finish')"  ]; then
+#        hammer template create --file '/vagrant/hammer/preseed_multidisk_finish' --type 'finish' --name 'Preseed multidisk finish' --operatingsystem-ids $os_id
+#else
+#        echo "Already created: Provisioning Template 'multidisk'"
+#fi
