@@ -6,7 +6,7 @@ mkdir -p git
 cd git
 
 if [ ! -d "$HOME/git/foreman-poc"  ]; then
-	git clone https://github.com/adaman79/foreman-poc.git
+	git clone https://github.com/codecentric/foreman-poc.git
 fi
 
 cd foreman-poc
