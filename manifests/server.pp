@@ -445,25 +445,25 @@ package { 'ruby-foreman-discovery':
 		]
 }
 
-exec { "reboot machine":
-	command => "/sbin/reboot",
-	require	=> [
-		Package['openssh-server'],
-		Package['git'],
-		User['dhcpd'],
-		Service['apparmor'],
-		File['/etc/apparmor.d/usr.sbin.dhcpd'],
-		File_line['dhclient'],
-		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
-		User['foreman-proxy'],
-		File['/etc/foreman/settings.yaml'],
-		Exec['foreman-restart'],
-		Exec['hammer execution'],
-		Exec['iptables masquerade'],
-		Exec['preseed'],
-		Service['iptables-persistent'],
-		Exec['apt-cacher-import'],
-		File_Line['sudo_rule_v3'],
-		Package['ruby-foreman-discovery'],
-	],
-}
+#exec { "reboot machine":
+#	command => "/sbin/reboot",
+#	require	=> [
+#		Package['openssh-server'],
+#		Package['git'],
+#		User['dhcpd'],
+#		Service['apparmor'],
+#		File['/etc/apparmor.d/usr.sbin.dhcpd'],
+#		File_line['dhclient'],
+#		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
+#		User['foreman-proxy'],
+#		File['/etc/foreman/settings.yaml'],
+#		Exec['foreman-restart'],
+#		Exec['hammer execution'],
+#		Exec['iptables masquerade'],
+#		Exec['preseed'],
+#		Service['iptables-persistent'],
+#		Exec['apt-cacher-import'],
+#		File_Line['sudo_rule_v3'],
+#		Package['ruby-foreman-discovery'],
+#	],
+#}
