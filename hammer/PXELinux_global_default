@@ -7,5 +7,5 @@ ONTIMEOUT discovery
 
 LABEL discovery
 MENU LABEL Foreman Discovery
-KERNEL boot/discovery-prod-0.3.0-1-vmlinuz
-APPEND rootflags=loop initrd=boot/discovery-prod-0.3.0-1-initrd.img root=live:/foreman.iso rootfstype=auto ro rd.live.image rd.live.check rd.lvm=0 rootflags=ro crashkernel=128M elevator=deadline max_loop=256 rd.luks=0 rd.md=0 rd.dm=0 foreman.ip=172.16.0.2 nomodeset selinux=0 stateless
+KERNEL boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz
+APPEND rootflags=loop initrd=boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img root=live:/foreman.iso rootfstype=auto ro rd.live.image rd.live.check rd.lvm=0 rootflags=ro crashkernel=128M elevator=deadline max_loop=256 rd.luks=0 rd.md=0 rd.dm=0 foreman.ip=172.16.0.2 nomodeset selinux=0 stateless

@@ -29,7 +29,7 @@ file {'foremanlist':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise 1.4'
+	content	=> 'deb http://deb.theforeman.org/ precise 1.5'
 }
 
 file {'smartproxylist':
@@ -43,7 +43,7 @@ file {'foreman-pluginlist':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.4'
+        content => 'deb http://deb.theforeman.org/ plugins 1.5'
 }
 
 aptkey { 'foreman.asc':
@@ -191,18 +191,31 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 }
 
 # download discovery images
-exec { "wget initrd.img":
-        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-initrd.img",
-	cwd     => "/var/lib/tftpboot/boot/",
-	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img",
-	path    => "/usr/bin",
-	require => File["/var/lib/tftpboot/boot"],
+#exec { "wget initrd.img":
+#        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-initrd.img",
+#	command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
+#	cwd     => "/var/lib/tftpboot/boot/",
+#	creates => "/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
+#	path    => "/usr/bin",
+#	require => File["/var/lib/tftpboot/boot"],
+#}
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img':
+        ensure  => present,
+        owner   => nobody,
+        group   => nogroup,
+        mode    => 777,
+        source  => "/vagrant/files/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
+        require => File["/var/lib/tftpboot/boot"],
 }
 
+
+
 exec { "wget vmlinuz":
-        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-vmlinuz",
+#        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-vmlinuz",
+	command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz",
 	cwd     => "/var/lib/tftpboot/boot/",
-	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz",
+#	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz",
+	creates => "/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz",
 	path    => "/usr/bin",
 	require => File["/var/lib/tftpboot/boot"],
 }
@@ -213,7 +226,8 @@ file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img':
       owner   => foreman-proxy,
       group   => nogroup,
       mode    => 644,
-      require => Exec["wget initrd.img"],
+#      require => Exec["wget initrd.img"],
+      require => File["/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img"]
 }
 
 
@@ -227,7 +241,17 @@ file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
 
 
 # options for foreman-installer
-file { "/usr/share/foreman-installer/config/answers.yaml":
+#file { "/usr/share/foreman-installer/config/answers.yaml":
+#	ensure	=> present,
+#	source	=> "/vagrant/files/Foreman/answers.yaml",
+#	owner	=> root,
+#	group	=> root,
+#	mode	=> 600,
+#	require	=> Package["foreman-installer"],
+#}
+
+# options for foreman-installer
+file { "/etc/foreman/foreman-installer-answers.yaml":
 	ensure	=> present,
 	source	=> "/vagrant/files/Foreman/answers.yaml",
 	owner	=> root,
@@ -249,12 +273,13 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/bin/foreman-installer",
+	command	=> "/usr/sbin/foreman-installer",
 	timeout => 0,
 	require => [
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
-		File['/usr/share/foreman-installer/config/answers.yaml'],
+#		File['/usr/share/foreman-installer/config/answers.yaml'],
+		File['/etc/foreman/foreman-installer-answers.yaml'],
 		File["/etc/bind/rndc.key"],
 	],
 }
