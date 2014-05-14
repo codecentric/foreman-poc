@@ -24,7 +24,7 @@ file {'foremanlist':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise 1.4'
+	content	=> 'deb http://deb.theforeman.org/ precise 1.5'
 }
 
 file {'smartproxylist':
@@ -38,7 +38,7 @@ file {'foreman-pluginlist':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.4'
+        content => 'deb http://deb.theforeman.org/ plugins 1.5'
 }
 
 aptkey { 'foreman.asc':
@@ -213,7 +213,7 @@ file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
 
 
 # options for foreman-installer
-file { "/usr/share/foreman-installer/config/answers.yaml":
+file { "/etc/foreman/foreman-installer-answers.yaml":
 	ensure	=> present,
 	source	=> "/home/ubuntu/git/foreman-poc/files/Foreman/answers.yaml",
 	owner	=> root,
@@ -240,7 +240,7 @@ exec { 'foreman-installer':
 	require => [
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
-		File['/usr/share/foreman-installer/config/answers.yaml'],
+		File['/etc/foreman/foreman-installer-answers.yaml'],
 		File["/etc/bind/rndc.key"],
 	],
 }
