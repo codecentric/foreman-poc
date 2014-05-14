@@ -12,7 +12,7 @@ fi
 cd foreman-poc
 git checkout bare_metal
 
-sudo cp $HOME/git/foreman-poc/files/System/interfaces /etc/network/
+#sudo cp $HOME/git/foreman-poc/files/System/interfaces /etc/network/
 
 wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
 sudo dpkg -i puppetlabs-release-precise.deb
@@ -25,4 +25,4 @@ sudo puppet module install --force puppetlabs-stdlib
 
 rm puppetlabs-release-precise.deb
 
-sudo reboot
+#sudo reboot

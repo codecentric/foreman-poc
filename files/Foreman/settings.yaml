@@ -2,7 +2,7 @@
 ### File managed with puppet ###
 ## Module:           'foreman'
 ## Template source:  'MODULES/foreman/templates/settings.yaml.erb'
-:foreman_url: server.local.cloud
+:foreman_url: ip-172-16-0-48.local.cloud
 
 #your default puppet server - can be overridden in the host level
 #if none specified, plain "puppet" will be used.

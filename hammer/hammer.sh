@@ -20,7 +20,7 @@ hammer domain update --name local.cloud --dns-id $proxy_id
 
 # Create Installation Medium (if not alreay there)
 if [ -z "$(hammer medium list | /bin/grep "Local Mirror")"  ]; then
-	hammer medium create --name 'Local Mirror' --path http://172.16.0.2:3142/apt-cacher/ubuntu --os-family Debian
+	hammer medium create --name 'Local Mirror' --path http://172.16.0.48:3142/apt-cacher/ubuntu --os-family Debian
 else
 	echo "Already created: Installation Medium"
 fi
@@ -47,22 +47,22 @@ hammer template update --id $template_id_pxelinux --operatingsystem-ids $os_id
 
 # Update PXELinux global default
 template_id_pxelinux_global_default=$(hammer template list --search "PXELinux global default" | /bin/grep "PXELinux global default" | /usr/bin/cut -d' ' -f1)
-hammer template update --id $template_id_pxelinux_global_default --file /home/server/git/foreman-poc/hammer/PXELinux_global_default
+hammer template update --id $template_id_pxelinux_global_default --file /home/ubuntu/git/foreman-poc/hammer/PXELinux_global_default
 
 # Update Preseed Finish
-hammer template update --id $template_id_finish --file /home/server/git/foreman-poc/hammer/preseed_default_finish
+hammer template update --id $template_id_finish --file /home/ubuntu/git/foreman-poc/hammer/preseed_default_finish
 
 # Update Puppet.conf
 template_id_puppetConf=$(hammer template list --search puppet.conf | /bin/grep puppet.conf | /usr/bin/cut -d' ' -f1)
-hammer template update --id $template_id_puppetConf --file /home/server/git/foreman-poc/hammer/puppet.conf --type snippet
+hammer template update --id $template_id_puppetConf --file /home/ubuntu/git/foreman-poc/hammer/puppet.conf --type snippet
 
 # Update Partition Table
-hammer partition-table update --id $ptable_id --file /home/server/git/foreman-poc/hammer/pTable
+hammer partition-table update --id $ptable_id --file /home/ubuntu/git/foreman-poc/hammer/pTable
 domain_id=$(hammer domain list | /bin/grep "local.cloud" | /usr/bin/cut -d' ' -f1)
 
 # Create Subnet (if not alreay there)
 if [ -z "$(hammer subnet list | /bin/grep "main")"  ]; then
-	hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.2 --domain-ids $domain_id --dhcp-id $proxy_id --tftp-id $proxy_id --dns-id $proxy_id
+	hammer subnet create --name main --network 172.16.0.0 --mask 255.255.255.0 --gateway 172.16.0.48 --domain-ids $domain_id --dhcp-id $proxy_id --tftp-id $proxy_id --dns-id $proxy_id
 else
 	echo "Already created: Subnet"
 fi

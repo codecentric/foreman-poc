@@ -87,7 +87,7 @@ package { "gem":
 # placing the keyfile
 file { "/etc/bind/rndc.key":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/BIND/rndc.key",
+	source	=> "/home/ubuntu/git/foreman-poc/files/BIND/rndc.key",
 	owner	=> root,
 	group	=> bind,
 	mode	=> 640,
@@ -118,16 +118,16 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/home/server/git/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
+	source	=> "/home/ubuntu/git/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
 	require => Package["isc-dhcp-server"],
 }
 
 # dhclient fix: prepend DNS-server
-file_line { 'dhclient':
-	path	=> '/etc/dhcp/dhclient.conf',
-	line	=> 'prepend domain-name-servers 172.16.0.2;',
-	match	=> "prepend domain-name-servers",
-}
+#file_line { 'dhclient':
+#	path	=> '/etc/dhcp/dhclient.conf',
+#	line	=> 'prepend domain-name-servers 172.16.0.2;',
+#	match	=> "prepend domain-name-servers",
+#}
 
 # TFTP
 
@@ -163,7 +163,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/home/server/git/foreman-poc/files/TFTP/ubuntu12.10/initrd.gz",
+	source	=> "/home/ubuntu/git/foreman-poc/files/TFTP/ubuntu12.10/initrd.gz",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
@@ -172,7 +172,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	source	=> "/home/server/git/foreman-poc/files/TFTP/ubuntu12.10/linux",
+	source	=> "/home/ubuntu/git/foreman-poc/files/TFTP/ubuntu12.10/linux",
 	require	=> File["/var/lib/tftpboot/boot"],
 }
 
@@ -215,7 +215,7 @@ file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
 # options for foreman-installer
 file { "/usr/share/foreman-installer/config/answers.yaml":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/Foreman/answers.yaml",
+	source	=> "/home/ubuntu/git/foreman-poc/files/Foreman/answers.yaml",
 	owner	=> root,
 	group	=> root,
 	mode	=> 600,
@@ -225,7 +225,7 @@ file { "/usr/share/foreman-installer/config/answers.yaml":
 # modifying foreman-installer to support DDNS
 file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/DHCP/proxydhcp.pp",
+	source	=> "/home/ubuntu/git/foreman-poc/files/DHCP/proxydhcp.pp",
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
@@ -256,7 +256,7 @@ user { "foreman-proxy":
 # foreman settings
 file { "/etc/foreman/settings.yaml":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/files/Foreman/settings.yaml",
+	source	=> "/home/ubuntu/git/foreman-poc/files/Foreman/settings.yaml",
 	owner	=> root,
 	group	=> foreman,
 	mode	=> 640,
@@ -302,7 +302,7 @@ file { '/etc/hammer':
 # hammer config file
 file { "/etc/hammer/cli_config.yml":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/hammer/cli_config.yml",
+	source	=> "/home/ubuntu/git/foreman-poc/hammer/cli_config.yml",
 	require	=> [File['/etc/hammer'], Exec['foreman-installer'],]
 }
 
@@ -314,7 +314,7 @@ file { '/var/log/foreman/hammer.log':
 }
 
 exec { "hammer execution":
-	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
+	command	=> "/home/ubuntu/git/foreman-poc/hammer/hammer.sh",
 	path	=> "/usr/local/bin/",
 	require	=> [
 			File["/var/log/foreman/hammer.log"],
@@ -322,8 +322,8 @@ exec { "hammer execution":
 			Package["hammer_cli_foreman"],
 		],
 #	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
-	user	=> "server",
-	environment	=> ["HOME=/home/server"],
+	user	=> "ubuntu",
+	environment	=> ["HOME=/home/ubuntu"],
 }
 
 
@@ -367,7 +367,7 @@ package{ 'debconf-utils':
 }
 
 exec { 'preseed':
-	command	=> "debconf-set-selections /home/server/git/foreman-poc/files/System/iptables-persistent.seed",
+	command	=> "debconf-set-selections /home/ubuntu/git/foreman-poc/files/System/iptables-persistent.seed",
 	path	=> "/usr/bin/",
 	require	=> [
 			Package['debconf-utils'],
@@ -409,7 +409,7 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	source	=> "/home/server/git/foreman-poc/files/System/apt-cacher.conf",
+	source	=> "/home/ubuntu/git/foreman-poc/files/System/apt-cacher.conf",
 	notify  => Service["apt-cacher"],
 	require	=> Package["apt-cacher"],
 }
