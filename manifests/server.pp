@@ -235,7 +235,7 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/bin/foreman-installer",
+	command	=> "/usr/sbin/foreman-installer",
 	timeout => 0,
 	require => [
 		Package["bind9"],

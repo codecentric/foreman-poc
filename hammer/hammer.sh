@@ -15,7 +15,7 @@ else
 fi
 
 # Update Domain with DNS-id
-proxy_id=$(hammer proxy list | /bin/grep "server.local.cloud" | /usr/bin/cut -d' ' -f1)
+proxy_id=$(hammer proxy list | /bin/grep "ip-172-16-0-48.local.cloud" | /usr/bin/cut -d' ' -f1)
 hammer domain update --name local.cloud --dns-id $proxy_id
 
 # Create Installation Medium (if not alreay there)
