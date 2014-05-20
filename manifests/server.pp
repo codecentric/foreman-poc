@@ -122,12 +122,12 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 	require => Package["isc-dhcp-server"],
 }
 
-# dhclient fix: prepend DNS-server
-#file_line { 'dhclient':
-#	path	=> '/etc/dhcp/dhclient.conf',
-#	line	=> 'prepend domain-name-servers 172.16.0.2;',
-#	match	=> "prepend domain-name-servers",
-#}
+ dhclient fix: prepend DNS-server
+file_line { 'dhclient':
+	path	=> '/etc/dhcp/dhclient.conf',
+	line	=> 'prepend domain-name-servers ${ipaddress};',
+	match	=> "prepend domain-name-servers",
+}
 
 # TFTP
 
