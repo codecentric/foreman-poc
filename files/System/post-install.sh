@@ -10,7 +10,7 @@ if [ ! -d "$HOME/git/foreman-poc"  ]; then
 fi
 
 cd foreman-poc
-git checkout bare_metal
+git checkout ec2
 
 #sudo cp $HOME/git/foreman-poc/files/System/interfaces /etc/network/
 
