@@ -215,7 +215,7 @@ file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz':
 
 
 # options for foreman-installer
-file { "/etc/foreman/foreman-install-answers.yaml":
+file { "/etc/foreman/foreman-installer-answers.yaml":
 	ensure	=> present,
 	source	=> "/home/server/git/foreman-poc/files/Foreman/answers.yaml",
 	owner	=> root,
@@ -242,7 +242,7 @@ exec { 'foreman-installer':
 	require => [
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
-		File['/etc/foreman/foreman-install-answers.yaml'],
+		File['/etc/foreman/foreman-installer-answers.yaml'],
 		File["/etc/bind/rndc.key"],
 	],
 }
