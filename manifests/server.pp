@@ -125,7 +125,7 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 # dhclient fix: prepend DNS-server
 file_line { 'dhclient':
 	path	=> '/etc/dhcp/dhclient.conf',
-	line	=> 'prepend domain-name-servers ${ipaddress};',
+	line	=> 'prepend domain-name-servers 172.16.0.2;',
 	match	=> "prepend domain-name-servers",
 }
 
@@ -201,7 +201,7 @@ file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img':
       owner   => foreman-proxy,
       group   => nogroup,
       mode    => 644,
-      require => Exec["wget initrd.img"],
+     require => Exec["wget initrd.img"],
 }
 
 
@@ -447,25 +447,25 @@ package { 'ruby-foreman-discovery':
 		]
 }
 
-exec { "reboot machine":
-	command => "/sbin/reboot",
-	require	=> [
-		Package['openssh-server'],
-		Package['git'],
-		User['dhcpd'],
-		Service['apparmor'],
-		File['/etc/apparmor.d/usr.sbin.dhcpd'],
-		File_line['dhclient'],
-		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
-		User['foreman-proxy'],
-		File['/etc/foreman/settings.yaml'],
-		Exec['foreman-restart'],
-		Exec['hammer execution'],
-		Exec['iptables masquerade'],
-		Exec['preseed'],
-		Service['iptables-persistent'],
-		Exec['apt-cacher-import'],
-		File_Line['sudo_rule_v3'],
-		Package['ruby-foreman-discovery'],
-	],
-}
+#exec { "reboot machine":
+#	command => "/sbin/reboot",
+#	require	=> [
+#		Package['openssh-server'],
+#		Package['git'],
+#		User['dhcpd'],
+#		Service['apparmor'],
+#		File['/etc/apparmor.d/usr.sbin.dhcpd'],
+#		File_line['dhclient'],
+#		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
+#		User['foreman-proxy'],
+#		File['/etc/foreman/settings.yaml'],
+#		Exec['foreman-restart'],
+#		Exec['hammer execution'],
+#		Exec['iptables masquerade'],
+#		Exec['preseed'],
+#		Service['iptables-persistent'],
+#		Exec['apt-cacher-import'],
+#		File_Line['sudo_rule_v3'],
+#		Package['ruby-foreman-discovery'],
+#	],
+#}
