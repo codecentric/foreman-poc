@@ -24,7 +24,7 @@ file {'foremanlist':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise 1.4'
+	content	=> 'deb http://deb.theforeman.org/ precise 1.5'
 }
 
 file {'smartproxylist':
@@ -38,7 +38,7 @@ file {'foreman-pluginlist':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.4'
+        content => 'deb http://deb.theforeman.org/ plugins 1.5'
 }
 
 aptkey { 'foreman.asc':
@@ -125,7 +125,7 @@ file { "/etc/apparmor.d/usr.sbin.dhcpd":
 # dhclient fix: prepend DNS-server
 file_line { 'dhclient':
 	path	=> '/etc/dhcp/dhclient.conf',
-	line	=> 'prepend domain-name-servers 172.16.0.2;',
+	line	=> 'prepend domain-name-servers ${ipaddress};',
 	match	=> "prepend domain-name-servers",
 }
 
@@ -185,16 +185,28 @@ exec { "wget initrd.img":
 	require => File["/var/lib/tftpboot/boot"],
 }
 
-exec { "wget vmlinuz":
-        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-vmlinuz",
-	cwd     => "/var/lib/tftpboot/boot/",
-	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz",
-	path    => "/usr/bin",
-	require => File["/var/lib/tftpboot/boot"],
+# download discovery images
+exec { "wget initrd.img":
+       command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-3.1.
+0-0.999.201404241107.el6.iso-img",
+       cwd     => "/var/lib/tftpboot/boot/",
+       creates => "/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
+       path    => "/usr/bin",
+       require => File["/var/lib/tftpboot/boot"],
 }
 
+
+exec { "wget vmlinuz":
+        command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz",
+        cwd     => "/var/lib/tftpboot/boot/",
+        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz",
+        path    => "/usr/bin",
+        require => File["/var/lib/tftpboot/boot"],
+}
+
+
 # set permissions for discovery images
-file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img':
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img':
       ensure  => present,
       owner   => foreman-proxy,
       group   => nogroup,
@@ -203,7 +215,7 @@ file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img':
 }
 
 
-file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz':
       ensure  => present,
       owner   => foreman-proxy,
       group   => nogroup,
@@ -213,7 +225,7 @@ file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
 
 
 # options for foreman-installer
-file { "/usr/share/foreman-installer/config/answers.yaml":
+file { "/etc/foreman/foreman-install-answers.yaml":
 	ensure	=> present,
 	source	=> "/home/server/git/foreman-poc/files/Foreman/answers.yaml",
 	owner	=> root,
@@ -235,12 +247,12 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/bin/foreman-installer",
+	command	=> "/usr/sbin/foreman-installer",
 	timeout => 0,
 	require => [
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
-		File['/usr/share/foreman-installer/config/answers.yaml'],
+		File['/etc/foreman/foreman-install-answers.yaml'],
 		File["/etc/bind/rndc.key"],
 	],
 }
