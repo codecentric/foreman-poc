@@ -182,6 +182,7 @@ exec { "wget initrd.img":
        cwd     => "/var/lib/tftpboot/boot/",
        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img",
        path    => "/usr/bin",
+       timeout => 1000,
        require => File["/var/lib/tftpboot/boot"],
 }
 
@@ -191,6 +192,7 @@ exec { "wget vmlinuz":
         cwd     => "/var/lib/tftpboot/boot/",
         creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
         path    => "/usr/bin",
+        timeout => 1000,
         require => File["/var/lib/tftpboot/boot"],
 }
 
