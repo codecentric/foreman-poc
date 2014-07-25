@@ -178,7 +178,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 
 # download discovery images
 exec { "wget initrd.img":
-       command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-img",
+       command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-img",
        cwd     => "/var/lib/tftpboot/boot/",
        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img",
        path    => "/usr/bin",
@@ -188,7 +188,7 @@ exec { "wget initrd.img":
 
 
 exec { "wget vmlinuz":
-        command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-vmlinuz",
+        command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-vmlinuz",
         cwd     => "/var/lib/tftpboot/boot/",
         creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
         path    => "/usr/bin",
