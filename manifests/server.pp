@@ -30,6 +30,7 @@ file {'foremanlist':
 	ensure	=> present,
 	mode	=> 0644,
 	content	=> 'deb http://deb.theforeman.org/ precise 1.5'
+#	content	=> 'deb http://deb.theforeman.org/ trusty 1.5'
 }
 
 file {'smartproxylist':
@@ -37,6 +38,7 @@ file {'smartproxylist':
 	ensure	=> present,
 	mode	=> 0644,
 	content	=> 'deb http://deb.theforeman.org/ precise stable'
+#	content	=> 'deb http://deb.theforeman.org/ trusty stable'
 }
 
 file {'foreman-pluginlist':

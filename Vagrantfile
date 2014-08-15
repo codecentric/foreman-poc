@@ -4,6 +4,7 @@ Vagrant.configure("2") do |config|
 
   # os image
   config.vm.box = "precise32"
+#  config.vm.box = "ubuntu/trusty64"
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
   config.vm.synced_folder ".", "/vagrant"
  
@@ -25,7 +26,7 @@ Vagrant.configure("2") do |config|
 	server.vm.hostname = "server.local.cloud"
 
 	# public network
-	server.vm.network "public_network", :bridge => 'lxcbr0'
+	server.vm.network "public_network", :bridge => 'eth0'
 
 	# private network
 	server.vm.network "private_network", ip: "172.16.0.2"
