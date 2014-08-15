@@ -191,47 +191,36 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 }
 
 # download discovery images
-#exec { "wget initrd.img":
-#        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-initrd.img",
-#	command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
-#	cwd     => "/var/lib/tftpboot/boot/",
-#	creates => "/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
-#	path    => "/usr/bin",
-#	require => File["/var/lib/tftpboot/boot"],
-#}
-file { '/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img':
-        ensure  => present,
-        owner   => nobody,
-        group   => nogroup,
-        mode    => 777,
-        source  => "/vagrant/files/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img",
-        require => File["/var/lib/tftpboot/boot"],
+exec { "wget initrd.img":
+       command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-img",
+       cwd     => "/var/lib/tftpboot/boot/",
+       creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img",
+       path    => "/usr/bin",
+       timeout => 1000,
+       require => File["/var/lib/tftpboot/boot"],
 }
-
 
 
 exec { "wget vmlinuz":
-#        command => "wget http://lzap.fedorapeople.org/zzz/discovery-prod-0.3.0-1-vmlinuz",
-	command => "wget http://yum.theforeman.org/discovery/releases/0.5/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz",
-	cwd     => "/var/lib/tftpboot/boot/",
-#	creates => "/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz",
-	creates => "/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-vmlinuz",
-	path    => "/usr/bin",
-	require => File["/var/lib/tftpboot/boot"],
+        command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-vmlinuz",
+        cwd     => "/var/lib/tftpboot/boot/",
+        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
+        path    => "/usr/bin",
+        timeout => 1000,
+        require => File["/var/lib/tftpboot/boot"],
 }
 
 # set permissions for discovery images
-file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-initrd.img':
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img':
       ensure  => present,
       owner   => foreman-proxy,
       group   => nogroup,
       mode    => 644,
-#      require => Exec["wget initrd.img"],
-      require => File["/var/lib/tftpboot/boot/foreman-discovery-image-3.1.0-0.999.201404241107.el6.iso-img"]
+     require => Exec["wget initrd.img"],
 }
 
 
-file { '/var/lib/tftpboot/boot/discovery-prod-0.3.0-1-vmlinuz':
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz':
       ensure  => present,
       owner   => foreman-proxy,
       group   => nogroup,

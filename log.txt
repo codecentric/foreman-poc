@@ -1,0 +1,345 @@
+Bringing machine 'server' up with 'virtualbox' provider...
+==> server: Importing base box 'precise32'...
+[KProgress: 10%[KProgress: 30%[KProgress: 40%[KProgress: 50%[KProgress: 70%[KProgress: 80%[KProgress: 90%[K==> server: Matching MAC address for NAT networking...
+==> server: Setting the name of the VM: fm_poc_foreman_server_1408089605523_22003
+==> server: Clearing any previously set network interfaces...
+==> server: Preparing network interfaces based on configuration...
+    server: Adapter 1: nat
+    server: Adapter 2: bridged
+    server: Adapter 3: hostonly
+==> server: Forwarding ports...
+    server: 22 => 2222 (adapter 1)
+==> server: Running 'pre-boot' VM customizations...
+==> server: Booting VM...
+==> server: Waiting for machine to boot. This may take a few minutes...
+    server: SSH address: 127.0.0.1:2222
+    server: SSH username: vagrant
+    server: SSH auth method: private key
+==> server: Machine booted and ready!
+==> server: Checking for guest additions in VM...
+    server: The guest additions on this VM do not match the installed version of
+    server: VirtualBox! In most cases this is fine, but in rare cases it can
+    server: prevent things such as shared folders from working properly. If you see
+    server: shared folder errors, please make sure the guest additions within the
+    server: virtual machine match the version of VirtualBox you have installed on
+    server: your host and reload your VM.
+    server: 
+    server: Guest Additions Version: 4.2.0
+    server: VirtualBox Version: 4.3
+==> server: Setting hostname...
+==> server: Configuring and enabling network interfaces...
+==> server: Mounting shared folders...
+    server: /vagrant => /home/fredi/Dokumente/git/fm_poc_foreman
+    server: /tmp/vagrant-cache => /home/fredi/.vagrant.d/cache/precise32
+    server: /tmp/vagrant-puppet-2/manifests => /home/fredi/Dokumente/git/fm_poc_foreman/manifests
+    server: /tmp/vagrant-puppet-2/modules-0 => /home/fredi/Dokumente/git/fm_poc_foreman/modules
+==> server: Configuring cache buckets...
+==> server: Running provisioner: shell...
+    server: Running: inline script
+==> server: stdin: is not a tty
+==> server: Europe/Berlin
+==> server: Current default time zone: 'Europe/Berlin'
+==> server: Local time is now:      Fri Aug 15 10:00:36 CEST 2014.
+==> server: Universal Time is now:  Fri Aug 15 08:00:36 UTC 2014.
+==> server: Configuring cache buckets...
+==> server: Running provisioner: shell...
+    server: Running: /tmp/vagrant-shell20140815-9456-nijgzs.sh
+==> server: stdin: is not a tty
+==> server: --2014-08-15 10:00:40--  https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+==> server: Resolving apt.puppetlabs.com (apt.puppetlabs.com)... 
+==> server: 198.58.114.168
+==> server: , 
+==> server: 2600:3c00::f03c:91ff:fe69:6bf0
+==> server: Connecting to apt.puppetlabs.com (apt.puppetlabs.com)|198.58.114.168|:443... 
+==> server: connected.
+==> server: HTTP request sent, awaiting response... 
+==> server: 200 OK
+==> server: Length: 
+==> server: 3430
+==> server:  (3.3K)
+==> server:  [application/x-debian-package]
+==> server: Saving to: `puppetlabs-release-precise.deb'
+==> server: 
+==> server:      0K
+==> server:  
+==> server: .
+==> server: .
+==> server: .
+==> server:  
+==> server:  
+==> server:                                                  100% 61.1M=0s
+==> server: 
+==> server: 2014-08-15 10:00:41 (61.1 MB/s) - `puppetlabs-release-precise.deb' saved [3430/3430]
+==> server: Selecting previously unselected package puppetlabs-release.
+==> server: (Reading database ... 
+==> server: 29361 files and directories currently installed.)
+==> server: Unpacking puppetlabs-release (from puppetlabs-release-precise.deb) ...
+==> server: Setting up puppetlabs-release (1.0-7) ...
+==> server: Ign http://security.ubuntu.com precise-security InRelease
+==> server: Ign http://us.archive.ubuntu.com precise InRelease
+==> server: Ign http://us.archive.ubuntu.com precise-updates InRelease
+==> server: Ign http://us.archive.ubuntu.com precise-backports InRelease
+==> server: Ign http://apt.puppetlabs.com precise InRelease
+==> server: Get:1 http://security.ubuntu.com precise-security Release.gpg [198 B]
+==> server: Hit http://us.archive.ubuntu.com precise Release.gpg
+==> server: Get:2 http://us.archive.ubuntu.com precise-updates Release.gpg [198 B]
+==> server: Get:3 http://apt.puppetlabs.com precise Release.gpg [876 B]
+==> server: Get:4 http://us.archive.ubuntu.com precise-backports Release.gpg [198 B]
+==> server: Get:5 http://security.ubuntu.com precise-security Release [50.7 kB]
+==> server: Hit http://us.archive.ubuntu.com precise Release
+==> server: Get:6 http://apt.puppetlabs.com precise Release [22.4 kB]
+==> server: Get:7 http://us.archive.ubuntu.com precise-updates Release [98.7 kB]
+==> server: Get:8 http://security.ubuntu.com precise-security/main Sources [108 kB]
+==> server: Get:9 http://apt.puppetlabs.com precise/main Sources [69.5 kB]
+==> server: Get:10 http://us.archive.ubuntu.com precise-backports Release [50.8 kB]
+==> server: Get:11 http://apt.puppetlabs.com precise/dependencies Sources [8,896 B]
+==> server: Get:12 http://apt.puppetlabs.com precise/main i386 Packages [76.7 kB]
+==> server: Get:13 http://apt.puppetlabs.com precise/dependencies i386 Packages [6,298 B]
+==> server: Hit http://us.archive.ubuntu.com precise/main Sources
+==> server: Hit http://us.archive.ubuntu.com precise/restricted Sources
+==> server: Hit http://us.archive.ubuntu.com precise/universe Sources
+==> server: Hit http://us.archive.ubuntu.com precise/multiverse Sources
+==> server: Hit http://us.archive.ubuntu.com precise/main i386 Packages
+==> server: Get:14 http://security.ubuntu.com precise-security/restricted Sources [2,494 B]
+==> server: Get:15 http://security.ubuntu.com precise-security/universe Sources [32.7 kB]
+==> server: Get:16 http://security.ubuntu.com precise-security/multiverse Sources [1,786 B]
+==> server: Get:17 http://security.ubuntu.com precise-security/main i386 Packages [444 kB]
+==> server: Ign http://apt.puppetlabs.com precise/dependencies TranslationIndex
+==> server: Ign http://apt.puppetlabs.com precise/main TranslationIndex
+==> server: Hit http://us.archive.ubuntu.com precise/restricted i386 Packages
+==> server: Hit http://us.archive.ubuntu.com precise/universe i386 Packages
+==> server: Hit http://us.archive.ubuntu.com precise/multiverse i386 Packages
+==> server: Hit http://us.archive.ubuntu.com precise/main TranslationIndex
+==> server: Hit http://us.archive.ubuntu.com precise/multiverse TranslationIndex
+==> server: Hit http://us.archive.ubuntu.com precise/restricted TranslationIndex
+==> server: Hit http://us.archive.ubuntu.com precise/universe TranslationIndex
+==> server: Get:18 http://us.archive.ubuntu.com precise-updates/main Sources [477 kB]
+==> server: Get:19 http://security.ubuntu.com precise-security/restricted i386 Packages [4,620 B]
+==> server: Get:20 http://security.ubuntu.com precise-security/universe i386 Packages [102 kB]
+==> server: Get:21 http://security.ubuntu.com precise-security/multiverse i386 Packages [2,644 B]
+==> server: Get:22 http://security.ubuntu.com precise-security/main TranslationIndex [74 B]
+==> server: Get:23 http://security.ubuntu.com precise-security/multiverse TranslationIndex [72 B]
+==> server: Get:24 http://security.ubuntu.com precise-security/restricted TranslationIndex [72 B]
+==> server: Get:25 http://security.ubuntu.com precise-security/universe TranslationIndex [73 B]
+==> server: Get:26 http://security.ubuntu.com precise-security/main Translation-en [190 kB]
+==> server: Hit http://security.ubuntu.com precise-security/multiverse Translation-en
+==> server: Hit http://security.ubuntu.com precise-security/restricted Translation-en
+==> server: Get:27 http://us.archive.ubuntu.com precise-updates/restricted Sources [8,056 B]
+==> server: Get:28 http://us.archive.ubuntu.com precise-updates/universe Sources [110 kB]
+==> server: Get:29 http://security.ubuntu.com precise-security/universe Translation-en [59.8 kB]
+==> server: Get:30 http://us.archive.ubuntu.com precise-updates/multiverse Sources [8,881 B]
+==> server: Get:31 http://us.archive.ubuntu.com precise-updates/main i386 Packages [856 kB]
+==> server: Ign http://apt.puppetlabs.com precise/dependencies Translation-en_US
+==> server: Ign http://apt.puppetlabs.com precise/dependencies Translation-en
+==> server: Ign http://apt.puppetlabs.com precise/main Translation-en_US
+==> server: Ign http://apt.puppetlabs.com precise/main Translation-en
+==> server: Get:32 http://us.archive.ubuntu.com precise-updates/restricted i386 Packages [13.7 kB]
+==> server: Get:33 http://us.archive.ubuntu.com precise-updates/universe i386 Packages [253 kB]
+==> server: Get:34 http://us.archive.ubuntu.com precise-updates/multiverse i386 Packages [15.5 kB]
+==> server: Get:35 http://us.archive.ubuntu.com precise-updates/main TranslationIndex [3,564 B]
+==> server: Get:36 http://us.archive.ubuntu.com precise-updates/multiverse TranslationIndex [2,605 B]
+==> server: Get:37 http://us.archive.ubuntu.com precise-updates/restricted TranslationIndex [2,461 B]
+==> server: Get:38 http://us.archive.ubuntu.com precise-updates/universe TranslationIndex [2,850 B]
+==> server: Get:39 http://us.archive.ubuntu.com precise-backports/main Sources [5,145 B]
+==> server: Get:40 http://us.archive.ubuntu.com precise-backports/restricted Sources [14 B]
+==> server: Get:41 http://us.archive.ubuntu.com precise-backports/universe Sources [39.4 kB]
+==> server: Get:42 http://us.archive.ubuntu.com precise-backports/multiverse Sources [5,311 B]
+==> server: Get:43 http://us.archive.ubuntu.com precise-backports/main i386 Packages [6,420 B]
+==> server: Get:44 http://us.archive.ubuntu.com precise-backports/restricted i386 Packages [14 B]
+==> server: Get:45 http://us.archive.ubuntu.com precise-backports/universe i386 Packages [42.2 kB]
+==> server: Get:46 http://us.archive.ubuntu.com precise-backports/multiverse i386 Packages [5,178 B]
+==> server: Get:47 http://us.archive.ubuntu.com precise-backports/main TranslationIndex [72 B]
+==> server: Get:48 http://us.archive.ubuntu.com precise-backports/multiverse TranslationIndex [72 B]
+==> server: Get:49 http://us.archive.ubuntu.com precise-backports/restricted TranslationIndex [70 B]
+==> server: Get:50 http://us.archive.ubuntu.com precise-backports/universe TranslationIndex [73 B]
+==> server: Hit http://us.archive.ubuntu.com precise/main Translation-en
+==> server: Hit http://us.archive.ubuntu.com precise/multiverse Translation-en
+==> server: Hit http://us.archive.ubuntu.com precise/restricted Translation-en
+==> server: Hit http://us.archive.ubuntu.com precise/universe Translation-en
+==> server: Get:51 http://us.archive.ubuntu.com precise-updates/main Translation-en [362 kB]
+==> server: Hit http://us.archive.ubuntu.com precise-updates/multiverse Translation-en
+==> server: Get:52 http://us.archive.ubuntu.com precise-updates/restricted Translation-en [3,027 B]
+==> server: Get:53 http://us.archive.ubuntu.com precise-updates/universe Translation-en [144 kB]
+==> server: Get:54 http://us.archive.ubuntu.com precise-backports/main Translation-en [5,882 B]
+==> server: Hit http://us.archive.ubuntu.com precise-backports/multiverse Translation-en
+==> server: Hit http://us.archive.ubuntu.com precise-backports/restricted Translation-en
+==> server: Get:55 http://us.archive.ubuntu.com precise-backports/universe Translation-en [33.8 kB]
+==> server: Fetched 3,739 kB in 6s (612 kB/s)
+==> server: Reading package lists...
+==> server: Reading package lists...
+==> server: Building dependency tree...
+==> server: Reading state information...
+==> server: The following extra packages will be installed:
+==> server:   augeas-lenses debconf-utils facter hiera libaugeas-ruby libaugeas-ruby1.8
+==> server:   libaugeas0 libjson-ruby libreadline5 libruby libruby1.8 libshadow-ruby1.8
+==> server:   puppet-common ruby ruby-json ruby-rgen ruby1.8 virt-what
+==> server: Suggested packages:
+==> server:   augeas-doc augeas-tools puppet-el vim-puppet ruby-selinux libselinux-ruby1.8
+==> server:   librrd-ruby1.9.1 librrd-ruby1.8 ri ruby-dev ruby1.8-examples ri1.8
+==> server: Recommended packages:
+==> server:   rdoc
+==> server: The following NEW packages will be installed:
+==> server:   augeas-lenses debconf-utils facter hiera libaugeas-ruby libaugeas-ruby1.8
+==> server:   libaugeas0 libjson-ruby libreadline5 libruby libruby1.8 libshadow-ruby1.8
+==> server:   puppet puppet-common ruby ruby-json ruby-rgen ruby1.8 virt-what
+==> server: 0 upgraded, 19 newly installed, 0 to remove and 168 not upgraded.
+==> server: Need to get 1,419 kB/3,963 kB of archives.
+==> server: After this operation, 15.3 MB of additional disk space will be used.
+==> server: Get:1 http://apt.puppetlabs.com/ precise/main facter i386 2.1.0-1puppetlabs1 [79.2 kB]
+==> server: Get:2 http://apt.puppetlabs.com/ precise/main hiera all 1.3.4-1puppetlabs1 [12.9 kB]
+==> server: Get:3 http://apt.puppetlabs.com/ precise/main puppet-common all 3.6.2-1puppetlabs1 [1,317 kB]
+==> server: Get:4 http://apt.puppetlabs.com/ precise/main puppet all 3.6.2-1puppetlabs1 [9,626 B]
+==> server: dpkg-preconfigure: unable to re-open stdin: No such file or directory
+==> server: Fetched 1,419 kB in 1s (1,064 kB/s)
+==> server: Selecting previously unselected package libreadline5.
+==> server: (Reading database ... 
+==> server: 29367 files and directories currently installed.)
+==> server: Unpacking libreadline5 (from .../libreadline5_5.2-11_i386.deb) ...
+==> server: Selecting previously unselected package augeas-lenses.
+==> server: Unpacking augeas-lenses (from .../augeas-lenses_0.10.0-0ubuntu4_all.deb) ...
+==> server: Selecting previously unselected package debconf-utils.
+==> server: Unpacking debconf-utils (from .../debconf-utils_1.5.42ubuntu1_all.deb) ...
+==> server: Selecting previously unselected package libruby1.8.
+==> server: Unpacking libruby1.8 (from .../libruby1.8_1.8.7.352-2ubuntu1.4_i386.deb) ...
+==> server: Selecting previously unselected package ruby1.8.
+==> server: Unpacking ruby1.8 (from .../ruby1.8_1.8.7.352-2ubuntu1.4_i386.deb) ...
+==> server: Selecting previously unselected package ruby.
+==> server: Unpacking ruby (from .../apt/archives/ruby_4.8_all.deb) ...
+==> server: Selecting previously unselected package virt-what.
+==> server: Unpacking virt-what (from .../virt-what_1.11-1_i386.deb) ...
+==> server: Selecting previously unselected package facter.
+==> server: Unpacking facter (from .../facter_2.1.0-1puppetlabs1_i386.deb) ...
+==> server: Selecting previously unselected package libaugeas0.
+==> server: Unpacking libaugeas0 (from .../libaugeas0_0.10.0-0ubuntu4_i386.deb) ...
+==> server: Selecting previously unselected package libaugeas-ruby1.8.
+==> server: Unpacking libaugeas-ruby1.8 (from .../libaugeas-ruby1.8_0.3.0-1.1ubuntu4_i386.deb) ...
+==> server: Selecting previously unselected package libaugeas-ruby.
+==> server: Unpacking libaugeas-ruby (from .../libaugeas-ruby_0.3.0-1.1ubuntu4_all.deb) ...
+==> server: Selecting previously unselected package ruby-json.
+==> server: Unpacking ruby-json (from .../ruby-json_1.6.3-1_i386.deb) ...
+==> server: Selecting previously unselected package libjson-ruby.
+==> server: Unpacking libjson-ruby (from .../libjson-ruby_1.6.3-1_all.deb) ...
+==> server: Selecting previously unselected package libruby.
+==> server: Unpacking libruby (from .../archives/libruby_4.8_all.deb) ...
+==> server: Selecting previously unselected package libshadow-ruby1.8.
+==> server: Unpacking libshadow-ruby1.8 (from .../libshadow-ruby1.8_1.4.1-8build1_i386.deb) ...
+==> server: Selecting previously unselected package hiera.
+==> server: Unpacking hiera (from .../hiera_1.3.4-1puppetlabs1_all.deb) ...
+==> server: Selecting previously unselected package ruby-rgen.
+==> server: Unpacking ruby-rgen (from .../ruby-rgen_0.6.5-1puppetlabs1_all.deb) ...
+==> server: Selecting previously unselected package puppet-common.
+==> server: Unpacking puppet-common (from .../puppet-common_3.6.2-1puppetlabs1_all.deb) ...
+==> server: Selecting previously unselected package puppet.
+==> server: Unpacking puppet (from .../puppet_3.6.2-1puppetlabs1_all.deb) ...
+==> server: Processing triggers for man-db ...
+==> server: Processing triggers for ureadahead ...
+==> server: ureadahead will be reprofiled on next reboot
+==> server: Setting up libreadline5 (5.2-11) ...
+==> server: Setting up augeas-lenses (0.10.0-0ubuntu4) ...
+==> server: Setting up debconf-utils (1.5.42ubuntu1) ...
+==> server: Setting up libruby1.8 (1.8.7.352-2ubuntu1.4) ...
+==> server: Setting up ruby1.8 (1.8.7.352-2ubuntu1.4) ...
+==> server: update-alternatives: 
+==> server: using /usr/bin/ruby1.8 to provide /usr/bin/ruby (ruby) in auto mode.
+==> server: Setting up ruby (4.8) ...
+==> server: Setting up virt-what (1.11-1) ...
+==> server: Setting up facter (2.1.0-1puppetlabs1) ...
+==> server: Setting up libaugeas0 (0.10.0-0ubuntu4) ...
+==> server: Setting up libaugeas-ruby1.8 (0.3.0-1.1ubuntu4) ...
+==> server: Setting up libaugeas-ruby (0.3.0-1.1ubuntu4) ...
+==> server: Setting up ruby-json (1.6.3-1) ...
+==> server: Setting up libjson-ruby (1.6.3-1) ...
+==> server: Setting up libruby (4.8) ...
+==> server: Setting up libshadow-ruby1.8 (1.4.1-8build1) ...
+==> server: Setting up hiera (1.3.4-1puppetlabs1) ...
+==> server: Setting up ruby-rgen (0.6.5-1puppetlabs1) ...
+==> server: Setting up puppet-common (3.6.2-1puppetlabs1) ...
+==> server: Setting up puppet (3.6.2-1puppetlabs1) ...
+==> server:  * Starting puppet agent
+==> server: puppet not configured to start, please edit /etc/default/puppet to enable
+==> server:    ...done.
+==> server: Processing triggers for libc-bin ...
+==> server: ldconfig deferred processing now taking place
+==> server:  * Restarting puppet agent
+==> server: puppet not configured to start, please edit /etc/default/puppet to enable
+==> server:    ...done.
+==> server: [1;31mWarning: Sections other than main, master, agent, user are deprecated in puppet.conf. Please use the directory environments feature to specify environments. (See http://docs.puppetlabs.com/puppet/latest/reference/environments.html)
+==> server:    (at /usr/lib/ruby/vendor_ruby/puppet/settings/config_file.rb:77:in `collect')[0m
+==> server: [mNotice: Preparing to install into /etc/puppet/environments/cloudbox/modules ...[0m
+==> server: [mNotice: Created target directory /etc/puppet/environments/cloudbox/modules[0m
+==> server: [mNotice: Downloading from https://forgeapi.puppetlabs.com ...[0m
+==> server: 
+==> server: [1;31mWarning: Setting templatedir is deprecated. See http://links.puppetlabs.com/env-settings-deprecations
+==> server:    (at /usr/lib/ruby/vendor_ruby/puppet/settings.rb:1095:in `issue_deprecations')[0m
+==> server: [mNotice: Installing -- do not interrupt ...[0m
+==> server: /etc/puppet/environments/cloudbox/modules
+==> server: └── puppetlabs-stdlib ([0;36mv4.3.2[0m)
+==> server: Configuring cache buckets...
+==> server: Running provisioner: puppet...
+==> server: Running Puppet with server.pp...
+==> server: stdin: is not a tty
+==> server: Warning: Sections other than main, master, agent, user are deprecated in puppet.conf. Please use the directory environments feature to specify environments. (See http://docs.puppetlabs.com/puppet/latest/reference/environments.html)
+==> server:    (at /usr/lib/ruby/vendor_ruby/puppet/settings/config_file.rb:77:in `collect')
+==> server: Warning: Setting manifestdir is deprecated. See http://links.puppetlabs.com/env-settings-deprecations
+==> server:    (at /usr/lib/ruby/vendor_ruby/puppet/settings.rb:1095:in `issue_deprecations')
+==> server: Warning: Setting templatedir is deprecated. See http://links.puppetlabs.com/env-settings-deprecations
+==> server:    (at /usr/lib/ruby/vendor_ruby/puppet/settings.rb:1095:in `issue_deprecations')
+==> server: Notice: Compiled catalog for server.local.cloud in environment cloudbox in 0.57 seconds
+==> server: Notice: /Stage[main]/Main/File[/etc/hammer]/ensure: created
+==> server: Notice: /Stage[main]/Main/File[smartproxylist]/ensure: created
+==> server: Notice: /Stage[main]/Main/File[foreman-pluginlist]/ensure: created
+==> server: Notice: /Stage[main]/Main/Exec[net.ipv4.ip_forward]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Exec[sysctl]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/File[foremanlist]/ensure: created
+==> server: Notice: /Stage[main]/Main/Exec[iptables forward]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Aptkey[foreman.asc]/Exec[apt-key present foreman.asc]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Exec[iptables masquerade]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Package[iptables-persistent]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/Service[iptables-persistent]/ensure: ensure changed 'stopped' to 'running'
+==> server: Notice: /Stage[main]/Main/File_line[dhclient]/ensure: created
+==> server: Notice: /Stage[main]/Main/Exec[preseed]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot]/ensure: created
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot/pxelinux.cfg]/ensure: created
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot/boot]/ensure: created
+==> server: Notice: /Stage[main]/Main/Exec[wget initrd.img]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux]/ensure: defined content as '{md5}18e37f77c1ab8c7c73826736959e6fe2'
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz]/ensure: defined content as '{md5}2207c684ec8d216adce4c4c670d74001'
+==> server: Notice: /Stage[main]/Main/Exec[wget vmlinuz]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/File[/etc/apt/apt.conf.d/99auth]/ensure: defined content as '{md5}be98c597aabe5f18d200636f39a36e1c'
+==> server: Notice: /Stage[main]/Main/Exec[apt-update]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Package[git]/ensure: created
+==> server: Notice: /Stage[main]/Main/Package[isc-dhcp-server]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/Package[squid-deb-proxy-client]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/Package[bind9]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/User[dhcpd]/groups: groups changed '' to 'bind'
+==> server: Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/content: content changed '{md5}c9e77f89289bbb55403ac5546dffc1d6' to '{md5}5e8ce92ef62e12451c1a4512ac2214e8'
+==> server: Notice: /Stage[main]/Main/File[/etc/bind/rndc.key]/owner: owner changed 'bind' to 'root'
+==> server: Notice: /Stage[main]/Main/Package[gem]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/Package[hammer_cli]/ensure: created
+==> server: Notice: /Stage[main]/Main/File[/etc/apparmor.d/usr.sbin.dhcpd]/content: content changed '{md5}de9a7784c64131b2d08392e163ecf0f5' to '{md5}187112871cf1ff932f077e56e2b909c9'
+==> server: Notice: /Stage[main]/Main/Service[apparmor]: Triggered 'refresh' from 1 events
+==> server: Notice: /Stage[main]/Main/Package[foreman-installer]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/File[/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp]/content: content changed '{md5}783c448905bd0eeac15a144a53e7533b' to '{md5}0245f7f8a920c5d88361615a0771012e'
+==> server: Notice: /Stage[main]/Main/File[/etc/foreman/foreman-installer-answers.yaml]/content: content changed '{md5}0585ece13a58cdab207af9ea6a7b471b' to '{md5}a9f14e78321dbda501de782893ddc667'
+==> server: Notice: /Stage[main]/Main/File[/etc/foreman/foreman-installer-answers.yaml]/mode: mode changed '0644' to '0600'
+==> server: Notice: /Stage[main]/Main/Exec[foreman-installer]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/File[/etc/hammer/cli_config.yml]/ensure: defined content as '{md5}cc5a46b466d237dbdc23d3dfcd8b17fc'
+==> server: Notice: /Stage[main]/Main/Package[apt-cacher]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/File[/var/log/foreman/hammer.log]/ensure: created
+==> server: Notice: /Stage[main]/Main/File[/etc/apt-cacher/apt-cacher.conf]/content: content changed '{md5}ed9e97a75d29c1889b9ab6d4f4298e49' to '{md5}2c80bd6a2d4dc2d93af79da3b9049199'
+==> server: Notice: /Stage[main]/Main/Exec[apt-cacher-import]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Service[apt-cacher]: Triggered 'refresh' from 1 events
+==> server: Notice: /Stage[main]/Main/File[/etc/foreman/settings.yaml]/content: content changed '{md5}8de8ee43f285564fc7e9f38163386f92' to '{md5}3c9c1318e07df348625b03caa7d1597e'
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img]/group: group changed 'root' to 'nogroup'
+==> server: Notice: /Stage[main]/Main/Package[hammer_cli_foreman]/ensure: created
+==> server: Notice: /Stage[main]/Main/File_line[sudo_rule_v1]/ensure: created
+==> server: Notice: /Stage[main]/Main/File_line[sudo_rule_v2]/ensure: created
+==> server: Notice: /Stage[main]/Main/File_line[sudo_rule_v3]/ensure: created
+==> server: Notice: /Stage[main]/Main/Package[ruby-foreman-discovery]/ensure: ensure changed 'purged' to 'present'
+==> server: Notice: /Stage[main]/Main/File[/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz]/group: group changed 'root' to 'nogroup'
+==> server: Notice: /Stage[main]/Main/Exec[foreman-restart]: Triggered 'refresh' from 1 events
+==> server: Notice: /Stage[main]/Main/Exec[foreman-cache]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Exec[hammer execution]/returns: executed successfully
+==> server: Notice: /Stage[main]/Main/Exec[reboot machine]/returns: executed successfully
+==> server: Notice: Finished catalog run in 507.78 seconds
+==> server: Configuring cache buckets...
