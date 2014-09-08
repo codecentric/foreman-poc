@@ -24,21 +24,21 @@ file {'foremanlist':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise 1.5'
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.6'
 }
 
 file {'smartproxylist':
 	path	=> '/etc/apt/sources.list.d/smartproxy.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise stable'
+	content	=> 'deb http://deb.theforeman.org/ trusty stable'
 }
 
 file {'foreman-pluginlist':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.5'
+        content => 'deb http://deb.theforeman.org/ plugins 1.6'
 }
 
 aptkey { 'foreman.asc':
@@ -56,10 +56,17 @@ exec { "apt-update":
 	]
 }
 
+package { "make":
+	ensure	=> "installed",
+	require	=> Exec['apt-update'],
+}
+
 package { "openssh-server":
 	ensure	=> "installed",
 	require	=> Exec['apt-update'],
 }
+
+
 
 package { "foreman-installer":
 	ensure	=> "installed",
@@ -81,6 +88,7 @@ package { "git":
 }
 package { "gem":
 	ensure => "installed",
+	install_options => [ '--force-yes'],
 	require => Exec['apt-update'],
 }
 
@@ -234,12 +242,14 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 	group	=> root,
 	mode	=> 644,
 	require	=> Package["foreman-installer"],
-}	
+}
+
 
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/sbin/foreman-installer",
+	command	=> "/usr/sbin/foreman-installer --foreman-admin-password changeme",
+	environment => ["HOME=/home/server"],
 	timeout => 0,
 	require => [
 		Package["bind9"],
@@ -278,6 +288,7 @@ exec { "foreman-cache":
 	command		=> "/usr/sbin/foreman-rake apipie:cache",
 	require		=> Exec['foreman-restart'],
 }
+
 # HAMMER
 # install hammer cli
 package { 'hammer_cli':
