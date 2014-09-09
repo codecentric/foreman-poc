@@ -504,19 +504,19 @@ exec { "foreman-discovery-install-f":
 		]
 }
 
-#package { 'ruby-foreman-discovery':
-#        ensure  => installed,
-#        require => [
-#			Exec['foreman-discovery-install-f'],
-#		]
-#}
+package { 'ruby-foreman-discovery':
+        ensure  => installed,
+        require => [
+			Exec['foreman-discovery-install-f'],
+		]
+}
 
 
 exec { "foreman-discovery-postinstall":
 
        command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
         require => [
-			Exec['foreman-discovery-install-f'],
+			Package['ruby-foreman-discovery],
 		]
 }
 
