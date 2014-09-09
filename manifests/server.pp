@@ -464,12 +464,54 @@ file_line { 'sudo_rule_v3':
 	require	=> File_Line['sudo_rule_v2'],
 }
 
-package { 'ruby-foreman-discovery':
-        ensure  => installed,
-        require => [
+exec { "gem-foreman-discovery":
+
+       command => "gem install --no-rdoc --no-ri foreman-discovery",
+       cwd     => "/usr/share/foreman",
+       path    => "/usr/bin",
+       require => [
 			Exec['foreman-installer'],
 		]
 }
+
+exec { "bundle-update":
+
+       command => "bundle update",
+       cwd     => "/usr/share/foreman",
+       path    => "/usr/bin",
+        require => [
+			Exec['gem-foreman-discovery'],
+		]
+}
+
+exec { "foreman-discovery-postinstall":
+
+       command => "ruby-foreman-discovery.postinst",
+       cwd     => "/var/lib/dpkg/info",
+       path    => "/usr/bin",
+        require => [
+			Exec['bundle-update'],
+		]
+}
+
+exec { "foreman-discovery-install-f":
+
+       command => "apt-get -f install",
+       path    => "/usr/bin",
+        require => [
+			Exec['foreman-discovery-postinstall'],
+		]
+}
+
+
+
+package { 'ruby-foreman-discovery':
+        ensure  => installed,
+        require => [
+			Exec['foreman-discovery-install-f'],
+		]
+}
+
 
 #exec { "reboot machine":
 #	command => "/sbin/reboot",
