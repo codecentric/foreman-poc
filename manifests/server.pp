@@ -347,9 +347,8 @@ exec { "hammer execution":
 			File["/etc/hammer/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-#	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
-	user	=> "server",
-	environment	=> ["HOME=/home/server"],
+#	user	=> "server",
+#	environment	=> ["HOME=/home/server"],
 }
 
 
