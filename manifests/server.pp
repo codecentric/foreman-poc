@@ -495,7 +495,7 @@ exec { "foreman-discovery-postinstall":
 exec { "foreman-discovery-install-f":
 
        command => "apt-get -f install",
-       path    => [ "/bin", "/usr/bin"],
+       path    => [ "/bin", "/usr/bin", "/sbin", "/usr/local/sbin", "/usr/sbin"],
         require => [
 			Exec['foreman-discovery-postinstall'],
 		]
