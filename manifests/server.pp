@@ -486,9 +486,7 @@ exec { "bundle-update":
 
 exec { "foreman-discovery-postinstall":
 
-       command => "ruby-foreman-discovery.postinst",
-       cwd     => "/var/lib/dpkg/info",
-       path    => "/usr/bin",
+       command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
         require => [
 			Exec['bundle-update'],
 		]
