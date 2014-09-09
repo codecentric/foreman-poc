@@ -348,7 +348,7 @@ exec { "hammer execution":
 			Package["hammer_cli_foreman"],
 		],
 #	user	=> "server",
-#	environment	=> ["HOME=/home/server"],
+	environment	=> ["HOME=/home/server"],
 }
 
 
