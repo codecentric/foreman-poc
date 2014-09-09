@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd $HOME
-sudo apt-get install openssh-server git
+sudo apt-get install --yes openssh-server git
 mkdir -p git
 cd git
 
