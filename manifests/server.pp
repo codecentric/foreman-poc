@@ -520,9 +520,15 @@ exec { "foreman-discovery-postinstall":
 		]
 }
 
+exec { "bundle-install-last":
 
-
-
+       command => "bundle install",
+       cwd     => "/usr/share/foreman",
+       path    => "/usr/bin",
+        require => [
+			Exec['foreman-discovery-postinstall'],
+		]
+}
 
 
 
