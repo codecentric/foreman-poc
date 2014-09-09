@@ -466,7 +466,7 @@ file_line { 'sudo_rule_v3':
 
 exec { "gem-foreman-discovery":
 
-       command => "gem install --no-rdoc --no-ri foreman-discovery",
+       command => "gem install --no-rdoc --no-ri foreman_discovery",
        cwd     => "/usr/share/foreman",
        path    => "/usr/bin",
        require => [
