@@ -516,7 +516,7 @@ exec { "foreman-discovery-postinstall":
 
        command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
         require => [
-			Package['ruby-foreman-discovery],
+			Package['ruby-foreman-discovery'],
 		]
 }
 
