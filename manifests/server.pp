@@ -289,12 +289,23 @@ exec { "foreman-cache":
 	require		=> Exec['foreman-restart'],
 }
 
+# ruby-dev
+# install ruby-dev package
+package { 'ruby-dev':
+	ensure		=> installed,
+	require	=> Exec['apt-update'],
+}
+
+
 # HAMMER
 # install hammer cli
 package { 'hammer_cli':
 	ensure		=> installed,
 	provider	=> "gem",
-	require		=> Package['gem'],
+	require => [
+			Package['gem'],
+			Package['ruby-dev'],
+		   ],
 }
 
 # install foreman plugin for hammer
