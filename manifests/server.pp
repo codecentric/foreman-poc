@@ -467,7 +467,7 @@ exec { "gem-foreman-discovery":
 
        command => "gem install --no-rdoc --no-ri foreman_discovery",
        cwd     => "/usr/share/foreman",
-       path    => "/usr/bin",
+       path    => ["/bin", "/sbin", "/usr/bin"],
        require => [
 			Exec['foreman-installer'],
 		]
@@ -502,12 +502,12 @@ exec { "foreman-discovery-install-f":
 
 
 
-package { 'ruby-foreman-discovery':
-        ensure  => installed,
-        require => [
-			Exec['foreman-discovery-install-f'],
-		]
-}
+#package { 'ruby-foreman-discovery':
+#        ensure  => installed,
+#        require => [
+#			Exec['foreman-discovery-install-f'],
+#		]
+#}
 
 
 #exec { "reboot machine":
