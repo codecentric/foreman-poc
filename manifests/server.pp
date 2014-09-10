@@ -463,72 +463,126 @@ file_line { 'sudo_rule_v3':
 	require	=> File_Line['sudo_rule_v2'],
 }
 
-
-exec { "gem-foreman-discovery":
-
-       command => "gem install --no-rdoc --no-ri foreman_discovery",
-       cwd     => "/usr/share/foreman",
-       path    => ["/bin", "/sbin", "/usr/bin"],
-       require => [
-			Exec['foreman-installer'],
-		]
+file { '/usr/share/foreman/bundler.d/plugins.rb':
+	ensure	=> present,
+	owner	=> root,
+	group	=> root,
+	mode	=> 644,
+	require	=> Exec['foreman-installer'],
 }
 
-exec { "bundle-update":
+file_line { 'add-gem-foreman_discovery':
+	path	=> '/usr/share/foreman/bundler.d/plugins.rb',
+	line	=> 'gem \'foreman_discovery\'',
+	require	=> File['/usr/share/foreman/bundler.d/plugins.rb'],
+}
 
+exec { 'bundle-update':
        command => "bundle update",
        cwd     => "/usr/share/foreman",
        path    => "/usr/bin",
-        require => [
-			Exec['gem-foreman-discovery'],
-		]
+       require => File_Line['add-gem-foreman_discovery'],
 }
 
-exec { "bundle-install":
-
-       command => "bundle install",
-       cwd     => "/usr/share/foreman",
-       path    => "/usr/bin",
-        require => [
-			Exec['bundle-update'],
-		]
+exec { 'second_foreman-restart':
+	command	=> "touch ~foreman/tmp/restart.txt",
+	path	=> "/usr/bin/",
+	require	=> Exec['bundle-update'],
 }
 
+#exec { "gem-foreman-discovery":
+#
+#       command => "gem install --no-rdoc --no-ri foreman_discovery",
+#       cwd     => "/usr/share/foreman",
+#       path    => ["/bin", "/sbin", "/usr/bin"],
+#       require => [
+#			Exec['foreman-installer'],
+#		]
+#}
 
-exec { "foreman-discovery-install-f":
+#exec { "bundle-update":
+#
+#       command => "bundle update",
+#       cwd     => "/usr/share/foreman",
+#       path    => "/usr/bin",
+#        require => [
+#			Exec['gem-foreman-discovery'],
+#		]
+#}
 
-       command => "apt-get -f install",
-       path    => [ "/bin", "/usr/bin", "/sbin", "/usr/local/sbin", "/usr/sbin"],
-        require => [
-			Exec['bundle-install'],
-		]
-}
-
-package { 'ruby-foreman-discovery':
-        ensure  => installed,
-        require => [
-			Exec['foreman-discovery-install-f'],
-		]
-}
+#exec { "bundle-install":
+#
+#       command => "bundle install",
+#       cwd     => "/usr/share/foreman",
+#       path    => "/usr/bin",
+#        require => [
+#			Exec['bundle-update'],
+#		]
+#}
 
 
-exec { "foreman-discovery-postinstall":
+#exec { "foreman-discovery-install-f":
+#
+#       command => "apt-get -f install",
+#       path    => [ "/bin", "/usr/bin", "/sbin", "/usr/local/sbin", "/usr/sbin"],
+#        require => [
+#			Exec['bundle-install'],
+#		]
+#}
 
-       command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
-        require => [
-			Package['ruby-foreman-discovery'],
-		]
-}
 
-exec { "bundle-install-last":
 
-       command => "bundle install",
-       cwd     => "/usr/share/foreman",
-       path    => "/usr/bin",
-        require => [
-			Exec['foreman-discovery-postinstall'],
-		]
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# INSTALL NUR, WENN ES /var/lib/dpkg/info/ruby-foreman-discovery.postinst NICHT GIBT?
+
+
+
+#package { 'ruby-foreman-discovery':
+#        ensure  => installed,
+#        require => [
+#			Exec['foreman-discovery-install-f'],
+#		]
+#}
+
+
+
+
+
+
+
+
+
+
+
+#exec { "foreman-discovery-postinstall":
+#
+#       command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
+#        require => [
+#			Package['ruby-foreman-discovery'],
+#		]
+#}
+
+#exec { "bundle-install-last":
+#
+#       command => "bundle install",
+#       cwd     => "/usr/share/foreman",
+#       path    => "/usr/bin",
+#        require => [
+#			Exec['foreman-discovery-postinstall'],
+#		]
+#}
 
 
 
