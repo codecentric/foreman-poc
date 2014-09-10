@@ -6,6 +6,7 @@ http://projects.theforeman.org/issues/5637
 0. KNOWN BUGS
 ---------------------------------------------------------------------------------------------
 	1.  "Verwaltung -> Einstellungen -> Puppet" -> puppetrun steht auf false und muss auf true gesetzt werden
+	2.  Ubuntu 12.10 hat einen Defekt, durch den bei der Installation der Archive Server nicht gefunden wird. Lösung: Neues OS hinzufügen (z.B. 14.04 Trusty)
 
 
 1. UBUNTU SERVER INSTALLATION VON BOOT STICK (14.04)
