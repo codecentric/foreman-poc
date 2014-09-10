@@ -1,9 +1,11 @@
-There is a bug in Foreman 1.5.0 related to Foreman Discovery and Foreman.
+
 
 http://projects.theforeman.org/issues/5637
 
 
-INSTALLATION MANUAL
+0. KNOWN BUGS
+---------------------------------------------------------------------------------------------
+	1.  "Verwaltung -> Einstellungen -> Puppet" -> puppetrun steht auf false und muss auf true gesetzt werden
 
 
 1. UBUNTU SERVER INSTALLATION VON BOOT STICK (14.04)
@@ -52,6 +54,37 @@ INSTALLATION MANUAL
 	2.  chmod +x run-puppet.sh
 	3.  ./run-puppet.sh
 
+
+
+4. POST INSTALL in FOREMAN
+---------------------------------------------------------------------------------------------
+	1.  Unter "Hosts -> Bereitstellungsvorlagen" den Button "PXE-Vorgabe erstellen" klicken
+	2.  Unter "Hosts -> Betriebssysteme" beim Ubuntu 12.10 unter "Vorlagen" die 3 Preseed Vorlagen hinzufügen
+	3.  Unter "Verwaltung -> Einstellungen" -> "Puppet" -> puppetrun von "false" auf "true" setzen
+	
+4.1 NOTIZEN
+---------------------------------------------------------------------------------------------
+	1.  Die vorinstallierte Ubuntu 12.10 funktioniert bei mir nicht, der archiv mirror wird nicht gefunden
+		Abhilfe: Ein neues OS anlegen (Siehe Punkt 5) z.B. für 14.04
+
+	
+5. OPTIONAL
+---------------------------------------------------------------------------------------------
+
+Neues OS hinzufügen:
+
+Bereitstellungsvorlagen: 
+	- Preseed default
+	- Preseed default finish
+	- Preseed default PXELinux
+		
+		-> "Zusammenschluss" -> alle rüberziehen
+Bei Betriebssystem -> "Vorlagen" diese auswählen in allen Feldern  
+
+
+Puppet Module laden:
+
+Alle Puppet Module kopieren unter /etc/puppet/environments/cloudbox/modules/
 
 
 
