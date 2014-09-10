@@ -484,11 +484,43 @@ exec { 'bundle-update':
        require => File_Line['add-gem-foreman_discovery'],
 }
 
+file_line { 'uncomment_environmentpath':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '#    environmentpath  = /etc/puppet/environments',
+	match	=> '    environmentpath  = /etc/puppet/environments',
+	require	=> Exec['bundle-update'],
+}
+
+file_line { 'add-cloudbox-1':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '',
+	require	=> File_Line['uncomment_environmentpath'],
+}
+
+file_line { 'add-cloudbox-2':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '[cloudbox]',
+	require	=> File_Line['add-cloudbox-1'],
+}
+
+file_line { 'add-cloudbox-3':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '    modulepath = /etc/puppet/environments/cloudbox/modules',
+	require	=> File_Line['add-cloudbox-2'],
+}
+
+exec { 'restart-puppet':
+	command	=> "service puppet restart",
+	path	=> "/usr/bin/",
+	require	=> File_Line['add-cloudbox-3']
+}
+
 exec { 'second_foreman-restart':
 	command	=> "touch ~foreman/tmp/restart.txt",
 	path	=> "/usr/bin/",
-	require	=> Exec['bundle-update'],
+	require	=> Exec['restart-puppet'],
 }
+
 
 #exec { "gem-foreman-discovery":
 #
