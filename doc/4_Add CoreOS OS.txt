@@ -1,0 +1,106 @@
+
+This guide will help you adding CoreOS as operating system to foreman.
+
+
+
+1. BEREITSTELLUNGSVORLAGE "CoreOS default PXE" HINZUFÜGEN
+---------------------------------------------------------------------------------------------
+	1.  Anlegen einer neuen Bereitstellungsvorlage mit dem Namen "CoreOS default PXE"
+	2.  Inhalt:
+
+DEFAULT menu
+
+PROMPT 0
+
+MENU TITLE PXE Menu
+
+TIMEOUT 50
+
+TOTALTIMEOUT 6000
+
+ONTIMEOUT coreos
+
+
+
+LABEL coreos
+
+MENU LABEL coreos
+
+KERNEL boot/coreos_production_pxe.vmlinuz
+
+APPEND  initrd=boot/coreos_production_pxe_image.cpio.gz cloud-config-url=http://server.local.cloud/unattended/template/pxe-cloud-config.yml/coreos
+	
+	3.  Achtung: Derzeit sind hier der Hostname ("server.local.cloud"), 
+	    das cloud-config-file ("pxe-cloud-config.yml" sowie die 
+	    Host-Gruppe ("coreos") fest verdrahtet!
+	4.  Typ: PXELinux
+
+	
+
+
+
+2. BEREITSTELLUNGSVORLAGE "pxe-cloud-config.yml" HINZUFÜGEN
+---------------------------------------------------------------------------------------------
+	1.  Anlegen einer neuen Bereitstellungsvorlage mit dem Namen "pxe-cloud-config.yml"
+	2.  Inhalt:
+
+#cloud-config
+
+coreos:
+
+  units:
+
+    - name: etcd.service
+
+      command: start
+
+    - name: fleet.service
+
+      command: start
+
+ssh_authorized_keys:
+
+  - ssh-rsa  AAAAB3NzaC1yc2EAAAADAQABAAABAQClvB1GerJQYbVax/+2rAwkQQFQDny4jiK5w5WcKeW0l1dtYnLUk/TIGFVZv7QUH3T5sLfWLllflzVzBldC8SKhQbKKuiwB9MqJm9h4oR+Ad7dd99XkdC1ooEfEKWEw0Bymb9dJutkO54VLemxEjpgpNKAlNYp9wVlxUNSPmjH447TG/j24630FMbsoiTFwtGWGZybHw3I4xM0Ucni9qDiktMLvmwdKJz7ww4OPkH+MF+RompUITsUUQFqwFALWHRpmcDmnqtk9kCgIDGJGfrx9r70OSHuM77eWqOKr1WMP7zusS4gYFhXWcabQDf+mLJcA9z6EiCcIp2cFqfufAkOj
+	
+	3.  Typ: provision
+
+
+
+
+
+3. NEUES BETRIEBSSYSTEM HINZUFÜGEN
+---------------------------------------------------------------------------------------------
+	1.  Name: "CoreOSStable"
+	2.  Größer: 410
+	3.  Kleiner: <<leer>>
+	4.  Beschreibung: CoreOS 410.0.0
+	5.  OS-Familie: Debian
+	6.  Veröffentlichungsname: stable
+	7.  Architektur: x86_64
+	
+	8.  Partitionstabelle: Preseed default	############ ZU PRÜFEN WEGEN DOCKER ###########
+	9.  Installation Medium: "CoreOS"
+	10. Vorlagen: finish: <<leer>> PXELinux: CoreOS default PXE user_Data: <<leer>> provision: pxe-cloud-config.yml
+
+
+
+4. OS ZU BEREITSTELLUNGSVORLAGEN HINZUFÜGEN
+---------------------------------------------------------------------------------------------
+	1.  Unter "CoreOS default PXE" -> Zusammenschluss -> CoreOS 410.0.0 hinzufügen
+	2.  Unter "pxe-cloud-config.yml" -> Zusammenschluss -> CoreOS 410.0.0 hinzufügen
+	3.  Unter Bereitstellungsvorlagen den Button rechts oben "PXE-Vorgabe erstellen" klicken
+	4.  Betriebssystem "CoreOS 410.0.0" öffnen und unter "Vorlagen" die Vorlagen wie folgt konfigurieren:
+		PXELinux: CoreOS default PXE
+		provision: pxe-cloud-config.yml
+
+
+5. IMAGES AUF FESTPLATTE KOPIEREN
+---------------------------------------------------------------------------------------------
+	1.  cd /var/lib/tftpboot/boot
+	2.  wget http://stable.release.core-os.net/amd64-usr/current/coreos_production_pxe.vmlinuz
+	3.  wget http://stable.release.core-os.net/amd64-usr/current/coreos_production_pxe_image.cpio.gz
+	4.  chown Besitzer auf "foreman-proxy"/"foreman-proxy"
+	5.  chmod Berechtigung auf -rw-r--r-- 1 (siehe auch andere Images)
+
+
+

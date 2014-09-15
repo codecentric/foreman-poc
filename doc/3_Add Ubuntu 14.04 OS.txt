@@ -1,0 +1,31 @@
+
+This steps will help you adding ubuntu 14.04 as a new operating system in foreman.
+
+
+
+1. UBUNTU 14.04 OS HINZUFÜGEN
+---------------------------------------------------------------------------------------------
+
+
+
+##############################
+##### ZU ÜBERARBEITEN ###
+##############################
+
+
+Bereitstellungsvorlagen: 
+	- Preseed default
+	- Preseed default finish
+	- Preseed default PXELinux
+		
+		-> "Zusammenschluss" -> alle rüberziehen
+
+Bei Betriebssystem -> "Vorlagen" diese auswählen in allen Feldern  
+
+
+Puppet Module laden:
+
+Alle Puppet Module kopieren unter /etc/puppet/environments/cloudbox/modules/
+
+
+Auf dem Client: puppet agent --enable
