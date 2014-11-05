@@ -29,23 +29,21 @@ file {'foremanlist':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise 1.5'
-#	content	=> 'deb http://deb.theforeman.org/ trusty 1.5'
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.6'
 }
 
 file {'smartproxylist':
 	path	=> '/etc/apt/sources.list.d/smartproxy.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ precise stable'
-#	content	=> 'deb http://deb.theforeman.org/ trusty stable'
+	content	=> 'deb http://deb.theforeman.org/ trusty stable'
 }
 
 file {'foreman-pluginlist':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.5'
+        content => 'deb http://deb.theforeman.org/ plugins 1.6'
 }
 
 aptkey { 'foreman.asc':
@@ -71,33 +69,47 @@ file { "/etc/apt/apt.conf.d/99auth":
 	mode => 644;
 }
 
+package { "make":
+	ensure	=> "installed",
+	require	=> Exec['apt-update'],
+}
+
 package { "openssh-server":
 	ensure	=> "installed",
-	require	=> [
-		Exec['apt-update'],],
+	require	=> Exec['apt-update'],
 }
+
 
 package { "foreman-installer":
 	ensure	=> "installed",
-	require	=> [Exec['apt-update'],],
+	require	=> Exec['apt-update'],
+}
+
+file { "/usr/share/foreman-installer/modules/foreman/lib/puppet/provider/foreman_smartproxy/rest_v2.rb": 
+	owner	=> root, 
+	group	=> root, 
+	source	=> "/vagrant/files/rest_v2.rb",
+	mode	=> 644,
+	require	=> Package["foreman-installer"],
 }
 
 # seperate installations necessary for proper configuration
 package { "bind9":
 	ensure	=> "installed",
-	require	=> [Exec['apt-update'],],
+	require	=> Exec['apt-update'],
 }
 package { "isc-dhcp-server":
 	ensure	=> "installed",
-	require	=> [Exec['apt-update'],],
+	require	=> Exec['apt-update'],
 }
 package { "git":
 	ensure  => "installed",
-	require => [Exec['apt-update'],],
+	require => Exec['apt-update'],
 }
 package { "gem":
 	ensure => "installed",
-	require => [Exec['apt-update'],],
+	install_options => [ '--force-yes'],
+	require => Exec['apt-update'],
 }
 
 # placing the keyfile
@@ -212,6 +224,7 @@ exec { "wget vmlinuz":
         require => File["/var/lib/tftpboot/boot"],
 }
 
+
 # set permissions for discovery images
 file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img':
       ensure  => present,
@@ -232,16 +245,6 @@ file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz':
 
 
 # options for foreman-installer
-#file { "/usr/share/foreman-installer/config/answers.yaml":
-#	ensure	=> present,
-#	source	=> "/vagrant/files/Foreman/answers.yaml",
-#	owner	=> root,
-#	group	=> root,
-#	mode	=> 600,
-#	require	=> Package["foreman-installer"],
-#}
-
-# options for foreman-installer
 file { "/etc/foreman/foreman-installer-answers.yaml":
 	ensure	=> present,
 	source	=> "/vagrant/files/Foreman/answers.yaml",
@@ -259,19 +262,21 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 	group	=> root,
 	mode	=> 644,
 	require	=> Package["foreman-installer"],
-}	
+}
+
 
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/sbin/foreman-installer",
+	command	=> "/usr/sbin/foreman-installer --foreman-proxy-register-in-foreman false --foreman-admin-password changeme",
+	environment => ["HOME=/home/server"],
 	timeout => 0,
 	require => [
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
-#		File['/usr/share/foreman-installer/config/answers.yaml'],
 		File['/etc/foreman/foreman-installer-answers.yaml'],
 		File["/etc/bind/rndc.key"],
+		File["/usr/share/foreman-installer/modules/foreman/lib/puppet/provider/foreman_smartproxy/rest_v2.rb"],
 	],
 }
 
@@ -305,13 +310,23 @@ exec { "foreman-cache":
 	require		=> Exec['foreman-restart'],
 }
 
+# ruby-dev
+# install ruby-dev package
+package { 'ruby-dev':
+	ensure		=> installed,
+	require	=> Exec['apt-update'],
+}
+
 
 # HAMMER
 # install hammer cli
 package { 'hammer_cli':
 	ensure		=> installed,
 	provider	=> "gem",
-	require		=> Package['gem'],
+	require => [
+			Package['gem'],
+			Package['ruby-dev'],
+		   ],
 }
 
 # install foreman plugin for hammer
@@ -336,7 +351,7 @@ file { '/etc/hammer':
 file { "/etc/hammer/cli_config.yml":
 	ensure	=> present,
 	source	=> "/vagrant/hammer/cli_config.yml",
-	require	=> Exec['foreman-installer'],
+	require	=> [File['/etc/hammer'], Exec['foreman-installer'],]
 }
 
 # hammer logging
@@ -354,8 +369,7 @@ exec { "hammer execution":
 			File["/etc/hammer/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-#	onlyif  => "hammer architecture list | /bin/grep -q 'x86_64'",
-	user	=> "vagrant",
+#	user	=> "vagrant",
 	environment	=> ["HOME=/home/vagrant"],
 }
 
@@ -453,8 +467,6 @@ exec {'apt-cacher-import':
 	require => File["/etc/apt-cacher/apt-cacher.conf"],
 }
 
-
-
 file_line { 'sudo_rule_v1':
 	path	=> '/etc/sudoers',
 	line	=> 'Defaults:foreman-proxy !requiretty',
@@ -473,32 +485,60 @@ file_line { 'sudo_rule_v3':
 	require	=> File_Line['sudo_rule_v2'],
 }
 
-package { 'ruby-foreman-discovery':
-        ensure  => installed,
-        require => [
-			Exec['foreman-installer'],
-		]
+file { '/usr/share/foreman/bundler.d/plugins.rb':
+	ensure	=> present,
+	owner	=> root,
+	group	=> root,
+	mode	=> 644,
+	require	=> Exec['foreman-installer'],
 }
 
-exec { "reboot machine":
-	command => "/sbin/reboot",
-	require	=> [
-		Package['openssh-server'],
-		Package['git'],
-		User['dhcpd'],
-		Service['apparmor'],
-		File['/etc/apparmor.d/usr.sbin.dhcpd'],
-		File_line['dhclient'],
-		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
-		User['foreman-proxy'],
-		File['/etc/foreman/settings.yaml'],
-		Exec['foreman-restart'],
-		Exec['hammer execution'],
-		Exec['iptables masquerade'],
-		Exec['preseed'],
-		Service['iptables-persistent'],
-		Exec['apt-cacher-import'],
-		File_Line['sudo_rule_v3'],
-		Package['ruby-foreman-discovery'],
-	],
+file_line { 'add-gem-foreman_discovery':
+	path	=> '/usr/share/foreman/bundler.d/plugins.rb',
+	line	=> 'gem \'foreman_discovery\'',
+	require	=> File['/usr/share/foreman/bundler.d/plugins.rb'],
+}
+
+exec { 'bundle-update':
+       command => "bundle update",
+       cwd     => "/usr/share/foreman",
+       path    => "/usr/bin",
+       require => File_Line['add-gem-foreman_discovery'],
+}
+
+file_line { 'uncomment_environmentpath':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '#    environmentpath  = /etc/puppet/environments',
+	match	=> '    environmentpath  = /etc/puppet/environments',
+	require	=> Exec['bundle-update'],
+}
+
+file_line { 'add-cloudbox-1':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '',
+	require	=> File_Line['uncomment_environmentpath'],
+}
+
+file_line { 'add-cloudbox-2':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '[cloudbox]',
+	require	=> File_Line['add-cloudbox-1'],
+}
+
+file_line { 'add-cloudbox-3':
+	path	=> '/etc/puppet/puppet.conf',
+	line	=> '    modulepath = /etc/puppet/environments/cloudbox/modules',
+	require	=> File_Line['add-cloudbox-2'],
+}
+
+exec { 'restart-puppet':
+	command	=> "service puppet restart",
+	path	=> "/usr/bin/",
+	require	=> File_Line['add-cloudbox-3']
+}
+
+exec { 'second_foreman-restart':
+	command	=> "touch ~foreman/tmp/restart.txt",
+	path	=> "/usr/bin/",
+	require	=> Exec['restart-puppet'],
 }

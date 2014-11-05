@@ -3,9 +3,7 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure("2") do |config|
 
   # os image
-  config.vm.box = "precise32"
-#  config.vm.box = "ubuntu/trusty64"
-  config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+  config.vm.box = "ubuntu/trusty64"
   config.vm.synced_folder ".", "/vagrant"
  
   # Vagrant Proxy plugin
@@ -21,6 +19,10 @@ Vagrant.configure("2") do |config|
   end
  
   config.vm.define "server" do |server|
+
+        server.vm.provider :virtualbox do |vb|
+        	vb.customize ['modifyvm', :id,'--memory', '2048']
+	end
 
 	# hostname
 	server.vm.hostname = "server.local.cloud"
