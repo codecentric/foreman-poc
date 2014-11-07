@@ -308,7 +308,7 @@ exec { "foreman-restart":
 file_line { 'uncomment_http':
 	path	=> '/etc/foreman-proxy/settings.yml',
 	line	=> ':http_port: 8000',
-	match	=> '#:http_port: 8000',
+	match	=> ':http_port: 8000',
 	require	=> Exec['foreman-restart'],
 }
 
