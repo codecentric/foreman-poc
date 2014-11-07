@@ -206,7 +206,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 
 # download discovery images
 exec { "wget initrd.img":
-       command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-img",
+       command => "wget http://downloads.theforeman.org/discovery/releases/0.6/foreman-discovery-image-latest.el6.iso-img",
        cwd     => "/var/lib/tftpboot/boot/",
        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img",
        path    => "/usr/bin",
@@ -216,7 +216,7 @@ exec { "wget initrd.img":
 
 
 exec { "wget vmlinuz":
-        command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-vmlinuz",
+        command => "wget http://downloads.theforeman.org/discovery/releases/0.6/foreman-discovery-image-latest.el6.iso-vmlinuz",
         cwd     => "/var/lib/tftpboot/boot/",
         creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
         path    => "/usr/bin",
@@ -305,9 +305,38 @@ exec { "foreman-restart":
 	path		=> "/usr/bin/",
 }
 
+file_line { 'uncomment_http':
+	path	=> '/etc/foreman-proxy/settings.yml',
+	line	=> ':http_port: 8000',
+	match	=> '#:http_port: 8000',
+	require	=> Exec['foreman-restart'],
+}
+
+file_line { 'comment_trusted_hosts':
+	path	=> '/etc/foreman-proxy/settings.yml',
+	line	=> '#:trusted_hosts:',
+	match	=> ':trusted_hosts:',
+	require	=> File_Line['uncomment_http'],
+}
+
+file_line { 'comment_server.local.cloud':
+	path	=> '/etc/foreman-proxy/settings.yml',
+	line	=> '#  - server.local.cloud',
+	match	=> '  - server.local.cloud',
+	require	=> File_Line['comment_trusted_hosts'],
+}
+
+exec { "foreman-proxy-restart":
+	command		=> "service foreman-proxy restart",
+	subscribe	=> File["/etc/foreman/settings.yaml"],
+	refreshonly	=> true,
+	path		=> "/usr/bin/",
+	require	=> File_Line['comment_server.local.cloud'],
+}
+
 exec { "foreman-cache":
 	command		=> "/usr/sbin/foreman-rake apipie:cache",
-	require		=> Exec['foreman-restart'],
+	require		=> Exec['foreman-proxy-restart'],
 }
 
 # ruby-dev
