@@ -1,9 +1,4 @@
 # aptkey
-package {'squid-deb-proxy-client':
-	ensure => installed,
-	require => Exec['apt-update'],
-}
-
 define aptkey($ensure, $apt_key_url = 'http://deb.theforeman.org') {
   case $ensure {
     'present': {
@@ -36,7 +31,7 @@ file {'smartproxylist':
 	path	=> '/etc/apt/sources.list.d/smartproxy.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ trusty stable'
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.6'
 }
 
 file {'foreman-pluginlist':
@@ -58,15 +53,7 @@ exec { "apt-update":
 		File['smartproxylist'],
 		File['foremanlist'],
 		File['foreman-pluginlist'],
-		File['/etc/apt/apt.conf.d/99auth'],
 	]
-}
-# It's OK to install unsigned packages 
-file { "/etc/apt/apt.conf.d/99auth": 
-	owner => root, 
-	group => root, 
-	content => "APT::Get::AllowUnauthenticated yes;", 
-	mode => 644;
 }
 
 package { "make":
@@ -80,17 +67,10 @@ package { "openssh-server":
 }
 
 
-package { "foreman-installer":
-	ensure	=> "installed",
-	require	=> Exec['apt-update'],
-}
 
-file { "/usr/share/foreman-installer/modules/foreman/lib/puppet/provider/foreman_smartproxy/rest_v2.rb": 
-	owner	=> root, 
-	group	=> root, 
-	source	=> "/vagrant/files/rest_v2.rb",
-	mode	=> 644,
-	require	=> Package["foreman-installer"],
+package { "foreman-installer":
+	ensure => ['1.6.0~rc2-1', installed],
+	require	=> Exec['apt-update'],
 }
 
 # seperate installations necessary for proper configuration
@@ -206,7 +186,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 
 # download discovery images
 exec { "wget initrd.img":
-       command => "wget http://downloads.theforeman.org/discovery/releases/0.6/foreman-discovery-image-latest.el6.iso-img",
+       command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-img",
        cwd     => "/var/lib/tftpboot/boot/",
        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img",
        path    => "/usr/bin",
@@ -216,7 +196,7 @@ exec { "wget initrd.img":
 
 
 exec { "wget vmlinuz":
-        command => "wget http://downloads.theforeman.org/discovery/releases/0.6/foreman-discovery-image-latest.el6.iso-vmlinuz",
+        command => "wget http://downloads.theforeman.org/discovery/releases/0.5/foreman-discovery-image-latest.el6.iso-vmlinuz",
         cwd     => "/var/lib/tftpboot/boot/",
         creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
         path    => "/usr/bin",
@@ -268,15 +248,14 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/sbin/foreman-installer --foreman-proxy-register-in-foreman false --foreman-admin-password changeme",
-	environment => ["HOME=/home/server"],
+	command	=> "/usr/sbin/foreman-installer --foreman-admin-password changeme",
+	environment => ["HOME=/vagrant"],
 	timeout => 0,
 	require => [
 		Package["bind9"],
 		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
 		File['/etc/foreman/foreman-installer-answers.yaml'],
 		File["/etc/bind/rndc.key"],
-		File["/usr/share/foreman-installer/modules/foreman/lib/puppet/provider/foreman_smartproxy/rest_v2.rb"],
 	],
 }
 
@@ -305,38 +284,9 @@ exec { "foreman-restart":
 	path		=> "/usr/bin/",
 }
 
-file_line { 'uncomment_http':
-	path	=> '/etc/foreman-proxy/settings.yml',
-	line	=> ':http_port: 8000',
-	match	=> ':http_port: 8000',
-	require	=> Exec['foreman-restart'],
-}
-
-file_line { 'comment_trusted_hosts':
-	path	=> '/etc/foreman-proxy/settings.yml',
-	line	=> '#:trusted_hosts:',
-	match	=> ':trusted_hosts:',
-	require	=> File_Line['uncomment_http'],
-}
-
-file_line { 'comment_server.local.cloud':
-	path	=> '/etc/foreman-proxy/settings.yml',
-	line	=> '#  - server.local.cloud',
-	match	=> '  - server.local.cloud',
-	require	=> File_Line['comment_trusted_hosts'],
-}
-
-exec { "foreman-proxy-restart":
-	command		=> "service foreman-proxy restart",
-	subscribe	=> File["/etc/foreman/settings.yaml"],
-	refreshonly	=> true,
-	path		=> "/usr/bin/",
-	require	=> File_Line['comment_server.local.cloud'],
-}
-
 exec { "foreman-cache":
 	command		=> "/usr/sbin/foreman-rake apipie:cache",
-	require		=> Exec['foreman-proxy-restart'],
+	require		=> Exec['foreman-restart'],
 }
 
 # ruby-dev
@@ -355,6 +305,7 @@ package { 'hammer_cli':
 	require => [
 			Package['gem'],
 			Package['ruby-dev'],
+			Exec['foreman-installer'],
 		   ],
 }
 
@@ -375,7 +326,6 @@ file { '/etc/hammer':
         group   => nogroup,
         mode    => 777,
 }
-
 # hammer config file
 file { "/etc/hammer/cli_config.yml":
 	ensure	=> present,
@@ -398,8 +348,8 @@ exec { "hammer execution":
 			File["/etc/hammer/cli_config.yml"],
 			Package["hammer_cli_foreman"],
 		],
-#	user	=> "vagrant",
-	environment	=> ["HOME=/home/vagrant"],
+#	user	=> "server",
+	environment	=> ["HOME=/vagrant"],
 }
 
 
@@ -432,7 +382,7 @@ exec { 'iptables forward':
 	require	=> Exec["sysctl"],
 }
 exec { 'iptables masquerade':
-	command	=> "iptables --table nat -A POSTROUTING -o eth2 -j MASQUERADE",
+	command	=> "iptables --table nat -A POSTROUTING -o eth1 -j MASQUERADE",
 	path	=> "/sbin",
 	require	=> Exec["iptables forward"],
 }
@@ -571,3 +521,124 @@ exec { 'second_foreman-restart':
 	path	=> "/usr/bin/",
 	require	=> Exec['restart-puppet'],
 }
+
+
+#exec { "gem-foreman-discovery":
+#
+#       command => "gem install --no-rdoc --no-ri foreman_discovery",
+#       cwd     => "/usr/share/foreman",
+#       path    => ["/bin", "/sbin", "/usr/bin"],
+#       require => [
+#			Exec['foreman-installer'],
+#		]
+#}
+
+#exec { "bundle-update":
+#
+#       command => "bundle update",
+#       cwd     => "/usr/share/foreman",
+#       path    => "/usr/bin",
+#        require => [
+#			Exec['gem-foreman-discovery'],
+#		]
+#}
+
+#exec { "bundle-install":
+#
+#       command => "bundle install",
+#       cwd     => "/usr/share/foreman",
+#       path    => "/usr/bin",
+#        require => [
+#			Exec['bundle-update'],
+#		]
+#}
+
+
+#exec { "foreman-discovery-install-f":
+#
+#       command => "apt-get -f install",
+#       path    => [ "/bin", "/usr/bin", "/sbin", "/usr/local/sbin", "/usr/sbin"],
+#        require => [
+#			Exec['bundle-install'],
+#		]
+#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# INSTALL NUR, WENN ES /var/lib/dpkg/info/ruby-foreman-discovery.postinst NICHT GIBT?
+
+
+
+#package { 'ruby-foreman-discovery':
+#        ensure  => installed,
+#        require => [
+#			Exec['foreman-discovery-install-f'],
+#		]
+#}
+
+
+
+
+
+
+
+
+
+
+
+#exec { "foreman-discovery-postinstall":
+#
+#       command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
+#        require => [
+#			Package['ruby-foreman-discovery'],
+#		]
+#}
+
+#exec { "bundle-install-last":
+#
+#       command => "bundle install",
+#       cwd     => "/usr/share/foreman",
+#       path    => "/usr/bin",
+#        require => [
+#			Exec['foreman-discovery-postinstall'],
+#		]
+#}
+
+
+
+
+#exec { "reboot machine":
+#	command => "/sbin/reboot",
+#	require	=> [
+#		Package['openssh-server'],
+#		Package['git'],
+#		User['dhcpd'],
+#		Service['apparmor'],
+#		File['/etc/apparmor.d/usr.sbin.dhcpd'],
+#		File_line['dhclient'],
+#		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
+#		User['foreman-proxy'],
+#		File['/etc/foreman/settings.yaml'],
+#		Exec['foreman-restart'],
+#		Exec['hammer execution'],
+#		Exec['iptables masquerade'],
+#		Exec['preseed'],
+#		Service['iptables-persistent'],
+#		Exec['apt-cacher-import'],
+#		File_Line['sudo_rule_v3'],
+#		Package['ruby-foreman-discovery'],
+#	],
+#}
