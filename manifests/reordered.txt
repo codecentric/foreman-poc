@@ -20,6 +20,7 @@ define aptkey($ensure, $apt_key_url = 'http://deb.theforeman.org') {
   }
 }
 
+->
 
 aptkey { 'foreman.asc':
 	ensure	=> present
@@ -35,7 +36,7 @@ aptkey { 'foreman.asc':
 	Package['openssh-server'] ->
 	Package['foreman-installer'] ->
 	Package['bind9'] ->
-	Exec['teardown-apparmor'] ->
+	Exec['apparmor-teardown'] ->
 	Package['isc-dhcp-server'] ->
 	Package['git'] ->
 	Package['gem'] ->
@@ -49,14 +50,12 @@ aptkey { 'foreman.asc':
 	File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'] ->
 	Exec['wget initrd.img'] ->
 	Exec['wget vmlinuz'] ->
-	File['/etc/foreman/foreman-installer-answers.yaml'] ->
-	Exec['foreman-installer'] ->
-	User['foreman-proxy'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz'] ->
-	
+	File['/etc/foreman/foreman-installer-answers.yaml'] ->
 	File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'] ->
-
+	Exec['foreman-installer'] ->
+	User['foreman-proxy'] ->
 	File['/etc/foreman/settings.yaml'] ->
 	Exec['foreman-restart'] ->
 	Exec['foreman-cache'] ->
@@ -310,6 +309,7 @@ exec { 'foreman-installer':
 user { "foreman-proxy":
 	ensure	=> present,
 	groups	=> ['bind'],
+
 }
 
 # foreman settings
@@ -324,6 +324,7 @@ file { "/etc/foreman/settings.yaml":
 
 exec { "foreman-restart":
 	command		=> "touch ~foreman/tmp/restart.txt",
+	subscribe	=> File["/etc/foreman/settings.yaml"],
 	refreshonly	=> true,
 	path		=> "/usr/bin/",
 }
@@ -346,7 +347,7 @@ package { 'ruby-dev':
 
 
 
-
+ HAMMER
 # install hammer cli
 package { 'hammer_cli':
 	ensure		=> installed,
@@ -565,9 +566,10 @@ file_line { 'add-gem-foreman_discovery':
 }
 
 exec { 'bundle-update':
-       command => "gem install json -v \'1.8.2\'; bundle update",
+       command => "bundle update",
        cwd     => "/usr/share/foreman",
-	   path => ['/usr/bin/', '/bin/', '/sbin/', '/usr/sbin'],
+       path    => "/usr/bin",
+
 }
 
 file_line { 'uncomment_environmentpath':

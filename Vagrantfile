@@ -30,7 +30,8 @@ Vagrant.configure("2") do |config|
 	server.vm.hostname = "server.local.cloud"
 
 	# public network
-	server.vm.network "public_network", :bridge => 'eth0'
+	server.vm.network "public_network"
+	#, :bridge => 'eth0'
 
 	# private network
 	server.vm.network "private_network", ip: "172.16.0.2"
