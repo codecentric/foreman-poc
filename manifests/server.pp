@@ -1,4 +1,5 @@
-# aptkey
+
+
 define aptkey($ensure, $apt_key_url = 'http://deb.theforeman.org') {
   case $ensure {
     'present': {
@@ -19,77 +20,149 @@ define aptkey($ensure, $apt_key_url = 'http://deb.theforeman.org') {
   }
 }
 
-# apt sources
-file {'foremanlist':
-	path	=> '/etc/apt/sources.list.d/foreman.list',
-	ensure	=> present,
-	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ trusty 1.6'
-}
-
-file {'smartproxylist':
-	path	=> '/etc/apt/sources.list.d/smartproxy.list',
-	ensure	=> present,
-	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ trusty stable'
-}
-
-file {'foreman-pluginlist':
-        path    => '/etc/apt/sources.list.d/foreman-plugins.list',
-        ensure  => present,
-        mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.6'
-}
 
 aptkey { 'foreman.asc':
 	ensure	=> present
 }
 
+->
+
+	File['prepare_list_foreman'] ->
+	File['prepare_list_smartproxy'] ->
+	File['prepare_list_plugin'] ->
+	Exec['apt-update'] ->
+	Package['make'] ->
+	Package['openssh-server'] ->
+	Package['foreman-installer'] ->
+	Package['bind9'] ->
+	Exec['teardown-apparmor'] ->
+	Package['isc-dhcp-server'] ->
+	Package['git'] ->
+	Package['gem'] ->
+	File['/etc/bind/rndc.key'] ->
+	User['dhcpd'] ->
+	File_Line['dhclient'] ->
+	File['/var/lib/tftpboot'] ->
+	File['/var/lib/tftpboot/pxelinux.cfg'] ->
+	File['/var/lib/tftpboot/boot'] ->
+	File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz'] ->
+	File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'] ->
+	Exec['wget initrd.img'] ->
+	Exec['wget vmlinuz'] ->
+	File['/etc/foreman/foreman-installer-answers.yaml'] ->
+	Exec['foreman-installer'] ->
+	User['foreman-proxy'] ->
+	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img'] ->
+	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz'] ->
+	
+	File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'] ->
+
+	File['/etc/foreman/settings.yaml'] ->
+	Exec['foreman-restart'] ->
+	Exec['foreman-cache'] ->
+	Package['ruby-dev'] ->
+	Package['hammer_cli'] ->
+	Package['hammer_cli_foreman'] ->
+	File['/etc/hammer'] ->
+	File['/etc/hammer/cli_config.yml'] ->
+	File['/var/log/foreman/hammer.log'] ->
+	Exec['hammer execution'] ->
+	Exec['net.ipv4.ip_forward'] ->
+	Exec['sysctl'] ->
+	Exec['iptables forward'] ->
+	Exec['iptables masquerade'] ->
+	Package['debconf-utils'] ->
+	Exec['preseed'] ->
+	Package['iptables-persistent'] ->
+	Service['iptables-persistent'] ->
+	Service['apache2'] ->
+	Package['apt-cacher'] ->
+	Service['apt-cacher'] ->
+	File['/etc/apt-cacher/apt-cacher.conf'] ->
+	Exec['apt-cacher-import'] ->
+	File_Line['sudo_rule_v1'] ->
+	File_Line['sudo_rule_v2'] ->
+	File_Line['sudo_rule_v3'] ->
+	File['/usr/share/foreman/bundler.d/plugins.rb'] ->
+	File_Line['add-gem-foreman_discovery'] ->
+	Exec['bundle-update'] ->
+	File_Line['uncomment_environmentpath'] ->
+	File_Line['add-cloudbox-1'] ->
+	File_Line['add-cloudbox-2'] ->
+	File_Line['add-cloudbox-3'] ->
+	Exec['restart-puppet'] ->
+	Exec['second_foreman-restart']
+
+
+	
+	
+
+# apt sources
+file {'prepare_list_foreman':
+	path	=> '/etc/apt/sources.list.d/foreman.list',
+	ensure	=> present,
+	mode	=> 0644,
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.7'
+}
+
+file {'prepare_list_smartproxy':
+	path	=> '/etc/apt/sources.list.d/smartproxy.list',
+	ensure	=> present,
+	mode	=> 0644,
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.7'
+}
+
+file {'prepare_list_plugin':
+        path    => '/etc/apt/sources.list.d/foreman-plugins.list',
+        ensure  => present,
+        mode    => 0644,
+        content => 'deb http://deb.theforeman.org/ plugins 1.7'
+}
+
+
+
 # update and source installation
 exec { "apt-update":
 	command	=> "/usr/bin/apt-get update",
-	require	=> [
-		Aptkey['foreman.asc'],
-		File['smartproxylist'],
-		File['foremanlist'],
-		File['foreman-pluginlist'],
-	]
 }
+
+
 
 package { "make":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
 }
 
 package { "openssh-server":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
 }
 
-
-
 package { "foreman-installer":
-	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+	ensure => ['1.7.1-1', installed],
 }
 
 # seperate installations necessary for proper configuration
 package { "bind9":
 	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+
 }
+
+exec { 'teardown-apparmor':
+	command	=> "service apparmor teardown",
+	path	=> "/usr/bin/",
+}
+
 package { "isc-dhcp-server":
-	ensure	=> "installed",
-	require	=> Exec['apt-update'],
+	ensure	=> "installed",	
 }
+
 package { "git":
 	ensure  => "installed",
-	require => Exec['apt-update'],
+
 }
 package { "gem":
 	ensure => "installed",
 	install_options => [ '--force-yes'],
-	require => Exec['apt-update'],
+
 }
 
 # placing the keyfile
@@ -99,35 +172,12 @@ file { "/etc/bind/rndc.key":
 	owner	=> root,
 	group	=> bind,
 	mode	=> 640,
-	require	=> Package["bind9"],
 }
 
 # adding user 'dhcpd' to group 'bind', as this users needs to read the keyfile
 user { "dhcpd":
 	ensure	=> present,
 	groups	=> ['bind'],
-	require => [
-		Package["isc-dhcp-server"],
-		Package["bind9"],
-	],
-}
-
-
-# workaround that DHCP can read the keyfile
-# replace existing DHCPd-apparmor configuration
-service { "apparmor":
-    ensure  => "running",
-    enable  => "true",
-}
-
-file { "/etc/apparmor.d/usr.sbin.dhcpd":
-	notify  => Service["apparmor"],
-	ensure	=> present,
-	owner	=> root,
-	group	=> root,
-	mode	=> 644,
-	source	=> "/home/server/git/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
-	require => Package["isc-dhcp-server"],
 }
 
 # dhclient fix: prepend DNS-server
@@ -153,7 +203,7 @@ file { '/var/lib/tftpboot/pxelinux.cfg':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	require	=> File["/var/lib/tftpboot"],
+	
 }
 
 # netboot image directory
@@ -162,7 +212,7 @@ file { '/var/lib/tftpboot/boot':
 	owner	=> nobody,
 	group	=> nogroup,
 	mode	=> 777,
-	require	=> File["/var/lib/tftpboot"],
+	
 }
 
 # copy image for Ubuntu 12.10
@@ -172,7 +222,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-initrd.gz':
 	group	=> nogroup,
 	mode	=> 777,
 	source	=> "/home/server/git/foreman-poc/files/TFTP/ubuntu12.10/initrd.gz",
-	require	=> File["/var/lib/tftpboot/boot"],
+	
 }
 
 file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
@@ -181,7 +231,7 @@ file { '/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux':
 	group	=> nogroup,
 	mode	=> 777,
 	source	=> "/home/server/git/foreman-poc/files/TFTP/ubuntu12.10/linux",
-	require	=> File["/var/lib/tftpboot/boot"],
+	
 }
 
 # download discovery images
@@ -191,7 +241,7 @@ exec { "wget initrd.img":
        creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img",
        path    => "/usr/bin",
        timeout => 1000,
-       require => File["/var/lib/tftpboot/boot"],
+       
 }
 
 
@@ -201,7 +251,7 @@ exec { "wget vmlinuz":
         creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
         path    => "/usr/bin",
         timeout => 1000,
-        require => File["/var/lib/tftpboot/boot"],
+        
 }
 
 
@@ -211,7 +261,7 @@ file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img':
       owner   => foreman-proxy,
       group   => nogroup,
       mode    => 644,
-     require => Exec["wget initrd.img"],
+     
 }
 
 
@@ -220,7 +270,7 @@ file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz':
       owner   => foreman-proxy,
       group   => nogroup,
       mode    => 644,
-      require => Exec["wget vmlinuz"],
+      
 }
 
 
@@ -231,7 +281,7 @@ file { "/etc/foreman/foreman-installer-answers.yaml":
 	owner	=> root,
 	group	=> root,
 	mode	=> 600,
-	require	=> Package["foreman-installer"],
+	
 }
 
 # modifying foreman-installer to support DDNS
@@ -241,30 +291,25 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	require	=> Package["foreman-installer"],
+	
 }
 
 
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/sbin/foreman-installer --foreman-admin-password changeme",
-	environment => ["HOME=/home/server"],
+	command	=> "/usr/sbin/foreman-installer --foreman-proxy-trusted-hosts=localhost --foreman-admin-password changeme",
+	environment => ["HOME=/vagrant"],
 	timeout => 0,
-	require => [
-		Package["bind9"],
-		File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'],
-		File['/etc/foreman/foreman-installer-answers.yaml'],
-		File["/etc/bind/rndc.key"],
-	],
+	
 }
+
 
 
 # adding user 'foreman-proxy' to group 'bind', as this users needs to read the keyfile
 user { "foreman-proxy":
 	ensure	=> present,
 	groups	=> ['bind'],
-	require => Exec["foreman-installer"],
 }
 
 # foreman settings
@@ -274,48 +319,46 @@ file { "/etc/foreman/settings.yaml":
 	owner	=> root,
 	group	=> foreman,
 	mode	=> 640,
-	require	=> Exec["foreman-installer"],
+	
 }
 
 exec { "foreman-restart":
 	command		=> "touch ~foreman/tmp/restart.txt",
-	subscribe	=> File["/etc/foreman/settings.yaml"],
 	refreshonly	=> true,
 	path		=> "/usr/bin/",
 }
 
 exec { "foreman-cache":
 	command		=> "/usr/sbin/foreman-rake apipie:cache",
-	require		=> Exec['foreman-restart'],
+	
 }
 
 # ruby-dev
 # install ruby-dev package
 package { 'ruby-dev':
 	ensure		=> installed,
-	require	=> Exec['apt-update'],
+	
 }
 
 
-# HAMMER
+
+
+
+
+
+
 # install hammer cli
 package { 'hammer_cli':
 	ensure		=> installed,
 	provider	=> "gem",
-	require => [
-			Package['gem'],
-			Package['ruby-dev'],
-		   ],
+	
 }
 
 # install foreman plugin for hammer
 package { 'hammer_cli_foreman':
 	ensure	=> installed,
 	provider => "gem",
-	require => [
-			Package["hammer_cli"],
-			Exec["foreman-installer"],
-		   ],
+	
 }
 
 # set up hammer for foreman
@@ -328,38 +371,28 @@ file { '/etc/hammer':
 # hammer config file
 file { "/etc/hammer/cli_config.yml":
 	ensure	=> present,
-	source	=> "/home/server/git/foreman-poc/hammer/cli_config.yml",
-	require	=> [File['/etc/hammer'], Exec['foreman-installer'],]
+	source	=> "/vagrant/hammer/cli_config.yml",
+
 }
 
 # hammer logging
 file { '/var/log/foreman/hammer.log':
 	ensure	=> present,
 	mode	=> 777,
-	require	=> Exec['foreman-installer'],
+
 }
 
 exec { "hammer execution":
-	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
+	command	=> "/vagrant/hammer/hammer.sh",
 	path	=> "/usr/local/bin/",
-	require	=> [
-			File["/var/log/foreman/hammer.log"],
-			File["/etc/hammer/cli_config.yml"],
-			Package["hammer_cli_foreman"],
-		],
+
 #	user	=> "server",
-	environment	=> ["HOME=/home/server"],
+	environment	=> ["HOME=/vagrant"],
 }
 
 
 
-# generate pxe 
 
-# host
-
-
-
-# firewall
 
 # uncomment IP forwarding
 exec { 'net.ipv4.ip_forward':
@@ -371,19 +404,19 @@ exec { 'net.ipv4.ip_forward':
 exec { 'sysctl':
 	command	=> "sysctl -w net.ipv4.ip_forward=1",
 	path	=> "/sbin/",
-	require	=> Exec["net.ipv4.ip_forward"],
+
 }
 
 # create firewall rules
 exec { 'iptables forward':
 	command	=> "iptables -P FORWARD ACCEPT",
 	path	=> "/sbin",
-	require	=> Exec["sysctl"],
+
 }
 exec { 'iptables masquerade':
 	command	=> "iptables --table nat -A POSTROUTING -o eth1 -j MASQUERADE",
 	path	=> "/sbin",
-	require	=> Exec["iptables forward"],
+
 }
 
 # preseed iptables-persistent
@@ -394,39 +427,38 @@ package{ 'debconf-utils':
 exec { 'preseed':
 	command	=> "debconf-set-selections /home/server/git/foreman-poc/files/System/iptables-persistent.seed",
 	path	=> "/usr/bin/",
-	require	=> [
-			Package['debconf-utils'],
-		],
+
 }
 
 # install iptables-persistent
 package { 'iptables-persistent':
 	ensure	=> installed,
-	require	=> Exec["iptables masquerade"],
 }
+
+
+
 
 # start iptables-persistent
 service { "iptables-persistent":
 	ensure	=> running,
-	require	=> Package["iptables-persistent"],
-}
+	}
 
 # Install local ubuntu repository: apt-cacher
 service { "apache2":
 	ensure  => "running",
 	enable  => "true",
-	require	=> Exec['foreman-installer'],
+
 }
 
 package { 'apt-cacher':
 	ensure	=> installed,
-	require	=> Service['apache2'],
+
 }
 
 service { "apt-cacher":
 	ensure  => "running",
 	enable  => "true",
-	require	=> Package['apt-cacher'],
+
 }
 
 file { '/etc/apt-cacher/apt-cacher.conf':
@@ -435,32 +467,87 @@ file { '/etc/apt-cacher/apt-cacher.conf':
 	group	=> root,
 	mode	=> 644,
 	source	=> "/home/server/git/foreman-poc/files/System/apt-cacher.conf",
-	notify  => Service["apt-cacher"],
-	require	=> Package["apt-cacher"],
+
+
 }
+
+
+#
+#
+# OBERHALB: SCHON VERARBEITET
+# UNTERHALB: NOCH VERARBEITEN
+#
+#
+#
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# workaround that DHCP can read the keyfile
+# replace existing DHCPd-apparmor configuration
+#service { "apparmor":
+#    ensure  => "running",
+#    enable  => "true",
+#}
+
+#file { "/etc/apparmor.d/usr.sbin.dhcpd":
+#	notify  => Service["apparmor"],
+#	ensure	=> present,
+#	owner	=> root,
+#	group	=> root,
+#	mode	=> 644,
+#	source	=> "/home/server/git/foreman-poc/files/DHCP/apparmor_usr.sbin.dhcpd",
+#	require => Package["isc-dhcp-server"],
+#}
+
+
+
+
+
+
+
+
+
+
+
+
 
 exec {'apt-cacher-import':
 	command => "apt-cacher-import.pl -r /var/cache/apt/archives",
 	path	=> "/usr/share/apt-cacher/",
-	require => File["/etc/apt-cacher/apt-cacher.conf"],
+
 }
 
 file_line { 'sudo_rule_v1':
 	path	=> '/etc/sudoers',
 	line	=> 'Defaults:foreman-proxy !requiretty',
-	require	=> Exec['foreman-installer'],
+	
 }
 
 file_line { 'sudo_rule_v2':
 	path	=> '/etc/sudoers',
 	line	=> 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet kick *',
-	require	=> File_Line['sudo_rule_v1'],
+	
 }
  
 file_line { 'sudo_rule_v3':
 	path	=> '/etc/sudoers',
 	line	=> 'foreman-proxy ALL = NOPASSWD: /usr/bin/puppet cert *',
-	require	=> File_Line['sudo_rule_v2'],
+
 }
 
 file { '/usr/share/foreman/bundler.d/plugins.rb':
@@ -468,99 +555,59 @@ file { '/usr/share/foreman/bundler.d/plugins.rb':
 	owner	=> root,
 	group	=> root,
 	mode	=> 644,
-	require	=> Exec['foreman-installer'],
+
 }
 
 file_line { 'add-gem-foreman_discovery':
 	path	=> '/usr/share/foreman/bundler.d/plugins.rb',
 	line	=> 'gem \'foreman_discovery\'',
-	require	=> File['/usr/share/foreman/bundler.d/plugins.rb'],
+
 }
 
 exec { 'bundle-update':
-       command => "bundle update",
+       command => "gem install json -v \'1.8.2\'; bundle update",
        cwd     => "/usr/share/foreman",
-       path    => "/usr/bin",
-       require => File_Line['add-gem-foreman_discovery'],
+	   path => ['/usr/bin/', '/bin/', '/sbin/', '/usr/sbin'],
 }
 
 file_line { 'uncomment_environmentpath':
 	path	=> '/etc/puppet/puppet.conf',
 	line	=> '#    environmentpath  = /etc/puppet/environments',
 	match	=> '    environmentpath  = /etc/puppet/environments',
-	require	=> Exec['bundle-update'],
+
 }
 
 file_line { 'add-cloudbox-1':
 	path	=> '/etc/puppet/puppet.conf',
 	line	=> '',
-	require	=> File_Line['uncomment_environmentpath'],
+
 }
 
 file_line { 'add-cloudbox-2':
 	path	=> '/etc/puppet/puppet.conf',
 	line	=> '[cloudbox]',
-	require	=> File_Line['add-cloudbox-1'],
+
 }
 
 file_line { 'add-cloudbox-3':
 	path	=> '/etc/puppet/puppet.conf',
 	line	=> '    modulepath = /etc/puppet/environments/cloudbox/modules',
-	require	=> File_Line['add-cloudbox-2'],
+
 }
 
 exec { 'restart-puppet':
 	command	=> "service puppet restart",
 	path	=> "/usr/bin/",
-	require	=> File_Line['add-cloudbox-3']
+	
 }
 
 exec { 'second_foreman-restart':
 	command	=> "touch ~foreman/tmp/restart.txt",
 	path	=> "/usr/bin/",
-	require	=> Exec['restart-puppet'],
+	
 }
 
 
-#exec { "gem-foreman-discovery":
-#
-#       command => "gem install --no-rdoc --no-ri foreman_discovery",
-#       cwd     => "/usr/share/foreman",
-#       path    => ["/bin", "/sbin", "/usr/bin"],
-#       require => [
-#			Exec['foreman-installer'],
-#		]
-#}
-
-#exec { "bundle-update":
-#
-#       command => "bundle update",
-#       cwd     => "/usr/share/foreman",
-#       path    => "/usr/bin",
-#        require => [
-#			Exec['gem-foreman-discovery'],
-#		]
-#}
-
-#exec { "bundle-install":
-#
-#       command => "bundle install",
-#       cwd     => "/usr/share/foreman",
-#       path    => "/usr/bin",
-#        require => [
-#			Exec['bundle-update'],
-#		]
-#}
-
-
-#exec { "foreman-discovery-install-f":
-#
-#       command => "apt-get -f install",
-#       path    => [ "/bin", "/usr/bin", "/sbin", "/usr/local/sbin", "/usr/sbin"],
-#        require => [
-#			Exec['bundle-install'],
-#		]
-#}
 
 
 
@@ -572,72 +619,3 @@ exec { 'second_foreman-restart':
 
 
 
-
-
-
-
-
-# INSTALL NUR, WENN ES /var/lib/dpkg/info/ruby-foreman-discovery.postinst NICHT GIBT?
-
-
-
-#package { 'ruby-foreman-discovery':
-#        ensure  => installed,
-#        require => [
-#			Exec['foreman-discovery-install-f'],
-#		]
-#}
-
-
-
-
-
-
-
-
-
-
-
-#exec { "foreman-discovery-postinstall":
-#
-#       command => "/var/lib/dpkg/info/ruby-foreman-discovery.postinst",
-#        require => [
-#			Package['ruby-foreman-discovery'],
-#		]
-#}
-
-#exec { "bundle-install-last":
-#
-#       command => "bundle install",
-#       cwd     => "/usr/share/foreman",
-#       path    => "/usr/bin",
-#        require => [
-#			Exec['foreman-discovery-postinstall'],
-#		]
-#}
-
-
-
-
-#exec { "reboot machine":
-#	command => "/sbin/reboot",
-#	require	=> [
-#		Package['openssh-server'],
-#		Package['git'],
-#		User['dhcpd'],
-#		Service['apparmor'],
-#		File['/etc/apparmor.d/usr.sbin.dhcpd'],
-#		File_line['dhclient'],
-#		File['/var/lib/tftpboot/boot/Ubuntu-12.10-x86_64-linux'],
-#		User['foreman-proxy'],
-#		File['/etc/foreman/settings.yaml'],
-#		Exec['foreman-restart'],
-#		Exec['hammer execution'],
-#		Exec['iptables masquerade'],
-#		Exec['preseed'],
-#		Service['iptables-persistent'],
-#		Exec['apt-cacher-import'],
-#		File_Line['sudo_rule_v3'],
-#		Package['ruby-foreman-discovery'],
-#	],
-#}

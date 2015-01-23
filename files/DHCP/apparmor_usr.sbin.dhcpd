@@ -14,9 +14,7 @@
   capability setgid,
   capability setuid,
 
-  network inet raw,
-  network packet packet,
-  network packet raw,
+  network,
 
   @{PROC}/[0-9]*/net/dev r,
   @{PROC}/[0-9]*/net/{dev,if_inet6} r,
@@ -30,6 +28,7 @@
   /etc/dhcpd{,6}_ldap.conf r,
 
   /usr/sbin/dhcpd mr,
+  /etc/bind/rndc.key lrw,
 
   /var/lib/dhcp/dhcpd{,6}.leases* lrw,
   /var/log/ r,
