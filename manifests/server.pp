@@ -148,7 +148,7 @@ package { "bind9":
 
 exec { 'teardown-apparmor':
 	command	=> "service apparmor stop; service apparmor teardown; update-rc.d -f apparmor remove",
-	path	=> "/usr/bin/",
+	path => ['/usr/bin/', '/bin/', '/sbin/', '/usr/sbin'],
 }
 
 package { "isc-dhcp-server":
