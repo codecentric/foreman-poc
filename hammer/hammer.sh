@@ -27,12 +27,13 @@ fi
 
 # Create OS (if not alreay there)
 ptable_id=$(hammer partition-table list | /bin/grep "Preseed default" | /usr/bin/cut -d' ' -f1)
-os_id=$(hammer os list | /bin/grep "Ubuntu" | /usr/bin/cut -d' ' -f1)
+os_id=$(hammer os list | /bin/grep "quantal" | /usr/bin/cut -d' ' -f1)
 architecture_id=$(hammer architecture list | /bin/grep "x86_64" | /usr/bin/cut -d' ' -f1)
 medium_id=$(hammer medium list | /bin/grep "Local Mirror" | /usr/bin/cut -d' ' -f1)
 if [ -z $os_id  ]; then
-	hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids $architecture_id --ptable-ids $ptable_id --medium-ids $medium_id
-	os_id=$(hammer os list | /bin/grep "Ubuntu" | /usr/bin/cut -d' ' -f1)
+	hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal
+	## changed by tobi. original: hammer os create --name Ubuntu --major 12 --minor 10 --family Debian --release-name quantal --architecture-ids $architecture_id --medium-ids $medium_id
+	os_id=$(hammer os list | /bin/grep "quantal" | /usr/bin/cut -d' ' -f1)
 else
 	echo "Already created: OS"
 fi
@@ -77,7 +78,8 @@ fi
 environment_id_cloudbox=$(hammer environment list --search "cloudbox" | /bin/grep "cloudbox" | /usr/bin/cut -d' ' -f1)
 subnet_id_main=$(hammer subnet list --search "main" |  /bin/grep "main" | /usr/bin/cut -d' ' -f1)
 
-hammer hostgroup create --name 'multidisk' --environment-id $environment_id_cloudbox --operatingsystem-id $os_id --architecture-id $architecture_id --medium-id $medium_id --ptable-id $ptable_id --puppet-ca-proxy-id $proxy_id --subnet-id $subnet_id_main --domain-id $domain_id --puppet-proxy-id $proxy_id
+hammer hostgroup create --name 'multidisk' --environment-id $environment_id_cloudbox --operatingsystem-id $os_id --architecture-id $architecture_id --medium-id $medium_id --puppet-ca-proxy-id $proxy_id --subnet-id $subnet_id_main --domain-id $domain_id --puppet-proxy-id $proxy_id
+## changed by tobi. original: hammer hostgroup create --name 'multidisk' --environment-id $environment_id_cloudbox --operatingsystem-id $os_id --architecture-id $architecture_id --medium-id $medium_id --ptable-id $ptable_id --puppet-ca-proxy-id $proxy_id --subnet-id $subnet_id_main --domain-id $domain_id --puppet-proxy-id $proxy_id
 
 hostgroup_id_multidisk=$(hammer hostgroup list --search "multidisk" | /bin/grep "multidisk" | /usr/bin/cut -d' ' -f1)
 hammer hostgroup set-parameter --name 'drives' --value '/dev/sdb:/drv/drive01' --hostgroup-id $hostgroup_id_multidisk
@@ -89,3 +91,5 @@ hammer hostgroup set-parameter --name 'drives' --value '/dev/sdb:/drv/drive01' -
 #else
 #        echo "Already created: Provisioning Template 'multidisk'"
 #fi
+
+exit 0

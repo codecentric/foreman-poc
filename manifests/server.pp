@@ -147,7 +147,7 @@ package { "bind9":
 }
 
 exec { 'teardown-apparmor':
-	command	=> "service apparmor teardown",
+	command	=> "service apparmor stop; service apparmor teardown; update-rc.d -f apparmor remove",
 	path	=> "/usr/bin/",
 }
 
