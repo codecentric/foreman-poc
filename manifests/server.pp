@@ -299,7 +299,7 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 # installation foreman
 exec { 'foreman-installer':
 	command	=> "/usr/sbin/foreman-installer --foreman-proxy-trusted-hosts=localhost --foreman-admin-password changeme",
-	environment => ["HOME=/vagrant"],
+	environment => ["HOME=/home/server"],
 	timeout => 0,
 	
 }
@@ -371,7 +371,7 @@ file { '/etc/hammer':
 # hammer config file
 file { "/etc/hammer/cli_config.yml":
 	ensure	=> present,
-	source	=> "/vagrant/hammer/cli_config.yml",
+	source	=> "/home/server/git/foreman-poc/hammer/cli_config.yml",
 
 }
 
@@ -383,11 +383,11 @@ file { '/var/log/foreman/hammer.log':
 }
 
 exec { "hammer execution":
-	command	=> "/vagrant/hammer/hammer.sh",
+	command	=> "/home/server/git/foreman-poc/hammer/hammer.sh",
 	path	=> "/usr/local/bin/",
 
 #	user	=> "server",
-	environment	=> ["HOME=/vagrant"],
+	environment	=> ["HOME=/home/server"],
 }
 
 
