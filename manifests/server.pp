@@ -34,7 +34,6 @@ aptkey { 'foreman.asc':
 	Package['make'] ->
 	Package['openssh-server'] ->
 	Package['foreman-installer'] ->
-	Package['puppetserver'] ->
 	Package['bind9'] ->
 	Exec['teardown-apparmor'] ->
 	Package['isc-dhcp-server'] ->
@@ -52,13 +51,12 @@ aptkey { 'foreman.asc':
 	Exec['wget vmlinuz'] ->
 	File['/etc/foreman/foreman-installer-answers.yaml'] ->
 	File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'] ->
-	Exec['foreman-installer'] ->
-	User['foreman-proxy'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz'] ->
+	Exec['foreman-installer'] ->
+	User['foreman-proxy'] ->
 	
-	
-
+		
 	File['/etc/foreman/settings.yaml'] ->
 	Exec['foreman-restart'] ->
 	Exec['foreman-cache'] ->
@@ -142,11 +140,6 @@ package { "foreman-installer":
 	ensure => ['1.8.2-1', installed],
 }
 
-
-# see this: https://themacwrangler.wordpress.com/category/smartproxy/
-package { "puppetserver":
-	ensure => "installed",
-}
 
 # seperate installations necessary for proper configuration
 package { "bind9":
@@ -259,28 +252,7 @@ exec { "wget vmlinuz":
         creates => "/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz",
         path    => "/usr/bin",
         timeout => 1000,
-        
 }
-
-
-# set permissions for discovery images
-file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img':
-      ensure  => present,
-      owner   => foreman-proxy,
-      group   => nogroup,
-      mode    => 644,
-     
-}
-
-
-file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz':
-      ensure  => present,
-      owner   => foreman-proxy,
-      group   => nogroup,
-      mode    => 644,
-      
-}
-
 
 # options for foreman-installer
 file { "/etc/foreman/foreman-installer-answers.yaml":
@@ -300,6 +272,30 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 	group	=> root,
 	mode	=> 644,
 	
+}
+
+
+
+
+
+
+
+# set permissions for discovery images
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img':
+      ensure  => present,
+      owner   => foreman-proxy,
+      group   => nogroup,
+      mode    => 644,
+     
+}
+
+
+file { '/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz':
+      ensure  => present,
+      owner   => foreman-proxy,
+      group   => nogroup,
+      mode    => 644,
+      
 }
 
 
