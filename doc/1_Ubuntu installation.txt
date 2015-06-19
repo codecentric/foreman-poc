@@ -3,6 +3,9 @@ Please follow this instructions to get the operating system running as needed:
 
 
 
+### TODOS neue foreman installer features
+# alle puppet module automatisch von git holen und installieren
+
 
 1. UBUNTU SERVER INSTALLATION VON BOOT STICK (14.04)
 ---------------------------------------------------------------------------------------------

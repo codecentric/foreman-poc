@@ -102,21 +102,21 @@ file {'prepare_list_foreman':
 	path	=> '/etc/apt/sources.list.d/foreman.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ trusty 1.7'
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.8'
 }
 
 file {'prepare_list_smartproxy':
 	path	=> '/etc/apt/sources.list.d/smartproxy.list',
 	ensure	=> present,
 	mode	=> 0644,
-	content	=> 'deb http://deb.theforeman.org/ trusty 1.7'
+	content	=> 'deb http://deb.theforeman.org/ trusty 1.8'
 }
 
 file {'prepare_list_plugin':
         path    => '/etc/apt/sources.list.d/foreman-plugins.list',
         ensure  => present,
         mode    => 0644,
-        content => 'deb http://deb.theforeman.org/ plugins 1.7'
+        content => 'deb http://deb.theforeman.org/ plugins 1.8'
 }
 
 
@@ -137,7 +137,7 @@ package { "openssh-server":
 }
 
 package { "foreman-installer":
-	ensure => ['1.7.1-1', installed],
+	ensure => ['1.8.2-1', installed],
 }
 
 # seperate installations necessary for proper configuration
