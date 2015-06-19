@@ -34,7 +34,7 @@ aptkey { 'foreman.asc':
 	Package['make'] ->
 	Package['openssh-server'] ->
 	Package['foreman-installer'] ->
-	Package['puppet-server'] ->
+	Package['puppetserver'] ->
 	Package['bind9'] ->
 	Exec['teardown-apparmor'] ->
 	Package['isc-dhcp-server'] ->
@@ -144,7 +144,7 @@ package { "foreman-installer":
 
 
 # see this: https://themacwrangler.wordpress.com/category/smartproxy/
-package { "puppet-server":
+package { "puppetserver":
 	ensure => "installed",
 }
 
