@@ -41,6 +41,7 @@ aptkey { 'foreman.asc':
 	Package['gem'] ->
 	File['/etc/bind/rndc.key'] ->
 	User['dhcpd'] ->
+	User['foreman-proxy'] ->
 	File_Line['dhclient'] ->
 	File['/var/lib/tftpboot'] ->
 	File['/var/lib/tftpboot/pxelinux.cfg'] ->
@@ -54,8 +55,6 @@ aptkey { 'foreman.asc':
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz'] ->
 	Exec['foreman-installer'] ->
-	User['foreman-proxy'] ->
-	
 		
 	File['/etc/foreman/settings.yaml'] ->
 	Exec['foreman-restart'] ->
