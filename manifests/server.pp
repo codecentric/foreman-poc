@@ -34,6 +34,7 @@ aptkey { 'foreman.asc':
 	Package['make'] ->
 	Package['openssh-server'] ->
 	Package['foreman-installer'] ->
+	Package['puppet-server'] ->
 	Package['bind9'] ->
 	Exec['teardown-apparmor'] ->
 	Package['isc-dhcp-server'] ->
@@ -50,12 +51,13 @@ aptkey { 'foreman.asc':
 	Exec['wget initrd.img'] ->
 	Exec['wget vmlinuz'] ->
 	File['/etc/foreman/foreman-installer-answers.yaml'] ->
+	File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'] ->
 	Exec['foreman-installer'] ->
 	User['foreman-proxy'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-img'] ->
 	File['/var/lib/tftpboot/boot/foreman-discovery-image-latest.el6.iso-vmlinuz'] ->
 	
-	File['/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.pp'] ->
+	
 
 	File['/etc/foreman/settings.yaml'] ->
 	Exec['foreman-restart'] ->
@@ -138,6 +140,12 @@ package { "openssh-server":
 
 package { "foreman-installer":
 	ensure => ['1.8.2-1', installed],
+}
+
+
+# see this: https://themacwrangler.wordpress.com/category/smartproxy/
+package { "puppet-server":
+	ensure => "installed",
 }
 
 # seperate installations necessary for proper configuration
@@ -298,7 +306,7 @@ file { "/usr/share/foreman-installer/modules/foreman_proxy/manifests/proxydhcp.p
 
 # installation foreman
 exec { 'foreman-installer':
-	command	=> "/usr/sbin/foreman-installer --foreman-proxy-trusted-hosts=localhost --foreman-admin-password changeme",
+	command	=> "/usr/sbin/foreman-installer --enable-foreman-proxy --foreman-proxy-trusted-hosts=localhost --foreman-admin-password changeme",
 	environment => ["HOME=/home/server"],
 	timeout => 0,
 	
